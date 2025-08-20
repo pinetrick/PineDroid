@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application>
+        <!-- ContentProvider 用于在App启动时初始化悬浮窗 -->
+        <provider
+            android:name=".debug.window.FloatingInitProvider"
+            android:authorities="${applicationId}.floatinginitprovider"
+            android:exported="false" />
+    </application>
 </manifest>
