@@ -1,4 +1,4 @@
-package com.pine.pinedroid.ui
+package com.pine.pinedroid.utils
 
 object SizeExt {
     fun test(): Int{
