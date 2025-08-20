@@ -11,12 +11,22 @@ import android.provider.Settings
 import android.view.WindowManager
 import android.widget.TextView
 import com.pine.pinedroid.ui.float_window.FloatingWindowHelper
+import com.pine.pinedroid.utils.activityContext
+import com.pine.pinedroid.utils.appContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FloatingInitProvider : ContentProvider() {
 
     override fun onCreate(): Boolean {
-        context?.let {
-            FloatingWindowHelper.showFloatingWindow(it)
+        context?.let { context ->
+            activityContext = context
+            appContext = context.applicationContext
+
+            CoroutineScope(Dispatchers.Main).launch {
+                FloatingWindowHelper.showFloatingWindow()
+            }
         }
         return true
     }
