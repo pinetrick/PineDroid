@@ -17,10 +17,17 @@ object ScreenUtil {
 
     private fun initMetrics() {
         if (screenWidth == 0 || screenHeight == 0 || density == 0f) {
-            val metrics: DisplayMetrics = appContext.resources.displayMetrics
-            screenWidth = metrics.widthPixels
-            screenHeight = metrics.heightPixels
-            density = metrics.density
+            try {
+                val metrics: DisplayMetrics = appContext.resources.displayMetrics
+                screenWidth = metrics.widthPixels
+                screenHeight = metrics.heightPixels
+                density = metrics.density
+            } catch (e: Exception){
+                screenWidth = 1080
+                screenHeight = 2400
+                density = 3f
+            }
+
         }
     }
 

@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.pine.pindroidpp.ui.theme.PinDroidppTheme
 import com.pine.pinedroid.utils.toast
+import com.pine.pinedroid.utils.ui.spw
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +76,7 @@ class MainActivity : ComponentActivity() {
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
         text = "Hello $name!",
+        fontSize = 36.spw,
         modifier = modifier.clickable { toast("click") } // 添加点击事件
     )
 }
