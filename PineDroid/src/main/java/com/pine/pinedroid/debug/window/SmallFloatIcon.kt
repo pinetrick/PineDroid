@@ -23,13 +23,22 @@ class SmallFloatIcon @JvmOverloads constructor(
         color = 0x55FF0000         // 背景色（半透明红色）
     }
 
-    private val text = "悬浮窗Lib"
+
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val desiredWidth = 120      // 小尺寸宽度
+        val desiredHeight = 120     // 小尺寸高度
+
+        val width = resolveSize(desiredWidth, widthMeasureSpec)
+        val height = resolveSize(desiredHeight, heightMeasureSpec)
+        setMeasuredDimension(width, height)
+    }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         // 画背景矩形
-        canvas.drawRect(0f, 0f, 200f, 200f, bgPaint)
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), bgPaint)
 //
 //        // 绘制文字（简单居中）
 //        val textWidth = paint.measureText(text)
