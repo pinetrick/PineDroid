@@ -1,7 +1,5 @@
 package com.pine.pinedroid.db
 
-import com.pine.pinedroid.utils.camelToSnakeCase
-
 
 import com.pine.pinedroid.utils.camelToSnakeCase
 
@@ -17,7 +15,14 @@ class Table(name: String, db: String? = null) {
     private val columns: MutableList<ColumnInfo> = mutableListOf()
 
     // 添加列（链式）
-    fun column(columnName: String, type: String, autoIncrease: Boolean = false, primaryKey: Boolean = false, notNull: Boolean = false, defaultValue: String? = null): Table {
+    fun column(
+        columnName: String,
+        type: String,
+        autoIncrease: Boolean = false,
+        primaryKey: Boolean = false,
+        notNull: Boolean = false,
+        defaultValue: String? = null
+    ): Table {
         columns.add(
             ColumnInfo(
                 cid = columns.size,
@@ -42,7 +47,14 @@ class Table(name: String, db: String? = null) {
             if (col.isPrimaryKey) sb.append(" PRIMARY KEY")
             if (col.isAutoIncrement) sb.append(" AUTOINCREMENT")
             if (col.notNull) sb.append(" NOT NULL")
-            if (col.defaultValue != null) sb.append(" DEFAULT '${col.defaultValue.replace("'", "''")}'")
+            if (col.defaultValue != null) sb.append(
+                " DEFAULT '${
+                    col.defaultValue.replace(
+                        "'",
+                        "''"
+                    )
+                }'"
+            )
             sb.toString()
         }
 
