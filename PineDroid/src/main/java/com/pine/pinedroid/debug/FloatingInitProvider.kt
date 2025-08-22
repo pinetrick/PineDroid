@@ -1,11 +1,12 @@
-package com.pine.pinedroid.debug.window
-
+package com.pine.pinedroid.debug
 
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import com.pine.pinedroid.PineConfig
+import com.pine.pinedroid.debug.icon.SmallFloatIcon
+import com.pine.pinedroid.debug.window.FunctionWindowController.onShowFunctionWindowClick
 import com.pine.pinedroid.ui.float_window.FloatingWindowHelper
 import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.appContext
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class FloatingInitProvider : ContentProvider() {
 
+
     override fun onCreate(): Boolean {
         context?.let { context ->
             activityContext = context
@@ -22,6 +24,7 @@ class FloatingInitProvider : ContentProvider() {
             if (PineConfig.getIsDebugWindowAlwaysOn()) {
                 CoroutineScope(Dispatchers.Main).launch {
                     val view = SmallFloatIcon(appContext)
+                    view.setOnClickListener(::onShowFunctionWindowClick)
                     FloatingWindowHelper.showFloatingWindow(view, true)
                 }
             }
@@ -30,11 +33,17 @@ class FloatingInitProvider : ContentProvider() {
         return true
     }
 
-    override fun query(uri: Uri, projection: Array<out String>?, selection: String?,
-                       selectionArgs: Array<out String>?, sortOrder: String?): Cursor? = null
+
+    override fun query(
+        uri: Uri, projection: Array<out String>?, selection: String?,
+        selectionArgs: Array<out String>?, sortOrder: String?
+    ): Cursor? = null
+
     override fun getType(uri: Uri): String? = null
     override fun insert(uri: Uri, values: ContentValues?): Uri? = null
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int = 0
-    override fun update(uri: Uri, values: ContentValues?, selection: String?,
-                        selectionArgs: Array<out String>?): Int = 0
+    override fun update(
+        uri: Uri, values: ContentValues?, selection: String?,
+        selectionArgs: Array<out String>?
+    ): Int = 0
 }

@@ -1,4 +1,4 @@
-package com.pine.pinedroid.debug
+package com.pine.pinedroid.utils
 
 import android.util.Log
 import com.pine.pinedroid.db.Model
@@ -13,11 +13,11 @@ fun <T> log(key: String, content: T?) {
         is Model -> content.log()
         else -> gson.toJson(content)
     }
-    _log(key, output)
+    _root_ide_package_.com.pine.pinedroid.utils._log(key, output)
 }
 
 fun <T> log(content: T?) {
-    log("null", content)
+    _root_ide_package_.com.pine.pinedroid.utils.log("null", content)
 }
 
 private fun _log(tag: String, content: String) {

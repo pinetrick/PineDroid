@@ -6,7 +6,7 @@
     <application>
         <!-- ContentProvider 用于在App启动时初始化悬浮窗 -->
         <provider
-            android:name=".debug.window.FloatingInitProvider"
+            android:name=".debug.FloatingInitProvider"
             android:authorities="${applicationId}.floatinginitprovider"
             android:exported="false" />
     </application>

@@ -18,7 +18,7 @@ import com.pine.pindroidpp.ui.theme.PinDroidppTheme
 import com.pine.pinedroid.db.Model
 import com.pine.pinedroid.db.model
 import com.pine.pinedroid.db.table
-import com.pine.pinedroid.debug.log
+import com.pine.pinedroid.utils.log
 import com.pine.pinedroid.utils.toast
 import com.pine.pinedroid.utils.ui.spw
 
@@ -37,18 +37,18 @@ class MainActivity : ComponentActivity() {
         drivingQuestionsTable.save()
 
         var results = model("DrivingQuestionsTable").select()
-        log("results", results)
+        _root_ide_package_.com.pine.pinedroid.utils.log("results", results)
         results.forEach {
             results.save(it)
         }
 
         var result = model("DrivingQuestionsTable").find(1)
-        log("result", result)
+        _root_ide_package_.com.pine.pinedroid.utils.log("result", result)
         result["question"] = "update"
         result.save()
 
         result = model("DrivingQuestionsTable").find(1)
-        log("result", result)
+        _root_ide_package_.com.pine.pinedroid.utils.log("result", result)
 
         enableEdgeToEdge()
         setContent {

@@ -6,6 +6,7 @@ import android.provider.Settings
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
+import com.pine.pinedroid.debug.window.FunctionWindow
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.sp
 import com.pine.pinedroid.utils.toast
@@ -15,10 +16,12 @@ import kotlinx.coroutines.withTimeoutOrNull
 
 object FloatingWindowHelper {
 
+    val windowManager = appContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
     suspend fun showFloatingWindow(view: View, draggable: Boolean = false) {
         if (!waitPermission()) return
 
-        val windowManager = appContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
 
         val layoutParams = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -44,12 +47,16 @@ object FloatingWindowHelper {
 
             var lastX = 0f
             var lastY = 0f
+            var startX = 0f
+            var startY = 0f
 
             view.setOnTouchListener { v, event ->
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
                         lastX = event.rawX
                         lastY = event.rawY
+                        startX = event.rawX
+                        startY = event.rawY
                         true
                     }
 
@@ -71,8 +78,8 @@ object FloatingWindowHelper {
 
                     MotionEvent.ACTION_UP -> {
                         // 判断是否是点击（小移动距离）
-                        val dx = event.rawX - lastX
-                        val dy = event.rawY - lastY
+                        val dx = event.rawX - startX
+                        val dy = event.rawY - startY
                         if (dx * dx + dy * dy < 25) { // 5px以内认为是点击
                             v.performClick()
                         }
@@ -87,7 +94,9 @@ object FloatingWindowHelper {
 
 
     }
-
+    fun closeFloatingWindow(functionWindow: FunctionWindow) {
+        windowManager.removeView(functionWindow)
+    }
 
     private suspend fun waitPermission(): Boolean {
         // Android 6+ 检查权限
@@ -111,6 +120,8 @@ object FloatingWindowHelper {
         return granted
 
     }
+
+
 
 
 }

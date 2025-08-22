@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/function_window_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#CCFFFFFF"
+    android:padding="0dp">
+
+    <!-- 标题栏 -->
+    <LinearLayout
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:background="#FF6200EE"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Function Window"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:paddingStart="16dp"/>
+
+        <ImageButton
+            android:id="@+id/btn_close"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+             android:padding="8dp"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:contentDescription="Close"/>
+    </LinearLayout>
+
+    <!-- 内容区 / 功能按钮区 -->
+    <LinearLayout
+        android:id="@+id/function_area"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/btn_exit_app"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="退出应用" />
+
+        <!-- 你可以继续加其他功能按钮 -->
+    </LinearLayout>
+
+</LinearLayout>
