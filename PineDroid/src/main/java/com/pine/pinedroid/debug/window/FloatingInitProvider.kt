@@ -5,6 +5,7 @@ import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
+import com.pine.pinedroid.PineConfig
 import com.pine.pinedroid.ui.float_window.FloatingWindowHelper
 import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.appContext
@@ -18,11 +19,13 @@ class FloatingInitProvider : ContentProvider() {
         context?.let { context ->
             activityContext = context
             appContext = context.applicationContext
-
-            CoroutineScope(Dispatchers.Main).launch {
-                val view = SmallFloatIcon(appContext)
-                FloatingWindowHelper.showFloatingWindow(view, true)
+            if (PineConfig.getIsDebugWindowAlwaysOn()) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val view = SmallFloatIcon(appContext)
+                    FloatingWindowHelper.showFloatingWindow(view, true)
+                }
             }
+
         }
         return true
     }

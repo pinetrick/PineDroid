@@ -3,7 +3,6 @@ package com.pine.pinedroid.utils.ui
 import android.content.Context
 import android.os.Build
 import android.util.DisplayMetrics
-import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import com.pine.pinedroid.utils.appContext
@@ -22,7 +21,7 @@ object ScreenUtil {
                 screenWidth = metrics.widthPixels
                 screenHeight = metrics.heightPixels
                 density = metrics.density
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 screenWidth = 1080
                 screenHeight = 2400
                 density = 3f
@@ -31,20 +30,28 @@ object ScreenUtil {
         }
     }
 
+    fun getDensity(): Float {
+        initMetrics()
+        return density
+    }
+
     fun getStatusBarHeightPx(): Int {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val windowMetrics = (appContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager).currentWindowMetrics
-            val insets = windowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.statusBars())
+            val windowMetrics =
+                (appContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager).currentWindowMetrics
+            val insets =
+                windowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.statusBars())
             insets.top
         } else {
             // 兼容老版本
-            val resourceId = appContext.resources.getIdentifier("status_bar_height", "dimen", "android")
+            val resourceId =
+                appContext.resources.getIdentifier("status_bar_height", "dimen", "android")
             if (resourceId > 0) appContext.resources.getDimensionPixelSize(resourceId) else 0
         }
     }
 
     fun getStatusBarHeightDp(): Float {
-        return pxToDp(getStatusBarHeightPx().toFloat())
+        return getStatusBarHeightPx().px2Dp()
     }
 
     fun getScreenWidthPx(): Int {
@@ -67,13 +74,5 @@ object ScreenUtil {
         return screenHeight / density
     }
 
-    fun dpToPx(dp: Float): Int {
-        initMetrics()
-        return (dp * density).toInt()
-    }
 
-    fun pxToDp(px: Float): Float {
-        initMetrics()
-        return px / density
-    }
 }

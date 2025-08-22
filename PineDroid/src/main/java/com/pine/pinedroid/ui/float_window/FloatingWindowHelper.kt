@@ -40,6 +40,7 @@ object FloatingWindowHelper {
                 0,
                 ScreenUtil.getScreenHeightPx() - view.height
             )
+            windowManager.updateViewLayout(view, layoutParams)
 
             var lastX = 0f
             var lastY = 0f
