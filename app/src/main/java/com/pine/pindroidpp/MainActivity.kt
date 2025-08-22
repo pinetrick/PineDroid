@@ -18,6 +18,7 @@ import com.pine.pindroidpp.ui.theme.PinDroidppTheme
 import com.pine.pinedroid.db.Model
 import com.pine.pinedroid.db.model
 import com.pine.pinedroid.db.table
+import com.pine.pinedroid.ui.message_box.MessageBox
 import com.pine.pinedroid.utils.log
 import com.pine.pinedroid.utils.toast
 import com.pine.pinedroid.utils.ui.spw
@@ -43,12 +44,14 @@ class MainActivity : ComponentActivity() {
         }
 
         var result = model("DrivingQuestionsTable").find(1)
-        _root_ide_package_.com.pine.pinedroid.utils.log("result", result)
+        log("result", result)
         result["question"] = "update"
         result.save()
 
         result = model("DrivingQuestionsTable").find(1)
-        _root_ide_package_.com.pine.pinedroid.utils.log("result", result)
+        log("result", result)
+
+        MessageBox.i().setListener { messageBoxChoose -> }.show("test" ,"te")
 
         enableEdgeToEdge()
         setContent {

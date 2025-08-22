@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import com.pine.pinedroid.R
 import com.pine.pinedroid.utils.ui.dp2Px
@@ -18,8 +19,12 @@ class FunctionWindow @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    var closeButton: ImageButton
+    var mainMessage: TextView
     var exitApp: Button
+
+    var closeButton: Button
+    var dataBaseButton: Button
+    var uninstallButton: Button
 
     init {
         // 加载 XML 布局
@@ -31,12 +36,11 @@ class FunctionWindow @JvmOverloads constructor(
             LayoutParams.MATCH_PARENT
         )
 
-
-        // 关闭按钮
-        closeButton = findViewById<ImageButton>(R.id.btn_close)
-
-        // 功能按钮示例：退出应用
-        exitApp = findViewById<Button>(R.id.btn_exit_app)
+        mainMessage = findViewById<TextView>(R.id.mainMassage)
+        exitApp = findViewById<Button>(R.id.debug_runtime_kill_btn)
+        closeButton = findViewById<Button>(R.id.debug_runtime_ret_btn)
+        dataBaseButton = findViewById<Button>(R.id.debug_runtime_database_btn)
+        uninstallButton = findViewById<Button>(R.id.debug_runtime_uninstall_btn)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
