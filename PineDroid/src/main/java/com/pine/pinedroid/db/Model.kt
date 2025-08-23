@@ -9,7 +9,7 @@ class Model(name: String, private val dbName: String? = null) {
 
     private val modelName: String = name
     private val tableName: String = name.camelToSnakeCase()
-    private val tableStructure: TableStructure = TableStructure.find(dbConnection, tableName)
+
     private val whereConditions = mutableListOf<String>()
     private val whereArgs = mutableListOf<Any?>()
 
@@ -17,7 +17,8 @@ class Model(name: String, private val dbName: String? = null) {
     private var offsetCount: Int? = null
 
     private var lastSql = "";
-
+    private val tableStructure: TableStructure
+        get() = TableStructure.find(dbConnection, tableName)
     private val dbConnection: DbConnection
         get() = db(dbName)
     /** 链式 where 查询 */
@@ -74,7 +75,6 @@ class Model(name: String, private val dbName: String? = null) {
 
             val record = newRecord()
             record.kvs = row
-            record.id = row[tableStructure.getPrimaryKeyColumn()?.name] as? Int
             records.add(record)
         }
 
@@ -83,9 +83,7 @@ class Model(name: String, private val dbName: String? = null) {
     }
 
     fun newRecord() : DbRecord {
-        val record = DbRecord()
-        record.tableName = tableName
-        record.dbName = dbName
+        val record = DbRecord(tableName, dbConnection.dbName)
         return record
     }
 

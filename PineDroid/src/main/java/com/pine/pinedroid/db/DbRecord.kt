@@ -2,10 +2,7 @@ package com.pine.pinedroid.db
 
 import com.pine.pinedroid.utils.gson
 
-class DbRecord {
-    var id: Int? = null
-    var tableName: String? = null
-    var dbName: String? = null
+class DbRecord(public var tableName: String, public var dbName: String) {
     var kvs: MutableMap<String, Any?> = mutableMapOf()
     var dirtyKeys: MutableSet<String> = mutableSetOf()
 
@@ -19,11 +16,10 @@ class DbRecord {
             kvs[column] = value
             dirtyKeys.add(column) // 自动防重复
         }
-
     }
 
     fun save() {
-        if (id == null) saveNew()
+        if (this["id"] == null) saveNew()
         else update()
     }
 
@@ -33,23 +29,25 @@ class DbRecord {
 
         val cols = kvs.keys.joinToString(", ")
         val placeholders = kvs.keys.joinToString(", ") { "?" }
-
-        val sql = "INSERT INTO $tableName ($cols) VALUES ($placeholders)"
         val args = kvs.values.toTypedArray()
 
-        dbConnection.execute(sql, args)
+
+
+        val id = dbConnection.insert(tableName, null, kvs)
+        this["id"] = id
     }
 
     /** 更新已有记录 */
     private fun update() {
-        if (tableName.isNullOrBlank()) throw IllegalStateException("tableName 未设置")
-        if (id == null) throw IllegalStateException("update 需要 id")
+        if (tableName.isBlank()) throw IllegalStateException("tableName 未设置")
+        if (this["id"] == null) throw IllegalStateException("update 需要 id")
         if (dirtyKeys.isEmpty()) return
 
         val setSql = dirtyKeys.joinToString(", ") { "$it = ?" }
 
         val sql = "UPDATE $tableName SET $setSql WHERE id = ?"
-        val args = dirtyKeys.map { kvs[it] }.toMutableList().apply { add(id!!) }
+        val args = dirtyKeys.map { kvs[it] }.toMutableList()
+        args.add(this["id"]!!)
 
         dbConnection.execute(sql, args.toTypedArray())
         dirtyKeys.clear()

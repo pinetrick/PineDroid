@@ -1,6 +1,7 @@
 package com.pine.pinedroid.utils
 
 import android.util.Log
+import com.pine.pinedroid.db.DbRecord
 import com.pine.pinedroid.db.Model
 
 fun <T> log(content: T?) = logd(content)
@@ -8,7 +9,6 @@ fun <T> log(key: String, content: T?, level: Int = Log.DEBUG) {
     val output = when (content) {
         null -> "null"
         is String, is Number, is Boolean -> content.toString()
-        is Model -> content.log()
         else -> gson.toJson(content)
     }
     _log(key, output, level)
