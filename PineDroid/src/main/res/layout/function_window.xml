@@ -16,7 +16,7 @@
                 android:id="@+id/imageView1"
                 android:layout_width="20dp"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:src="@drawable/warning" />
 
             <TextView
@@ -25,8 +25,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="Memory Usage: 300MB"
-            android:textColor="#ffffff"
-            android:textSize="20sp" />
+            android:textColor="#ffffff"/>
 
         </LinearLayout>
 
@@ -56,8 +55,7 @@
                     android:layout_weight="1"
                     android:background="@color/yellow"
                     android:text="Database"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textColor="@color/black"/>
 
                 <Button
                     android:id="@+id/debug_runtime_uninstall_btn"
@@ -66,8 +64,7 @@
                     android:layout_weight="1"
                     android:background="@color/greenyellow"
                     android:text="Uninstall"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textColor="@color/black" />
 
                 <Button
                     android:id="@+id/debug_runtime_kill_btn"
@@ -76,8 +73,7 @@
                     android:layout_weight="1"
                     android:background="@color/yellow"
                     android:text="Kill"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textColor="@color/black"/>
             </LinearLayout>
 
             <Button
@@ -86,8 +82,7 @@
                 android:layout_height="0px"
                 android:layout_weight="10"
                 android:background="@color/green"
-                android:text="Return"
-                android:textSize="20sp" />
+                android:text="Return" />
         </LinearLayout>
 
 

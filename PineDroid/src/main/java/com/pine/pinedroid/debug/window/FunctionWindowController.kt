@@ -2,20 +2,20 @@ package com.pine.pinedroid.debug.window
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.view.View
+import androidx.core.net.toUri
+import com.pine.pinedroid.file.DataCleanManager
 import com.pine.pinedroid.ui.float_window.FloatingWindowHelper
 import com.pine.pinedroid.ui.message_box.MessageBox
-import com.pine.pinedroid.ui.message_box.OnMessageClickListener
 import com.pine.pinedroid.utils.Memory.getAppMemoryUsage
+import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.appContext
+import com.pine.pinedroid.utils.currentActivity
+import com.pine.pinedroid.utils.shortName
 import com.pine.pinedroid.utils.file.kbToDisplayFileSize
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import androidx.core.net.toUri
-import com.pine.pinedroid.file.DataCleanManager
-import com.pine.pinedroid.utils.activityContext
 import kotlin.system.exitProcess
 
 object FunctionWindowController {
@@ -34,7 +34,7 @@ object FunctionWindowController {
             if (functionWindow == null) {
                 functionWindow = FunctionWindow(appContext).apply {
 
-                    mainMessage.text = "Memory Usage: " + getAppMemoryUsage().kbToDisplayFileSize()
+                    mainMessage.text = currentActivity().shortName + ": " + getAppMemoryUsage().kbToDisplayFileSize()
                     exitApp.setOnClickListener {
                         android.os.Process.killProcess(android.os.Process.myPid())
                     }
