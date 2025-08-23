@@ -32,20 +32,20 @@ class MainActivity : ComponentActivity() {
             .column(columnName = "answer", type = "TEXT")
             .createTable()
 
-        val drivingQuestionsTable = model("DrivingQuestionsTable")
+        val drivingQuestionsTable = model("DrivingQuestionsTable").newRecord()
         drivingQuestionsTable["question"] = "What is your favorite color?"
         drivingQuestionsTable["answer"] = "What is your favorite color?"
         drivingQuestionsTable.save()
 
         var results = model("DrivingQuestionsTable").select()
         _root_ide_package_.com.pine.pinedroid.utils.log("results", results)
-        results.forEach {
-            results.save(it)
+        results.forEach { result ->
+            result.save()
         }
 
         var result = model("DrivingQuestionsTable").find(1)
         log("result", result)
-        result["question"] = "update"
+        result!!["question"] = "update"
         result.save()
 
         result = model("DrivingQuestionsTable").find(1)

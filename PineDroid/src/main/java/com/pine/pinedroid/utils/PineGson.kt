@@ -1,5 +1,8 @@
 package com.pine.pinedroid.utils
 
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 
-val gson = GsonBuilder().setPrettyPrinting().create()
+val gson: Gson by lazy {
+    GsonBuilder().setPrettyPrinting().create()
+}
