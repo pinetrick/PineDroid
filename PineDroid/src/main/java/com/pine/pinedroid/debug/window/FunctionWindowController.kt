@@ -43,7 +43,6 @@ object FunctionWindowController {
                 }
 
 
-
             }
             FloatingWindowHelper.showFloatingWindow(functionWindow!!)
         }
