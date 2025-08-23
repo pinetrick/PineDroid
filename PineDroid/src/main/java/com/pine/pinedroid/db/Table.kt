@@ -20,7 +20,10 @@ class Table(
     // 存储列信息
     private val columns: MutableList<ColumnInfo> = mutableListOf()
 
-
+    fun drop(){
+        val sql = "DROP TABLE IF EXISTS $tableName;"
+        dbConnection.execute(sql)
+    }
 
     // 添加列（链式）
     fun column(
@@ -75,7 +78,6 @@ class Table(
         }
 
         val sql = "CREATE TABLE IF NOT EXISTS $tableName ($columnsSql);"
-        logv("SQL", sql)
         dbConnection.execute(sql)
     }
 
