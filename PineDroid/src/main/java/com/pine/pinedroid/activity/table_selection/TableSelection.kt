@@ -8,7 +8,7 @@ import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 @Composable
 fun TableSelection(
     navController: NavController? = null,
-    viewModel: QuestionViewModel = viewModel()
+    viewModel: TableSelectionVM = viewModel()
 ) {
 
 
