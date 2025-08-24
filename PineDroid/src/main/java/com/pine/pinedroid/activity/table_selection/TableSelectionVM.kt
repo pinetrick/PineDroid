@@ -19,13 +19,16 @@ class TableSelectionVM : BaseViewModel() {
 
     fun initialize(dbName: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            val tables = db(dbName).tables()
             _viewState.update { currentState ->
                 currentState.copy(
                     dbName = dbName,
-                    tables = db(dbName).tables(),
+                    tables = tables
                 )
             }
-
+            if (tables.size == 1) {
+                onOpenTable(tables.first())
+            }
         }
     }
 

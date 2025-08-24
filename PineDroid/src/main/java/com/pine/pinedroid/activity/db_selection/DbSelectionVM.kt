@@ -20,10 +20,15 @@ class DbSelectionVM : BaseViewModel() {
 
     fun initialize() {
         viewModelScope.launch(Dispatchers.IO) {
+            val dbs = AppDatabases.getDatabaseFiles()
             _viewState.update { currentState ->
                 currentState.copy(
-                    dbs = AppDatabases.getDatabaseFiles()
+                    dbs = dbs
                 )
+            }
+
+            if (dbs.size == 1) {
+                onOpenDb(dbs.first())
             }
 
         }
