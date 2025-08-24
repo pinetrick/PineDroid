@@ -1,11 +1,12 @@
 package com.pine.pinedroid.db
 
 import com.pine.pinedroid.utils.camelToSnakeCase
+import kotlin.reflect.KClass
 
 
 fun model(name: String, db: String? = null): Model = Model(name, db)
 
-class Model(name: String, private val dbName: String? = null) {
+open class Model(name: String, private val dbName: String? = null) {
 
     private val modelName: String = name
     private val tableName: String = name.camelToSnakeCase()
@@ -22,20 +23,26 @@ class Model(name: String, private val dbName: String? = null) {
     private val dbConnection: DbConnection
         get() = db(dbName)
     /** 链式 where 查询 */
-    fun <T> where(key: String, value: T?): Model {
-        return where(key, "=", value)
+    fun where(key: String, value: Any?): Model {
+        return where(key, "=", value.toString())
     }
-    fun <T> where(raw: String): Model {
+
+    fun where(raw: String): Model {
         whereConditions.add(raw)
         return this
     }
-    fun <T> where(key: String, condition: String, value: T?): Model {
+    fun where(key: String, condition: String, value: Any?): Model {
         whereConditions.add("$key $condition ?")
         whereArgs.add(value)
         return this
     }
-    /** 根据主键或条件查找单条记录 */
+    fun limit(count: Int, offset: Int? = null): Model {
+        limitCount = count
+        offsetCount = offset
+        return this
+    }
 
+    /** 根据主键或条件查找单条记录 */
     fun find(id: Int? = null): DbRecord? {
         if (id != null) {
             val pkCol = tableStructure.getPrimaryKeyColumn()
@@ -47,11 +54,7 @@ class Model(name: String, private val dbName: String? = null) {
         return list.firstOrNull()
     }
 
-    fun limit(count: Int, offset: Int? = null): Model {
-        limitCount = count
-        offsetCount = offset
-        return this
-    }
+
 
     fun select(columns: String = "*"): List<DbRecord> {
         val whereSql = if (whereConditions.isEmpty()) "" else "WHERE ${whereConditions.joinToString(" AND ")}"

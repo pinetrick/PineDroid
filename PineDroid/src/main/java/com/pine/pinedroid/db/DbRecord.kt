@@ -25,7 +25,7 @@ class DbRecord(public var tableName: String, public var dbName: String) {
 
     /** 插入新记录 */
     private fun saveNew() {
-        if (tableName.isNullOrBlank()) throw IllegalStateException("tableName 未设置")
+        if (tableName.isBlank()) throw IllegalStateException("tableName 未设置")
 
         val cols = kvs.keys.joinToString(", ")
         val placeholders = kvs.keys.joinToString(", ") { "?" }

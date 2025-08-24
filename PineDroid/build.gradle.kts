@@ -53,7 +53,7 @@ dependencies {
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.kotlinx.serialization.json)
-
+    implementation(libs.kotlin.reflect) // 使用你的Kotlin版本
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
