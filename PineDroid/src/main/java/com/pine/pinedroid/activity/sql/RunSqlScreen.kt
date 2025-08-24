@@ -278,58 +278,125 @@ fun SqlResultTable(
                 }
             }
 
-            // 表格内容 - REMOVE verticalScroll from here
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .border(1.dp, MaterialTheme.colorScheme.outline)
-                    .horizontalScroll(rememberScrollState()) // Keep only horizontal scroll
-            ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer(scaleX = scale, scaleY = scale)
-                ) {
+            DataTable(
+                header = header,
+                records = records,
+                scale = scale,
+                modifier = Modifier.fillMaxSize()
+            )
 
-                    // 表头
-                    item {
-                        TableHeaderRow(header)
-                    }
-
-                    // 数据行（推荐 items(list)）
-                    items(records) { record ->
-                        TableDataRow(record)
-                    }
-                }
-
-            }
+//            // 表格内容 - REMOVE verticalScroll from here
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .border(1.dp, MaterialTheme.colorScheme.outline)
+//                    .horizontalScroll(rememberScrollState()) // Keep only horizontal scroll
+//            ) {
+//                LazyColumn(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .graphicsLayer(scaleX = scale, scaleY = scale)
+//                ) {
+//
+//                    // 表头
+//                    item {
+//                        Row(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .background(MaterialTheme.colorScheme.primaryContainer)
+//                        ) {
+//                            header.forEach { columnInfo ->
+//                                Text(
+//                                    text = columnInfo.name,
+//                                    fontSize = 8.spwh,
+//                                    fontWeight = FontWeight.Bold,
+//                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+//                                    modifier = Modifier
+//                                        .padding(1.pct)
+//                                )
+//                            }
+//                        }
+//                    }
+//
+//                    // 数据行（推荐 items(list)）
+//                    items(records) { record ->
+//                        Row(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .border(0.5.dp, MaterialTheme.colorScheme.outlineVariant)
+//                        ) {
+//                            record.kvs.values.forEach { value ->
+//                                Text(
+//                                    text = value?.toString() ?: "NULL",
+//                                    fontSize = 8.spwh,
+//                                    modifier = Modifier
+//                                        .padding(1.pct)
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
+//
+//            }
         }
     }
 }
 
 
 @Composable
-fun TableHeaderRow( tableHeader: List<ColumnInfo>) {
+fun DataTable(
+    header: List<ColumnInfo>, // 假设 ColumnInfo 有 name 属性
+    records: List<DbRecord>,    // 假设 Record 有 kvs 属性
+    scale: Float = 1f,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .border(1.dp, MaterialTheme.colorScheme.outline)
+            .horizontalScroll(rememberScrollState())
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .graphicsLayer(scaleX = scale, scaleY = scale)
+        ) {
+            // 表头
+            item {
+                TableHeaderRow(header)
+            }
+
+            // 数据行
+            items(records) { record ->
+                TableDataRow(record)
+            }
+        }
+    }
+}
+
+@Composable
+private fun TableHeaderRow(header: List<ColumnInfo>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
-        tableHeader.forEach { columnInfo ->
+        header.forEach { columnInfo ->
             Text(
                 text = columnInfo.name,
-                fontSize = 8.spwh,
+                fontSize = 8.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
-                    .padding(1.pct)
+                    .weight(1f) // 使用 weight 确保均匀分布
+                    .padding(4.dp) // 使用 dp 而不是 pct
             )
         }
     }
 }
 
 @Composable
-fun TableDataRow(record: DbRecord) {
+private fun TableDataRow(record: DbRecord) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -338,9 +405,10 @@ fun TableDataRow(record: DbRecord) {
         record.kvs.values.forEach { value ->
             Text(
                 text = value?.toString() ?: "NULL",
-                fontSize = 8.spwh,
+                fontSize = 8.sp,
                 modifier = Modifier
-                    .padding(1.pct)
+                    .weight(1f) // 使用 weight 确保均匀分布
+                    .padding(4.dp) // 使用 dp 而不是 pct
             )
         }
     }
