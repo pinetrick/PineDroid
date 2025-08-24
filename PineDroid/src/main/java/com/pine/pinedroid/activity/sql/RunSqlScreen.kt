@@ -58,6 +58,7 @@ import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import com.pine.pinedroid.ui.Colour
 import com.pine.pinedroid.utils.ui.pct
 import com.pine.pinedroid.utils.ui.spwh
+import androidx.compose.foundation.lazy.items
 
 @Composable
 fun RunSqlScreen(
@@ -292,17 +293,17 @@ fun SqlResultTable(
                         TableHeaderRow(columns)
                     }
 
-                    // 表格数据行
-                    items(records.count()) { id ->
-                        TableDataRow(records[id])
+                    // 数据行（推荐 items(list)）
+                    items(records) { record ->
+                        TableDataRow(record)
                     }
                 }
+
             }
         }
     }
 }
 
-private fun BoxScope.item(function: () -> Unit) {}
 
 @Composable
 fun TableHeaderRow(columns: List<String>) {
@@ -314,12 +315,12 @@ fun TableHeaderRow(columns: List<String>) {
         columns.forEach { column ->
             Text(
                 text = column,
-                fontSize = 12.spwh,
+                fontSize = 8.spwh,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(8.dp)
+                    .padding(1.pct)
             )
         }
     }
@@ -335,10 +336,10 @@ fun TableDataRow(record: DbRecord) {
         record.kvs.values.forEach { value ->
             Text(
                 text = value?.toString() ?: "NULL",
-                fontSize = 12.sp,
+                fontSize = 8.spwh,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(8.dp)
+                    .padding(1.pct)
             )
         }
     }

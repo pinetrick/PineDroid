@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
         result = model("DrivingQuestionsTable").find(1)
         log("result", result)
 
-        MessageBox.i().setListener { messageBoxChoose -> }.show("test" ,"te")
+       // MessageBox.i().setListener { messageBoxChoose -> }.show("test" ,"te")
 
         enableEdgeToEdge()
         setContent {
