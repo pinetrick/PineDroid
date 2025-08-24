@@ -23,13 +23,13 @@ abstract class BaseViewModel : ViewModel() {
         }
     }
 
-    protected fun navigateBack() {
+    fun navigateBack() {
         viewModelScope.launch {
             _navEvents.emit(NavEvent.NavigateBack)
         }
     }
 
-    protected fun popUpTo(route: String, inclusive: Boolean = false) {
+    fun popUpTo(route: String, inclusive: Boolean = false) {
         viewModelScope.launch {
             _navEvents.emit(NavEvent.PopUpTo(route, inclusive))
         }

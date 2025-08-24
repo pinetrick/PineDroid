@@ -63,5 +63,4 @@ class RunSqlScreenVM : BaseViewModel() {
     }
 
 
-
 }

@@ -23,6 +23,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.ZoomIn
 import androidx.compose.material.icons.filled.ZoomOut
@@ -80,7 +82,8 @@ fun RunSqlScreen(
     RunSqlContent(
         state = viewState,
         onSqlChanged = { viewModel.updateSql(it) },
-        onExecute = { viewModel.onRunSql() }
+        onExecute = { viewModel.onRunSql() },
+        onReturn = { viewModel.navigateBack() }
     )
 }
 
@@ -88,7 +91,8 @@ fun RunSqlScreen(
 fun RunSqlContent(
     state: RunSqlScreenStatus,
     onSqlChanged: (String) -> Unit,
-    onExecute: () -> Unit
+    onExecute: () -> Unit,
+    onReturn: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -100,6 +104,7 @@ fun RunSqlContent(
         SqlInputSection(
             sql = state.sql,
             onSqlChanged = onSqlChanged,
+            onReturn = onReturn,
             onExecute = onExecute,
             modifier = Modifier
                 .fillMaxWidth().height(15.pct)
@@ -121,6 +126,7 @@ fun RunSqlContent(
 fun SqlInputSection(
     sql: String,
     onSqlChanged: (String) -> Unit,
+    onReturn: () -> Unit,
     onExecute: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -129,6 +135,24 @@ fun SqlInputSection(
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.Top
         ) {
+            // 执行按钮 - 播放图标版本
+            IconButton(
+                onClick = onReturn,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .size(8.pct)
+                    .background(
+                        MaterialTheme.colorScheme.primary
+                    )
+            ) {
+                Icon(
+                    imageVector =Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "执行SQL",
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+
             // 使用BasicTextField替代TextField来完全控制padding
             Box(
                 modifier = Modifier
