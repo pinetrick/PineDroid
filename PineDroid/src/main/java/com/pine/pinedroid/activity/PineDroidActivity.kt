@@ -16,7 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.pine.pinedroid.activity.db_selection.DbSelection
+import com.pine.pinedroid.activity.sql.RunSqlScreen
 import com.pine.pinedroid.activity.table_selection.TableSelection
 import com.pine.pinedroid.db.model
 import com.pine.pinedroid.db.table
