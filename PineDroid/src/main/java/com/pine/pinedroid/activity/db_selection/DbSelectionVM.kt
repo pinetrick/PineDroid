@@ -2,7 +2,8 @@ package com.pine.pinedroid.activity.db_selection
 
 import androidx.lifecycle.viewModelScope
 import com.pine.pinedroid.db.AppDatabases
-import com.pine.pinedroid.db.DatabaseInfo
+import com.pine.pinedroid.db.bean.DatabaseInfo
+
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

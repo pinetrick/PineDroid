@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.pine.pinedroid.db.DatabaseInfo
+import com.pine.pinedroid.db.bean.DatabaseInfo
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import com.pine.pinedroid.utils.file.bToDisplayFileSize
 import com.pine.pinedroid.utils.file.kbToDisplayFileSize

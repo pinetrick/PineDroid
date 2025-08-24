@@ -2,6 +2,7 @@ package com.pine.pinedroid.db
 
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import com.pine.pinedroid.db.bean.TableInfo
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.logv
 import kotlin.collections.component1
@@ -49,6 +50,38 @@ class DbConnection private constructor(public var dbName: String) {
 
         return db.insert(tableName, nullColumnHack, contentValues)
     }
+
+    /**
+     * 获取数据库中的所有表信息
+     */
+    fun tables(): List<TableInfo> {
+        val tables = mutableListOf<TableInfo>()
+        var cursor: Cursor? = null
+
+        try {
+            // 查询 sqlite_master 表获取所有表信息
+            cursor = db.rawQuery(
+                "SELECT name, type, sql FROM sqlite_master WHERE type IN ('table', 'view') AND name NOT LIKE 'sqlite_%' ORDER BY name",
+                null
+            )
+
+            while (cursor.moveToNext()) {
+                val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                val type = cursor.getString(cursor.getColumnIndexOrThrow("type"))
+                val sql = cursor.getString(cursor.getColumnIndexOrThrow("sql"))
+
+
+                tables.add(TableInfo(name, type, sql))
+            }
+        } catch (e: Exception) {
+            logv("DbConnection", "Error getting tables: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return tables
+    }
+
 
     companion object{
         // 缓存所有 dbName 对应的连接

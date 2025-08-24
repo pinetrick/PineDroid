@@ -1,6 +1,6 @@
 package com.pine.pinedroid.activity.db_selection
 
-import com.pine.pinedroid.db.DatabaseInfo
+import com.pine.pinedroid.db.bean.DatabaseInfo
 
 
 data class DbSelectionStatus(

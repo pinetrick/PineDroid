@@ -49,7 +49,10 @@ class PineDroidActivity : ComponentActivity() {
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     composable("db") { DbSelection(navController) }
-                    composable("table") { TableSelection(navController) }
+                    composable("table/{dbname}") { backStackEntry ->  // 注意这里改成 {dbname}
+                        val dbname = backStackEntry.arguments?.getString("dbname")
+                        TableSelection(navController, dbname ?: "")
+                    }
                     composable("sql") { RunSqlScreen(navController) }
                 }
             }
