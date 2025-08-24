@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlin.reflect) // 使用你的Kotlin版本
+    implementation(libs.coil.compose) //异步网络图片加载库
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
