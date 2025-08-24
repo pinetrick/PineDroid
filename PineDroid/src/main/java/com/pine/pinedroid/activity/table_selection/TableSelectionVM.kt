@@ -21,7 +21,8 @@ class TableSelectionVM : BaseViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             _viewState.update { currentState ->
                 currentState.copy(
-                    tables = db(dbName).tables()
+                    dbName = dbName,
+                    tables = db(dbName).tables(),
                 )
             }
 

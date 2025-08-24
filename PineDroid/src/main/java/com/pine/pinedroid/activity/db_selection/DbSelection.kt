@@ -1,6 +1,8 @@
 package com.pine.pinedroid.activity.db_selection
 
+import android.view.View
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +20,9 @@ import androidx.compose.foundation.lazy.items
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.PlusOne
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material3.Button
@@ -25,6 +30,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -49,6 +55,8 @@ import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import com.pine.pinedroid.utils.file.bToDisplayFileSize
 import com.pine.pinedroid.utils.file.kbToDisplayFileSize
 import com.pine.pinedroid.utils.formatDate
+import com.pine.pinedroid.utils.ui.pct
+import com.pine.pinedroid.utils.ui.spwh
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -72,8 +80,9 @@ fun DbSelection(
     // 构建UI
     DbSelectionScreen(
         state = state,
-        onRefresh = viewModel::initialize,
-        onDatabaseClick = viewModel::onOpenDb
+        onNew = viewModel::onNew,
+        onDatabaseClick = viewModel::onOpenDb,
+        onClose = viewModel::onClose,
     )
 }
 
@@ -81,26 +90,32 @@ fun DbSelection(
 @Composable
 fun DbSelectionScreen(
     state: DbSelectionStatus,
-    onRefresh: () -> Unit,
-    onDatabaseClick: (DatabaseInfo) -> Unit = {}
+    onNew: () -> Unit,
+    onDatabaseClick: (DatabaseInfo) -> Unit = {},
+    onClose: () -> Unit,
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("数据库选择") },
-                actions = {
-                    Button(
-                        onClick = onRefresh,
-                        modifier = Modifier.padding(end = 8.dp)
-                    ) {
+                navigationIcon = {
+                    IconButton(onClick = onClose) {
                         Icon(
-                            imageVector = Icons.Default.Refresh,
-                            contentDescription = "刷新",
-                            modifier = Modifier.size(18.dp)
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "返回"
                         )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text("刷新")
                     }
+
+                },
+                actions = {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(horizontal = 4.pct)
+                            .size(8.pct)
+                            .clickable{onNew()}
+                    )
                 }
             )
         }

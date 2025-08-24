@@ -1,10 +1,12 @@
 package com.pine.pinedroid.activity.db_selection
 
+import android.app.Activity
 import androidx.lifecycle.viewModelScope
 import com.pine.pinedroid.db.AppDatabases
 import com.pine.pinedroid.db.bean.DatabaseInfo
 
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
+import com.pine.pinedroid.utils.activityContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,8 +29,17 @@ class DbSelectionVM : BaseViewModel() {
         }
     }
 
+    fun onNew(){
+
+    }
+
     fun onOpenDb(databaseInfo: DatabaseInfo) {
         navigateTo("table/${databaseInfo.name}")
+
+    }
+
+    fun onClose() {
+        (activityContext as Activity).finish()
 
     }
 
