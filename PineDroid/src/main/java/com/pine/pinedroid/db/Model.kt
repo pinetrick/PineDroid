@@ -1,5 +1,6 @@
 package com.pine.pinedroid.db
 
+import android.database.Cursor
 import com.pine.pinedroid.utils.camelToSnakeCase
 import kotlin.reflect.KClass
 
@@ -72,14 +73,23 @@ open class Model(name: String, private val dbName: String? = null) {
     }
 
     fun rawQuery(lastSql: String, args: Array<Any?>? = null): List<DbRecord> {
-
         val cursor = dbConnection.query(lastSql, args)
         val records = mutableListOf<DbRecord>()
 
         while (cursor.moveToNext()) {
             val row = mutableMapOf<String, Any?>()
             for (i in 0 until cursor.columnCount) {
-                row[cursor.getColumnName(i)] = cursor.getString(i)
+                val columnName = cursor.getColumnName(i)
+                val columnType = cursor.getType(i)
+
+                row[columnName] = when (columnType) {
+                    Cursor.FIELD_TYPE_NULL -> null
+                    Cursor.FIELD_TYPE_INTEGER -> cursor.getLong(i)
+                    Cursor.FIELD_TYPE_FLOAT -> cursor.getDouble(i)
+                    Cursor.FIELD_TYPE_STRING -> cursor.getString(i)
+                    Cursor.FIELD_TYPE_BLOB -> cursor.getBlob(i)
+                    else -> cursor.getString(i) // 未知类型回退到字符串
+                }
             }
 
             val record = newRecord()
