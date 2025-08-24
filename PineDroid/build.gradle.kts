@@ -55,6 +55,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlin.reflect) // 使用你的Kotlin版本
     implementation(libs.coil.compose) //异步网络图片加载库
+    //noinspection NewerVersionAvailable
+    implementation(libs.coil.gif)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
