@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.View
 import androidx.core.net.toUri
+import com.pine.pinedroid.activity.PineDroidActivity
 import com.pine.pinedroid.file.DataCleanManager
 import com.pine.pinedroid.ui.float_window.FloatingWindowHelper
 import com.pine.pinedroid.ui.message_box.MessageBox
@@ -40,12 +41,18 @@ object FunctionWindowController {
                     }
                     closeButton.setOnClickListener(::closeFloatWindow)
                     uninstallButton.setOnClickListener (::onUninstallBtnClick)
+                    dataBaseButton.setOnClickListener (::openDbEditor)
                 }
 
 
             }
             FloatingWindowHelper.showFloatingWindow(functionWindow!!)
         }
+    }
+
+    fun openDbEditor(view: View? = null){
+        activityContext.startActivity(Intent(activityContext, PineDroidActivity::class.java))
+        closeFloatWindow()
     }
 
     fun closeFloatWindow(view: View? = null){

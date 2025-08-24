@@ -57,10 +57,14 @@ dependencies {
     implementation(libs.coil.compose) //异步网络图片加载库
     //noinspection NewerVersionAvailable
     implementation(libs.coil.gif)
+    implementation(libs.material3)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.androidx.material.icons.extended)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.gson)
+    debugImplementation(libs.ui.tooling)
 }

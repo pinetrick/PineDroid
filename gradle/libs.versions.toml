@@ -13,15 +13,20 @@ activityCompose = "[1.0,1.10.1]"
 composeBom = "2025.08.00"
 appcompat = "[1.0,1.7.1]"
 material = "[1.0,1.12.0]"
+materialIconsExtended = "1.7.8"
 runtime = "[1.0,1.9.0]"
 navigationCompose = "2.9.3"
 navigationFragmentKtx = "2.9.3"
 ktor = "3.2.3"
 coroutines = "1.10.2"
 serialization = "1.9.0"
+material3 = "1.3.2"
+uiToolingPreview = "1.9.0"
+uiTooling = "1.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coilCompose" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
@@ -52,6 +57,9 @@ ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "uiToolingPreview" }
+ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 
 
 [plugins]

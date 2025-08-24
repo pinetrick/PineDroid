@@ -26,6 +26,7 @@ class FunctionWindow @JvmOverloads constructor(
     var dataBaseButton: Button
     var uninstallButton: Button
 
+
     init {
         // 加载 XML 布局
         inflate(context, R.layout.function_window, this)
@@ -41,6 +42,7 @@ class FunctionWindow @JvmOverloads constructor(
         closeButton = findViewById<Button>(R.id.debug_runtime_ret_btn)
         dataBaseButton = findViewById<Button>(R.id.debug_runtime_database_btn)
         uninstallButton = findViewById<Button>(R.id.debug_runtime_uninstall_btn)
+
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
