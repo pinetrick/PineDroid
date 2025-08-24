@@ -59,6 +59,7 @@ import com.pine.pinedroid.ui.Colour
 import com.pine.pinedroid.utils.ui.pct
 import com.pine.pinedroid.utils.ui.spwh
 import androidx.compose.foundation.lazy.items
+import com.pine.pinedroid.db.ColumnInfo
 
 @Composable
 fun RunSqlScreen(
@@ -116,6 +117,7 @@ fun RunSqlContent(
         // 结果表格区域
         SqlResultTable(
             records = state.table,
+            header = state.tableHeader,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.6f)
@@ -213,6 +215,7 @@ fun SqlInputSection(
 @Composable
 fun SqlResultTable(
     records: List<DbRecord>,
+    header: List<ColumnInfo>,
     modifier: Modifier = Modifier
 ) {
     var scale by remember { mutableFloatStateOf(1f) }
@@ -287,10 +290,10 @@ fun SqlResultTable(
                         .fillMaxSize()
                         .graphicsLayer(scaleX = scale, scaleY = scale)
                 ) {
+
                     // 表头
                     item {
-                        val columns = records.firstOrNull()?.kvs?.keys?.toList() ?: emptyList()
-                        TableHeaderRow(columns)
+                        TableHeaderRow(header)
                     }
 
                     // 数据行（推荐 items(list)）
@@ -306,20 +309,19 @@ fun SqlResultTable(
 
 
 @Composable
-fun TableHeaderRow(columns: List<String>) {
+fun TableHeaderRow( tableHeader: List<ColumnInfo>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
-        columns.forEach { column ->
+        tableHeader.forEach { columnInfo ->
             Text(
-                text = column,
+                text = columnInfo.name,
                 fontSize = 8.spwh,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
-                    .weight(1f)
                     .padding(1.pct)
             )
         }
@@ -338,7 +340,6 @@ fun TableDataRow(record: DbRecord) {
                 text = value?.toString() ?: "NULL",
                 fontSize = 8.spwh,
                 modifier = Modifier
-                    .weight(1f)
                     .padding(1.pct)
             )
         }

@@ -68,12 +68,13 @@ open class Model(name: String, private val dbName: String? = null) {
 
         lastSql = "SELECT $columns FROM $tableName $whereSql $limitSql"
 
-        return rawQuery(lastSql, whereArgs.toTypedArray())
+        return rawQuery(lastSql, whereArgs.toTypedArray()).first
 
     }
 
-    fun rawQuery(lastSql: String, args: Array<Any?>? = null): List<DbRecord> {
-        val cursor = dbConnection.query(lastSql, args)
+    fun rawQuery(lastSql: String, args: Array<Any?>? = null): Pair<List<DbRecord>, List<ColumnInfo>> {
+        val queryResult = dbConnection.query(lastSql, args)
+        val cursor = queryResult.first
         val records = mutableListOf<DbRecord>()
 
         while (cursor.moveToNext()) {
@@ -98,7 +99,7 @@ open class Model(name: String, private val dbName: String? = null) {
         }
 
         cursor.close()
-        return records
+        return Pair(records, queryResult.second)
     }
 
     fun newRecord() : DbRecord {

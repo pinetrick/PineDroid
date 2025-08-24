@@ -21,7 +21,7 @@ class TableStructure private constructor(
     val columns: MutableList<ColumnInfo> = mutableListOf()
 
     init {
-        val cursor: Cursor = dbConnection.query("PRAGMA table_info($tableName)")
+        val cursor: Cursor = dbConnection.query("PRAGMA table_info($tableName)").first
         while (cursor.moveToNext()) {
             val cid = cursor.getInt(cursor.getColumnIndexOrThrow("cid"))
             val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))

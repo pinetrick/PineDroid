@@ -54,10 +54,11 @@ class RunSqlScreenVM : BaseViewModel() {
 
     fun onRunSql() {
         val vs = _viewState.value
-        val result = model(vs.tableName, vs.dbName).rawQuery(vs.sql)
+        val queryResult = model(vs.tableName, vs.dbName).rawQuery(vs.sql)
         _viewState.update { currentState ->
             currentState.copy(
-                table = result,
+                table = queryResult.first,
+                tableHeader = queryResult.second,
             )
         }
     }

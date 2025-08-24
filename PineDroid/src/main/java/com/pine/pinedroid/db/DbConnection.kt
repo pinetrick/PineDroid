@@ -23,11 +23,30 @@ class DbConnection private constructor(public var dbName: String) {
         else db.execSQL(sql, args)
     }
 
-    fun query(sql: String, args: Array<Any?>? = null): Cursor {
+    fun query(sql: String, args: Array<Any?>? = null): Pair<Cursor, List<ColumnInfo>> {
         logv("SQLQuery", sql)
-        return if (args == null) db.rawQuery(sql, null)
-        else db.rawQuery(sql, args.map { it.toString() }.toTypedArray())
+
+        val cursor = if (args == null) db.rawQuery(sql, null)
+        else db.rawQuery(sql, args.map { it?.toString() }.toTypedArray())
+
+        val columnNames = cursor.columnNames.toList()
+
+        // 创建基本的 ColumnInfo（只有名称和索引）
+        val columnInfos = columnNames.mapIndexed { index, name ->
+            ColumnInfo(
+                cid = index,
+                name = name,
+                type = "UNKNOWN", // 或者尝试从cursor获取类型信息
+                notNull = false,
+                defaultValue = null,
+                isPrimaryKey = false,
+                isAutoIncrement = false
+            )
+        }
+
+        return Pair(cursor, columnInfos)
     }
+
 
     fun insert(tableName: String, nullColumnHack: String?, kvs: MutableMap<String, Any?>): Long {
         logv("SQLInsert", kvs)
