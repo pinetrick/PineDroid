@@ -67,7 +67,13 @@ open class Model(name: String, private val dbName: String? = null) {
 
         lastSql = "SELECT $columns FROM $tableName $whereSql $limitSql"
 
-        val cursor = dbConnection.query(lastSql, whereArgs.toTypedArray())
+        return rawQuery(lastSql, whereArgs.toTypedArray())
+
+    }
+
+    fun rawQuery(lastSql: String, args: Array<Any?>? = null): List<DbRecord> {
+
+        val cursor = dbConnection.query(lastSql, args)
         val records = mutableListOf<DbRecord>()
 
         while (cursor.moveToNext()) {

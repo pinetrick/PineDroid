@@ -8,6 +8,8 @@ import com.pine.pinedroid.db.AppDatabases
 import com.pine.pinedroid.db.bean.DatabaseInfo
 import com.pine.pinedroid.db.bean.TableInfo
 import com.pine.pinedroid.db.db
+import com.pine.pinedroid.db.model
+import com.pine.pinedroid.db.table
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,13 +29,37 @@ class RunSqlScreenVM : BaseViewModel() {
                     tableName = tableName,
                 )
             }
-
+            _viewState.update { currentState ->
+                currentState.copy(
+                    sql = getDefaultSql()
+                )
+            }
         }
     }
 
-    fun onRunSql(sql: String) {
+    fun getDefaultSql(): String {
+        val vs = _viewState.value
+        return "SELECT *\n" +
+                "FROM " + vs.tableName + "\n" +
+                "LIMIT 100"
+    }
 
+    fun updateSql(sql: String) {
+        _viewState.update { currentState ->
+            currentState.copy(
+                sql = sql,
+            )
+        }
+    }
 
+    fun onRunSql() {
+        val vs = _viewState.value
+        val result = model(vs.tableName, vs.dbName).rawQuery(vs.sql)
+        _viewState.update { currentState ->
+            currentState.copy(
+                table = result,
+            )
+        }
     }
 
 

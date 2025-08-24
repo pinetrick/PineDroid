@@ -34,4 +34,6 @@ abstract class BaseViewModel : ViewModel() {
             _navEvents.emit(NavEvent.PopUpTo(route, inclusive))
         }
     }
+
+
 }
