@@ -54,6 +54,13 @@ open class Model(name: String, private val dbName: String? = null) {
         return this
     }
 
+    fun count(): Long {
+        val list = select("count(*)")
+        return list.first()["count(*)"] as Long
+    }
+
+
+
     /** 根据主键或条件查找单条记录 */
     fun find(id: Long? = null): DbRecord? {
         if (id != null) {
