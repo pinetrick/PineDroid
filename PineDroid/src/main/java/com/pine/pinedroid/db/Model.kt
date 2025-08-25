@@ -16,6 +16,7 @@ open class Model(name: String, private val dbName: String? = null) {
     private val whereArgs = mutableListOf<Any?>()
 
     private var limitCount: Int? = null
+    private var orderBy: String = ""
     private var offsetCount: Int? = null
 
     private var lastSql = "";
@@ -25,7 +26,7 @@ open class Model(name: String, private val dbName: String? = null) {
         get() = db(dbName)
     /** 链式 where 查询 */
     fun where(key: String, value: Any?): Model {
-        return where(key, "=", value.toString())
+        return where(key, "=", value)
     }
 
     fun where(raw: String): Model {
@@ -33,8 +34,13 @@ open class Model(name: String, private val dbName: String? = null) {
         return this
     }
     fun where(key: String, condition: String, value: Any?): Model {
+        val tmpValue =
+            if (value is Boolean)
+                if (value) 1 else 0
+            else value
+
         whereConditions.add("$key $condition ?")
-        whereArgs.add(value)
+        whereArgs.add(tmpValue)
         return this
     }
     fun limit(count: Int, offset: Int? = null): Model {
@@ -43,8 +49,13 @@ open class Model(name: String, private val dbName: String? = null) {
         return this
     }
 
+    fun order(key: String): Model {
+        orderBy = "ORDER BY $key"
+        return this
+    }
+
     /** 根据主键或条件查找单条记录 */
-    fun find(id: Int? = null): DbRecord? {
+    fun find(id: Long? = null): DbRecord? {
         if (id != null) {
             val pkCol = tableStructure.getPrimaryKeyColumn()
                 ?: throw Exception("No primary key found in $tableName")
@@ -61,12 +72,12 @@ open class Model(name: String, private val dbName: String? = null) {
         val whereSql = if (whereConditions.isEmpty()) "" else "WHERE ${whereConditions.joinToString(" AND ")}"
 
         val limitSql = when {
-            limitCount != null && offsetCount != null -> "LIMIT $limitCount OFFSET $offsetCount"
-            limitCount != null -> "LIMIT $limitCount"
+            limitCount != null && offsetCount != null -> " LIMIT $limitCount OFFSET $offsetCount"
+            limitCount != null -> " LIMIT $limitCount"
             else -> ""
         }
 
-        lastSql = "SELECT $columns FROM $tableName $whereSql $limitSql"
+        lastSql = "SELECT $columns FROM  $tableName $whereSql $limitSql $orderBy"
 
         return rawQuery(lastSql, whereArgs.toTypedArray()).first
 

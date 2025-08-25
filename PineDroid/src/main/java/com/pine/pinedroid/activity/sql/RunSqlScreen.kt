@@ -60,6 +60,9 @@ import com.pine.pinedroid.utils.ui.pct
 import com.pine.pinedroid.utils.ui.spwh
 import androidx.compose.foundation.lazy.items
 import com.pine.pinedroid.db.ColumnInfo
+import com.pine.pinedroid.db.bean.fakeColumnInfos
+import com.pine.pinedroid.db.bean.fakeDbRecords
+import com.pine.pinedroid.jetpack.ui.ZoomableTable
 
 @Composable
 fun RunSqlScreen(
@@ -109,10 +112,13 @@ fun RunSqlContent(
             onReturn = onReturn,
             onExecute = onExecute,
             modifier = Modifier
-                .fillMaxWidth().height(15.pct)
+                .fillMaxWidth()
+                .height(15.pct)
         )
 
-        Spacer(modifier = Modifier.height(1.dp).background(Colour.gray))
+        Spacer(modifier = Modifier
+            .height(1.dp)
+            .background(Colour.gray))
 
         // 结果表格区域
         SqlResultTable(
@@ -149,7 +155,7 @@ fun SqlInputSection(
                     )
             ) {
                 Icon(
-                    imageVector =Icons.AutoMirrored.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "执行SQL",
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(24.dp)
@@ -243,179 +249,68 @@ fun SqlResultTable(
                 )
             }
         } else {
-            // 缩放控制
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(
-                    onClick = { scale = (scale - 0.1f).coerceAtLeast(0.5f) },
-                    modifier = Modifier.size(24.dp)
-                ) {
-                    Icon(
-                        Icons.Default.ZoomOut,
-                        contentDescription = "缩小"
+
+            ZoomableTable(
+                columnCount = header.size,
+                lineCount = records.size,
+                renderCell = { rowIndex, columnIndex, scale ->
+                    TableDataRow(
+                        records[rowIndex].kvs.values.toList()[columnIndex].toString(),
+                        scale
                     )
+                },
+                header = { columnIndex, scale ->
+                    TableHeaderRow(header[columnIndex].name, scale)
                 }
-
-                Text(
-                    text = "${(scale * 100).toInt()}%",
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-
-                IconButton(
-                    onClick = { scale = (scale + 0.1f).coerceAtMost(2f) },
-                    modifier = Modifier.size(24.dp)
-                ) {
-                    Icon(
-                        Icons.Default.ZoomIn,
-                        contentDescription = "放大"
-                    )
-                }
-            }
-
-            DataTable(
-                header = header,
-                records = records,
-                scale = scale,
-                modifier = Modifier.fillMaxSize()
             )
 
-//            // 表格内容 - REMOVE verticalScroll from here
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .border(1.dp, MaterialTheme.colorScheme.outline)
-//                    .horizontalScroll(rememberScrollState()) // Keep only horizontal scroll
-//            ) {
-//                LazyColumn(
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .graphicsLayer(scaleX = scale, scaleY = scale)
-//                ) {
-//
-//                    // 表头
-//                    item {
-//                        Row(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .background(MaterialTheme.colorScheme.primaryContainer)
-//                        ) {
-//                            header.forEach { columnInfo ->
-//                                Text(
-//                                    text = columnInfo.name,
-//                                    fontSize = 8.spwh,
-//                                    fontWeight = FontWeight.Bold,
-//                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-//                                    modifier = Modifier
-//                                        .padding(1.pct)
-//                                )
-//                            }
-//                        }
-//                    }
-//
-//                    // 数据行（推荐 items(list)）
-//                    items(records) { record ->
-//                        Row(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .border(0.5.dp, MaterialTheme.colorScheme.outlineVariant)
-//                        ) {
-//                            record.kvs.values.forEach { value ->
-//                                Text(
-//                                    text = value?.toString() ?: "NULL",
-//                                    fontSize = 8.spwh,
-//                                    modifier = Modifier
-//                                        .padding(1.pct)
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-//
-//            }
         }
     }
 }
 
 
 @Composable
-fun DataTable(
-    header: List<ColumnInfo>, // 假设 ColumnInfo 有 name 属性
-    records: List<DbRecord>,    // 假设 Record 有 kvs 属性
-    scale: Float = 1f,
-    modifier: Modifier = Modifier
+fun TableDataRow(
+    key: String?,
+    scale: Float
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .border(1.dp, MaterialTheme.colorScheme.outline)
-            .horizontalScroll(rememberScrollState())
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .graphicsLayer(scaleX = scale, scaleY = scale)
-        ) {
-            // 表头
-            item {
-                TableHeaderRow(header)
-            }
-
-            // 数据行
-            items(records) { record ->
-                TableDataRow(record)
-            }
-        }
-    }
+    Text(
+        text = key ?: "NULL",
+        fontSize = 8.sp * scale,
+        modifier = Modifier
+            .padding(4.dp) // 使用 dp 而不是 pct
+    )
 }
 
 @Composable
-private fun TableHeaderRow(header: List<ColumnInfo>) {
-    Row(
+private fun TableHeaderRow(name: String, scale: Float) {
+    Text(
+        text = name,
+        fontSize = 8.sp * scale,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.onPrimaryContainer,
         modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primaryContainer)
-    ) {
-        header.forEach { columnInfo ->
-            Text(
-                text = columnInfo.name,
-                fontSize = 8.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier
-                    .weight(1f) // 使用 weight 确保均匀分布
-                    .padding(4.dp) // 使用 dp 而不是 pct
-            )
-        }
-    }
+            .padding(4.dp) // 使用 dp 而不是 pct
+    )
 }
 
-@Composable
-private fun TableDataRow(record: DbRecord) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(0.5.dp, MaterialTheme.colorScheme.outlineVariant)
-    ) {
-        record.kvs.values.forEach { value ->
-            Text(
-                text = value?.toString() ?: "NULL",
-                fontSize = 8.sp,
-                modifier = Modifier
-                    .weight(1f) // 使用 weight 确保均匀分布
-                    .padding(4.dp) // 使用 dp 而不是 pct
-            )
-        }
-    }
-}
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 800)
 @Composable
 fun RunSqlScreenPreview() {
-    RunSqlScreen(null)
+    val status = RunSqlScreenStatus(
+        dbName = "Default Database",
+        tableName = "Default Table",
+        sql = "SELECT * \n FROM table_name \n LIMIT 100",
+        table = fakeDbRecords,
+        tableHeader = fakeColumnInfos
+    )
+
+    RunSqlContent(
+        state = status,
+        onSqlChanged = {  },
+        onExecute = { },
+        onReturn = { }
+    )
+
 }

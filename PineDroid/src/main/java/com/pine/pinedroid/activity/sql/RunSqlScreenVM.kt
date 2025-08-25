@@ -34,6 +34,7 @@ class RunSqlScreenVM : BaseViewModel() {
                     sql = getDefaultSql()
                 )
             }
+            onRunSql()
         }
     }
 

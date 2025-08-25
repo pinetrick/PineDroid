@@ -1,6 +1,7 @@
 package com.pine.pinedroid.db
 
 import com.pine.pinedroid.utils.camelToSnakeCase
+import com.pine.pinedroid.utils.logw
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
@@ -18,7 +19,7 @@ class ModelK<T : Any>(kclass: KClass<T>, dbName: String? = null) {
     /**
      * 根据主键或条件查找单条记录，并转换为指定类型
      */
-    fun find(id: Int? = null): T? {
+    fun find(id: Long? = null): T? {
         val dbRecord = model.find(id) ?: return null
         return convertToType(dbRecord)
     }
@@ -44,6 +45,11 @@ class ModelK<T : Any>(kclass: KClass<T>, dbName: String? = null) {
         return this
     }
 
+    fun order(key: String): ModelK<T> {
+        model.order(key)
+        return this
+    }
+
     /**
      * 将 DbRecord 转换为指定类型 T
      */
@@ -56,7 +62,7 @@ class ModelK<T : Any>(kclass: KClass<T>, dbName: String? = null) {
             }
             constructor.callBy(args)
         } catch (e: Exception) {
-            println("Error converting DbRecord to ${kclass.simpleName}: ${e.message}")
+            logw("Error converting DbRecord to ${kclass.simpleName}: ${e.message}")
             null
         }
     }

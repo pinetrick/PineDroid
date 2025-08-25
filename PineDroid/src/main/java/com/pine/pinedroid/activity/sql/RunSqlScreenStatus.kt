@@ -18,5 +18,4 @@ data class RunSqlScreenStatus(
     val sql: String = "SELECT * \n FROM table_name \n LIMIT 100",
     val table: List<DbRecord> = fakeDbRecords,
     val tableHeader: List<ColumnInfo> = fakeColumnInfos
-
 )
