@@ -7,17 +7,19 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
 // 简化的 ViewModel 基类
-abstract class BaseViewModel : ViewModel() {
+open class BaseViewModel : ViewModel() {
     private val _navEvents = MutableSharedFlow<NavEvent>()
     val navEvents: SharedFlow<NavEvent> = _navEvents
 
-    protected fun navigateTo(route: String) {
+
+    fun navigateTo(route: String, isPopThis: Boolean = false) {
         viewModelScope.launch {
+            if (isPopThis) _navEvents.emit(NavEvent.NavigateBack)
             _navEvents.emit(NavEvent.Navigate(route))
         }
     }
 
-    protected fun navigateWithArgs(route: String, args: Map<String, Any> = emptyMap()) {
+    fun navigateWithArgs(route: String, args: Map<String, Any> = emptyMap()) {
         viewModelScope.launch {
             _navEvents.emit(NavEvent.NavigateWithArgs(route, args))
         }

@@ -1,6 +1,7 @@
 package com.pine.pinedroid.db
 
 import com.pine.pinedroid.utils.gson
+import java.util.Date
 
 class DbRecord(public var tableName: String, public var dbName: String) {
     var kvs: MutableMap<String, Any?> = mutableMapOf()
@@ -13,7 +14,11 @@ class DbRecord(public var tableName: String, public var dbName: String) {
 
     operator fun set(column: String, value: Any?) {
         if (kvs[column] != value) {
-            kvs[column] = value
+            var value0 = value
+            if (value0 is Date) {
+                value0 = value.time
+            }
+            kvs[column] = value0
             dirtyKeys.add(column) // 自动防重复
         }
     }

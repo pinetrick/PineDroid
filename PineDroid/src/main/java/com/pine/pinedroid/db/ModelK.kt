@@ -2,6 +2,7 @@ package com.pine.pinedroid.db
 
 import com.pine.pinedroid.utils.camelToSnakeCase
 import com.pine.pinedroid.utils.logw
+import java.util.Date
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
@@ -22,6 +23,11 @@ class ModelK<T : Any>(kclass: KClass<T>, dbName: String? = null) {
     fun find(id: Long? = null): T? {
         val dbRecord = model.find(id) ?: return null
         return convertToType(dbRecord)
+    }
+
+    fun select(columns: String = "*"): List<T> {
+        val dbRecords = model.select(columns).map {  convertToType(it)!! }
+        return dbRecords
     }
 
     /**
@@ -90,6 +96,7 @@ class ModelK<T : Any>(kclass: KClass<T>, dbName: String? = null) {
             Double::class -> value.toString().toDoubleOrNull() ?: 0.0
             Float::class -> value.toString().toFloatOrNull() ?: 0f
             Boolean::class -> value.toString().toBoolean()
+            Date::class -> Date(value.toString().toLongOrNull() ?: 0L)
             else -> value
         }
     }

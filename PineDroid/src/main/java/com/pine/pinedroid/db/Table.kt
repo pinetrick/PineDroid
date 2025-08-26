@@ -4,6 +4,7 @@ package com.pine.pinedroid.db
 import com.pine.pinedroid.utils.camelToSnakeCase
 import com.pine.pinedroid.utils.logv
 import java.lang.reflect.ParameterizedType
+import java.util.Date
 
 fun table(name: String, db: String? = null): Table = Table(name, db)
 
@@ -95,6 +96,7 @@ class Table(
                     Long::class.java, java.lang.Long::class.java -> "BIGINT"
                     String::class.java -> "TEXT"
                     Boolean::class.java, java.lang.Boolean::class.java -> "INTEGER"
+                    Date::class.java -> "INTEGER"
                     Double::class.java, java.lang.Double::class.java -> "REAL"
                     Float::class.java, java.lang.Float::class.java -> "REAL"
                     List::class.java-> "List"
