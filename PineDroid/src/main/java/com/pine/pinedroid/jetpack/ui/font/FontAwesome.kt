@@ -30,7 +30,7 @@ val FontAwesomeRegular = FontFamily(
 val FontAwesomeBrands = FontFamily(
     Font(R.font.awesome_brands, FontWeight.Normal)
 )
-
+//https://fontawesome.com/search?q=sort&ic=free&o=r
 
 @Composable
 fun PineIcon(
