@@ -11,6 +11,8 @@ import com.pine.pinedroid.PineConfig
 import com.pine.pinedroid.debug.icon.SmallFloatIcon
 import com.pine.pinedroid.debug.window.FunctionWindowController
 import com.pine.pinedroid.ui.float_window.FloatingWindowHelper
+import com.pine.pinedroid.utils.PineApp.isAppDebug
+import com.pine.pinedroid.utils.PineApp.printSignatures
 import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.appContext
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +27,10 @@ class PineContentProvider : ContentProvider() {
             activityContext = context
             appContext = context.applicationContext
             registerActivityLifecycleCallbacks()
+
+            if (isAppDebug()) {
+                printSignatures()
+            }
             if (PineConfig.getIsDebugWindowAlwaysOn()) {
                 CoroutineScope(Dispatchers.Main).launch {
                     val view = SmallFloatIcon(appContext)

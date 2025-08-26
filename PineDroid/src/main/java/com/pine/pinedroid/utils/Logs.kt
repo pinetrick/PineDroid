@@ -6,11 +6,17 @@ import com.pine.pinedroid.db.Model
 
 fun <T> log(content: T?) = logd(content)
 fun <T> log(key: String, content: T?, level: Int = Log.DEBUG) {
-    val output = when (content) {
-        null -> "null"
-        is String, is Number, is Boolean -> content.toString()
-        else -> gson.toJson(content)
+    val output = try {
+        when (content) {
+            null -> "null"
+            is String, is Number, is Boolean -> content.toString()
+            is Exception -> (content.cause?.toString() ?: content.toString()).also { content.printStackTrace()  }
+            else -> gson.toJson(content)
+        }
+    }catch (e: Exception) {
+        e.toString()
     }
+
     _log(key, output, level)
 }
 
