@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.pine.pindroidpp.ui.theme.PinDroidppTheme
 import com.pine.pinedroid.db.model
 import com.pine.pinedroid.db.table
-import com.pine.pinedroid.utils.log
 import com.pine.pinedroid.utils.log.log
 import com.pine.pinedroid.utils.toast
 import com.pine.pinedroid.utils.ui.spw

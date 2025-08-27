@@ -29,6 +29,7 @@ var httpRootUrl = "";
 suspend inline fun <reified T> httpGet(url: String): T? {
     return try {
         val result: String = ktor.get(httpRootUrl + url).body()
+        //logv(result)
         val type = object : TypeToken<T>() {}.type
         gson.fromJson<T>(result, type)
     } catch (e: Exception) {
@@ -39,7 +40,7 @@ suspend inline fun <reified T> httpGet(url: String): T? {
 
 suspend inline fun <reified T> httpPostJson(
     url: String,
-    body: Any //MutableMap<String, Any?> = mutableMapOf() 如果传入的是
+    body: Any
 ): T? {
 
     var result: String = ""
