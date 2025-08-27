@@ -1,10 +1,9 @@
 package com.pine.pinedroid.db
 
 import com.pine.pinedroid.utils.camelToSnakeCase
-import com.pine.pinedroid.utils.logw
+import com.pine.pinedroid.utils.log.logw
 import java.util.Date
 import kotlin.reflect.KClass
-import kotlin.reflect.KParameter
 import kotlin.reflect.KType
 
 inline fun <reified T : Any> model(db: String? = null): ModelK<T> = ModelK(T::class, db)
@@ -20,10 +19,11 @@ class ModelK<T : Any>(kclass: KClass<T>, dbName: String? = null) {
     /**
      * 根据主键或条件查找单条记录，并转换为指定类型
      */
-    fun find(id: Long? = null): T? {
-        val dbRecord = model.find(id) ?: return null
+    fun find(id: Number? = null): T? {
+        val dbRecord = model.find(id?.toLong()) ?: return null
         return convertToType(dbRecord)
     }
+
 
     fun select(columns: String = "*"): List<T> {
         val dbRecords = model.select(columns).map {  convertToType(it)!! }
@@ -42,10 +42,28 @@ class ModelK<T : Any>(kclass: KClass<T>, dbName: String? = null) {
         model.where(raw)
         return this
     }
+
     fun where(key: String, condition: String, value: Any?): ModelK<T> {
         model.where(key, condition, value)
         return this
     }
+
+    // 添加 orWhere 相关方法
+    fun whereOr(key: String, value: Any?): ModelK<T> {
+        model.whereOr(key, value)
+        return this
+    }
+
+    fun whereOr(raw: String): ModelK<T> {
+        model.whereOr(raw)
+        return this
+    }
+
+    fun whereOr(key: String, condition: String, value: Any?): ModelK<T> {
+        model.whereOr(key, condition, value)
+        return this
+    }
+
     fun limit(count: Int, offset: Int? = null): ModelK<T> {
         model.limit(count, offset)
         return this

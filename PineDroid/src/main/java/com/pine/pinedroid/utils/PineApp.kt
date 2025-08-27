@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
+import com.pine.pinedroid.utils.log.logi
 import java.security.MessageDigest
 
 object PineApp {

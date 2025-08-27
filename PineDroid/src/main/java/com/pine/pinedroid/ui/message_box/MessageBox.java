@@ -1,7 +1,7 @@
 package com.pine.pinedroid.ui.message_box;
 
 import static com.pine.pinedroid.utils.ContextExtKt.activityContext;
-import static com.pine.pinedroid.utils.LogsKt.loge;
+import static com.pine.pinedroid.utils.log.LogsKt.loge;
 
 import android.content.Context;
 import android.content.DialogInterface;

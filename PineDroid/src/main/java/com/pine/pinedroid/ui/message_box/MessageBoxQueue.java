@@ -1,6 +1,6 @@
 package com.pine.pinedroid.ui.message_box;
 
-import static com.pine.pinedroid.utils.LogsKt.logd;
+import static com.pine.pinedroid.utils.log.LogsKt.logd;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -12,7 +12,12 @@ open class Model(name: String, private val dbName: String? = null) {
     private val modelName: String = name
     private val tableName: String = name.camelToSnakeCase()
 
-    private val whereConditions = mutableListOf<String>()
+    private data class WhereCondition(
+        val condition: String,  // 条件语句，如 "name = ?"
+        val operator: String    // 逻辑运算符：AND 或 OR
+    )
+
+    private val whereConditions = mutableListOf<WhereCondition>()
     private val whereArgs = mutableListOf<Any?>()
 
     private var limitCount: Int? = null
@@ -25,24 +30,44 @@ open class Model(name: String, private val dbName: String? = null) {
     private val dbConnection: DbConnection
         get() = db(dbName)
     /** 链式 where 查询 */
-    fun where(key: String, value: Any?): Model {
-        return where(key, "=", value)
-    }
+// 基础 where 条件（默认 AND）
+    fun where(key: String, value: Any?): Model = where(key, "=", value, "AND")
 
-    fun where(raw: String): Model {
-        whereConditions.add(raw)
-        return this
-    }
-    fun where(key: String, condition: String, value: Any?): Model {
-        val tmpValue =
-            if (value is Boolean)
-                if (value) 1 else 0
-            else value
+    fun where(key: String, condition: String, value: Any?): Model =
+        where(key, condition, value, "AND")
 
-        whereConditions.add("$key $condition ?")
+    // 支持指定逻辑运算符的 where
+    fun where(key: String, condition: String, value: Any?, operator: String): Model {
+        val tmpValue = if (value is Boolean) if (value) 1 else 0 else value
+        whereConditions.add(WhereCondition("$key $condition ?", operator))
         whereArgs.add(tmpValue)
         return this
     }
+
+    // 原始 SQL where（默认 AND）
+    fun where(raw: String): Model = where(raw, "AND")
+
+    // 支持指定逻辑运算符的原始 SQL where
+    fun where(raw: String, operator: String): Model {
+        whereConditions.add(WhereCondition(raw, operator))
+        return this
+    }
+
+    // 专门用于 OR 条件的快捷方法
+    fun whereOr(key: String, value: Any?): Model = whereOr(key, "=", value)
+
+    fun whereOr(key: String, condition: String, value: Any?): Model {
+        val tmpValue = if (value is Boolean) if (value) 1 else 0 else value
+        whereConditions.add(WhereCondition("$key $condition ?", "OR"))
+        whereArgs.add(tmpValue)
+        return this
+    }
+
+    fun whereOr(raw: String): Model {
+        whereConditions.add(WhereCondition(raw, "OR"))
+        return this
+    }
+
     fun limit(count: Int, offset: Int? = null): Model {
         limitCount = count
         offsetCount = offset
@@ -69,6 +94,7 @@ open class Model(name: String, private val dbName: String? = null) {
             where(pkCol.name, id)
         }
 
+        limit(1)
         val list = select()
         return list.firstOrNull()
     }
@@ -76,7 +102,7 @@ open class Model(name: String, private val dbName: String? = null) {
 
 
     fun select(columns: String = "*"): List<DbRecord> {
-        val whereSql = if (whereConditions.isEmpty()) "" else "WHERE ${whereConditions.joinToString(" AND ")}"
+        val whereSql = buildWhereClause()
 
         val limitSql = when {
             limitCount != null && offsetCount != null -> " LIMIT $limitCount OFFSET $offsetCount"
@@ -88,6 +114,25 @@ open class Model(name: String, private val dbName: String? = null) {
 
         return rawQuery(lastSql, whereArgs.toTypedArray()).first
 
+    }
+
+
+    private fun buildWhereClause(): String {
+        if (whereConditions.isEmpty()) return ""
+
+        val whereBuilder = StringBuilder("WHERE ")
+
+        for ((index, condition) in whereConditions.withIndex()) {
+            if (index == 0) {
+                // 第一个条件不需要逻辑运算符
+                whereBuilder.append(condition.condition)
+            } else {
+                // 后续条件添加逻辑运算符
+                whereBuilder.append(" ${condition.operator} ${condition.condition}")
+            }
+        }
+
+        return whereBuilder.toString()
     }
 
     fun rawQuery(lastSql: String, args: Array<Any?>? = null): Pair<List<DbRecord>, List<ColumnInfo>> {

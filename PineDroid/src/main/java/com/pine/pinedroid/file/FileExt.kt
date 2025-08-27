@@ -1,12 +1,9 @@
 package com.pine.pinedroid.file
 
-import android.content.Context
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.file.kbToDisplayFileSize
-import com.pine.pinedroid.utils.logi
+import com.pine.pinedroid.utils.log.logi
 import java.io.File
-import java.text.DecimalFormat
-
 
 
 /**

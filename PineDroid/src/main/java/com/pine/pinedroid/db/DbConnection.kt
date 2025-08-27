@@ -4,7 +4,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.pine.pinedroid.db.bean.TableInfo
 import com.pine.pinedroid.utils.appContext
-import com.pine.pinedroid.utils.logv
+import com.pine.pinedroid.utils.log.logv
 import kotlin.collections.component1
 import kotlin.collections.component2
 

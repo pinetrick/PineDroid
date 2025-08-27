@@ -15,11 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.pine.pindroidpp.ui.theme.PinDroidppTheme
-import com.pine.pinedroid.db.Model
 import com.pine.pinedroid.db.model
 import com.pine.pinedroid.db.table
-import com.pine.pinedroid.ui.message_box.MessageBox
 import com.pine.pinedroid.utils.log
+import com.pine.pinedroid.utils.log.log
 import com.pine.pinedroid.utils.toast
 import com.pine.pinedroid.utils.ui.spw
 
@@ -38,7 +37,7 @@ class MainActivity : ComponentActivity() {
         drivingQuestionsTable.save()
 
         var results = model("DrivingQuestionsTable").select()
-        _root_ide_package_.com.pine.pinedroid.utils.log("results", results)
+        log("results", results)
         results.forEach { result ->
             result.save()
         }
@@ -51,7 +50,7 @@ class MainActivity : ComponentActivity() {
         result = model("DrivingQuestionsTable").find(1)
         log("result", result)
 
-       // MessageBox.i().setListener { messageBoxChoose -> }.show("test" ,"te")
+        // MessageBox.i().setListener { messageBoxChoose -> }.show("test" ,"te")
 
         enableEdgeToEdge()
         setContent {

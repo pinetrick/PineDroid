@@ -2,7 +2,6 @@ package com.pine.pinedroid.db
 
 
 import com.pine.pinedroid.utils.camelToSnakeCase
-import com.pine.pinedroid.utils.logv
 import java.lang.reflect.ParameterizedType
 import java.util.Date
 

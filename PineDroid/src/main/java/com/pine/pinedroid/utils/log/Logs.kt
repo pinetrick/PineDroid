@@ -1,8 +1,8 @@
-package com.pine.pinedroid.utils
+package com.pine.pinedroid.utils.log
 
 import android.util.Log
-import com.pine.pinedroid.db.DbRecord
-import com.pine.pinedroid.db.Model
+import com.pine.pinedroid.utils.ToString
+import com.pine.pinedroid.utils.gson
 
 fun <T> log(content: T?) = logd(content)
 fun <T> log(key: String, content: T?, level: Int = Log.DEBUG) {
@@ -11,6 +11,9 @@ fun <T> log(key: String, content: T?, level: Int = Log.DEBUG) {
             null -> "null"
             is String, is Number, is Boolean -> content.toString()
             is Exception -> (content.cause?.toString() ?: content.toString()).also { content.printStackTrace()  }
+            is ByteArray -> content.ToString()
+            is List<*> -> content.ToString(30)
+            is Map<*, *> -> content.ToString(30)
             else -> gson.toJson(content)
         }
     }catch (e: Exception) {
@@ -45,3 +48,4 @@ private fun _log(tag: String, content: String, level: Int = Log.DEBUG) {
         else       -> Log.d(tag, content)  // 默认使用 DEBUG
     }
 }
+
