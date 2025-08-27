@@ -35,7 +35,6 @@ object FunctionWindowController {
             if (functionWindow == null) {
                 functionWindow = FunctionWindow(appContext).apply {
 
-                    mainMessage.text = currentActivity().shortName + ": " + getAppMemoryUsage().kbToDisplayFileSize()
                     exitApp.setOnClickListener {
                         android.os.Process.killProcess(android.os.Process.myPid())
                     }
@@ -43,9 +42,8 @@ object FunctionWindowController {
                     uninstallButton.setOnClickListener (::onUninstallBtnClick)
                     dataBaseButton.setOnClickListener (::openDbEditor)
                 }
-
-
             }
+            functionWindow!!.mainMessage.text = appContext.packageName + ": " + getAppMemoryUsage().kbToDisplayFileSize()
             FloatingWindowHelper.showFloatingWindow(functionWindow!!)
         }
     }

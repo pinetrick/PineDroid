@@ -6,4 +6,4 @@ import android.content.Context
 lateinit var activityContext: Context
 lateinit var appContext: Context
 
-fun currentActivity(): Activity = activityContext as Activity
+val currentActivity: Activity get() = activityContext as Activity
