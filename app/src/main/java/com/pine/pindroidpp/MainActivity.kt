@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.pine.pindroidpp.db.TableTest
 import com.pine.pindroidpp.ui.theme.PinDroidppTheme
 import com.pine.pinedroid.db.model
 import com.pine.pinedroid.db.table
@@ -24,31 +25,11 @@ import com.pine.pinedroid.utils.ui.spw
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        table("DrivingQuestionsTable")
-            .column(columnName = "id", type = "INTEGER", autoIncrease = true, primaryKey = true)
-            .column(columnName = "question", type = "TEXT")
-            .column(columnName = "answer", type = "TEXT")
-            .createTable()
 
-        val drivingQuestionsTable = model("DrivingQuestionsTable").newRecord()
-        drivingQuestionsTable["question"] = "What is your favorite color?"
-        drivingQuestionsTable["answer"] = "What is your favorite color?"
-        drivingQuestionsTable.save()
-
-        var results = model("DrivingQuestionsTable").select()
-        log("results", results)
-        results.forEach { result ->
-            result.save()
-        }
-
-        var result = model("DrivingQuestionsTable").find(1)
-        log("result", result)
-        result!!["question"] = "update"
-        result.save()
-
-        result = model("DrivingQuestionsTable").find(1)
-        log("result", result)
-
+        TableTest.createTables()
+        TableTest.testInsert()
+        TableTest.testSearch()
+        TableTest.loadRelative()
         // MessageBox.i().setListener { messageBoxChoose -> }.show("test" ,"te")
 
         enableEdgeToEdge()

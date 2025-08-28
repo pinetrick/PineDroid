@@ -1,6 +1,7 @@
 package com.pine.pinedroid.db
 
 import com.pine.pinedroid.utils.gson
+import com.pine.pinedroid.utils.log.logw
 import java.util.Date
 
 class DbRecord(public var tableName: String, public var dbName: String) {
@@ -23,6 +24,16 @@ class DbRecord(public var tableName: String, public var dbName: String) {
         }
     }
 
+    fun delete(){
+        if (this["id"] == null) {
+            logw("Cannot Delete, id is null")
+            return
+        }
+
+        val sql = "DELETE FROM $tableName WHERE id = " + this["id"]
+
+        dbConnection.execute(sql)
+    }
     fun save() {
         if (this["id"] == null) saveNew()
         else update()

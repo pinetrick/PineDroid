@@ -189,10 +189,11 @@ class DbConnection private constructor(public var dbName: String) {
 
     companion object {
         // 缓存所有 dbName 对应的连接
+        const val DEFAULT_DB_NAME = "app.db"
         private val instances = mutableMapOf<String, DbConnection>()
 
         fun getInstance(dbName: String? = null): DbConnection {
-            val name = dbName ?: "app.db"
+            val name = dbName ?: DEFAULT_DB_NAME
             return instances.getOrPut(name) { DbConnection(name) }
         }
     }

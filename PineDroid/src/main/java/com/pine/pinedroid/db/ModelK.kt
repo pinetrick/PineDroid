@@ -1,5 +1,6 @@
 package com.pine.pinedroid.db
 
+import com.pine.pinedroid.db.bean.BaseDataTable
 import com.pine.pinedroid.utils.camelToSnakeCase
 import com.pine.pinedroid.utils.log.logw
 import java.util.Date
@@ -8,9 +9,8 @@ import kotlin.reflect.KType
 
 inline fun <reified T : Any> model(db: String? = null): ModelK<T> = ModelK(T::class, db)
 
-class ModelK<T : Any>(kclass: KClass<T>, dbName: String? = null) {
+class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
 
-    private val kclass: KClass<T> = kclass
     private val constructor = kclass.constructors.first()
     private val parameters = constructor.parameters
 
@@ -73,6 +73,7 @@ class ModelK<T : Any>(kclass: KClass<T>, dbName: String? = null) {
         model.order(key)
         return this
     }
+
 
     /**
      * 将 DbRecord 转换为指定类型 T
