@@ -62,17 +62,11 @@ object LanguageManager {
         val resources = activityContext.resources
         val config = Configuration(resources.configuration)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            config.setLocale(locale)
-            activityContext.createConfigurationContext(config)
-            // 更新应用级别的配置
-            resources.updateConfiguration(config, resources.displayMetrics)
-        } else {
-            @Suppress("DEPRECATION")
-            config.locale = locale
-            @Suppress("DEPRECATION")
-            resources.updateConfiguration(config, resources.displayMetrics)
-        }
+        config.setLocale(locale)
+        activityContext.createConfigurationContext(config)
+        appContext = appContext.createConfigurationContext(config)
+        // 更新应用级别的配置
+        resources.updateConfiguration(config, resources.displayMetrics)
 
         // 更新状态，通知 UI 刷新
         _appLocaleState.value = locale
