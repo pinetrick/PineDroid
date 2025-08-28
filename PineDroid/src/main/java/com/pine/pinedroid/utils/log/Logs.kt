@@ -16,9 +16,10 @@ fun <T> log(key: String, content: T?, level: Int = Log.DEBUG) {
             is Map<*, *> -> content.ToString(30)
             else -> gson.toJson(content)
         }
-    }catch (e: Exception) {
+    } catch (e: Exception) {
         e.toString()
     }
+
 
     _log(key, output, level)
 }
@@ -39,13 +40,23 @@ fun <T> logv(content: T?) = log("null", content, Log.VERBOSE)
 
 
 private fun _log(tag: String, content: String, level: Int = Log.DEBUG) {
+    val finalTag = tag.ifEmpty {
+        // 获取调用者的类名
+        Thread.currentThread().stackTrace
+            .firstOrNull { !it.className.contains("Log") && !it.className.contains("_log") }
+            ?.className
+            ?.substringAfterLast('.')
+            ?: "UnknownClass"
+    }
+
+
     when (level) {
-        Log.VERBOSE -> Log.v(tag, content)
-        Log.DEBUG   -> Log.d(tag, content)
-        Log.INFO    -> Log.i(tag, content)
-        Log.WARN    -> Log.w(tag, content)
-        Log.ERROR   -> Log.e(tag, content)
-        else       -> Log.d(tag, content)  // 默认使用 DEBUG
+        Log.VERBOSE -> Log.v(finalTag, content)
+        Log.DEBUG   -> Log.d(finalTag, content)
+        Log.INFO    -> Log.i(finalTag, content)
+        Log.WARN    -> Log.w(finalTag, content)
+        Log.ERROR   -> Log.e(finalTag, content)
+        else       -> Log.d(finalTag, content)  // 默认使用 DEBUG
     }
 }
 
