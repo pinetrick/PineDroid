@@ -110,7 +110,7 @@ open class Model(name: String, private val dbName: String? = null) {
             else -> ""
         }
 
-        lastSql = "SELECT $columns FROM  $tableName $whereSql $orderBy $limitSql"
+        lastSql = "SELECT $columns FROM $tableName $whereSql $orderBy $limitSql"
 
         return rawQuery(lastSql, whereArgs.toTypedArray()).first
 

@@ -151,10 +151,10 @@ class DbConnection private constructor(public var dbName: String) {
                 }
                 tempSql = tempSql.replaceFirst("?", value)
             }
-
-            val formattedSql = formatSqlString(tempSql)
-            logv("SQL", formattedSql)
         }
+
+        val formattedSql = formatSqlString(tempSql)
+        logv("SQL", formattedSql)
     }
 
     private fun formatSqlString(sql: String): String {
@@ -183,6 +183,7 @@ class DbConnection private constructor(public var dbName: String) {
             .replace(Regex("\\bON\\b", RegexOption.IGNORE_CASE), "\nON ")
             .replace(Regex("\\bLIMIT\\b", RegexOption.IGNORE_CASE), "\nLIMIT ")
             .replace(Regex("\\bOFFSET\\b", RegexOption.IGNORE_CASE), "\nOFFSET ")
+            .replace("\n\n", "\n")
 
         return formattedSql.trim()
     }

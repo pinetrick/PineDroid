@@ -27,10 +27,6 @@ class DbSelectionVM : BaseViewModel() {
                 )
             }
 
-            if (dbs.size == 1) {
-                onOpenDb(dbs.first())
-            }
-
         }
     }
 

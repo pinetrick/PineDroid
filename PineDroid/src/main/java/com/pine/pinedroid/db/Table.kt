@@ -12,7 +12,6 @@ class Table(
     db: String? = null
 ) {
 
-
     private val modelName: String = name
     private val tableName: String = name.camelToSnakeCase()
     private val dbConnection: DbConnection = db(db)
@@ -57,28 +56,58 @@ class Table(
     // 生成 SQL 并执行建表
     fun createTable() {
         if (columns.isEmpty()) return
-        column("id", "INTEGER", true, true)
 
+        // 检查表是否存在
+        val tableExists = dbConnection.query(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='$tableName'"
+        ).first.count > 0
 
+        if (!tableExists) {
+            // 表不存在，创建新表
+            createNewTable()
+        } else {
+            // 表已存在，更新表结构
+            updateExistingTable()
+        }
+    }
+
+    private fun createNewTable() {
         val columnsSql = columns.joinToString(", ") { col ->
-            val sb = StringBuilder()
-            sb.append("${col.name} ${col.type}")
-            if (col.isPrimaryKey) sb.append(" PRIMARY KEY")
-            if (col.isAutoIncrement) sb.append(" AUTOINCREMENT")
-            if (col.notNull) sb.append(" NOT NULL")
-            if (col.defaultValue != null) sb.append(
-                " DEFAULT '${
-                    col.defaultValue.replace(
-                        "'",
-                        "''"
-                    )
-                }'"
-            )
-            sb.toString()
+            buildColumnSql(col)
         }
 
-        val sql = "CREATE TABLE IF NOT EXISTS $tableName ($columnsSql);"
+        val sql = "CREATE TABLE $tableName ($columnsSql);"
         dbConnection.execute(sql)
+    }
+
+    private fun updateExistingTable() {
+        // 获取现有表结构
+        val existingTable = TableStructure.find(dbConnection, tableName)
+        val existingColumns = existingTable.columns.associateBy { it.name }
+
+        // 检查需要添加的新列
+        val newColumns = columns.filter { !existingColumns.containsKey(it.name) }
+
+        // 添加新列
+        newColumns.forEach { newColumn ->
+            val alterSql = "ALTER TABLE $tableName ADD COLUMN ${buildColumnSql(newColumn)};"
+            dbConnection.execute(alterSql)
+        }
+
+        // 注意：SQLite 不支持直接修改列类型、删除列或修改主键
+        // 如果需要这些复杂操作，需要创建新表并迁移数据
+    }
+
+    private fun buildColumnSql(col: ColumnInfo): String {
+        val sb = StringBuilder()
+        sb.append("${col.name} ${col.type}")
+        if (col.isPrimaryKey) sb.append(" PRIMARY KEY")
+        if (col.isAutoIncrement) sb.append(" AUTOINCREMENT")
+        if (col.notNull) sb.append(" NOT NULL")
+        if (col.defaultValue != null) {
+            sb.append(" DEFAULT '${col.defaultValue.replace("'", "''")}'")
+        }
+        return sb.toString()
     }
 
     companion object{
