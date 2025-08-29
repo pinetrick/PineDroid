@@ -72,6 +72,8 @@ class Table(
     }
 
     private fun createNewTable() {
+        column("id", "Integer", autoIncrease = true, primaryKey = true)
+
         val columnsSql = columns.joinToString(", ") { col ->
             buildColumnSql(col)
         }

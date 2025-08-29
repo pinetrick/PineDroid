@@ -6,7 +6,9 @@ import com.pine.pinedroid.db.model
 import com.pine.pinedroid.utils.camelToSnakeCase
 import kotlin.reflect.full.memberProperties
 
-abstract class BaseDataTable  {
+abstract class BaseDataTable {
+    //防止gson 不知道映射哪个字段
+    @Transient  // Gson 默认就会排除 transient 字段
     open var id: Long? = null
     open var _dbName: String = DbConnection.DEFAULT_DB_NAME
     open val _tableName: String by lazy {
