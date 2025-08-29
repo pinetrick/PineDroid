@@ -4,6 +4,6 @@ import com.pine.pinedroid.db.bean.BaseDataTable
 
 data class Article (
     override var id: Long?,
-
+    var title: String
 ): BaseDataTable()
 

@@ -2,21 +2,17 @@ package com.pine.pinedroid.db.bean
 
 import com.pine.pinedroid.db.DbConnection
 import com.pine.pinedroid.db.DbRecord
-import com.pine.pinedroid.db.db
 import com.pine.pinedroid.db.model
 import com.pine.pinedroid.utils.camelToSnakeCase
-import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.memberProperties
 
-abstract class BaseDataTable: DbRelation {
+abstract class BaseDataTable  {
     open var id: Long? = null
     open var _dbName: String = DbConnection.DEFAULT_DB_NAME
     open val _tableName: String by lazy {
         val className = this::class.simpleName ?: "UnknownTable"
         className.camelToSnakeCase()
     }
-
-    override var relations: Map<String, Relation<out BaseDataTable>> = emptyMap()
 
     fun save(): BaseDataTable {
         val dbRecord = DbRecord(_tableName, _dbName)
@@ -47,22 +43,10 @@ abstract class BaseDataTable: DbRelation {
         return this
     }
 
-    fun delete(){
+    fun delete() {
         if (id != null) {
             model(_tableName, _dbName).find(id)?.delete()
         }
-    }
-
-    fun <T> hasMany(key: String): List<T> {
-        return listOf()
-    }
-
-    fun <T> belongsTo(key: String): T? {
-        return null
-    }
-
-    fun <T> hasOne(key: String): T? {
-        return null
     }
 
 

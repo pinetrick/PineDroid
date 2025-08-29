@@ -57,5 +57,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:1.9.0")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.9.0")
 
+
+
+
     implementation(project(":PineDroid"))
 }
