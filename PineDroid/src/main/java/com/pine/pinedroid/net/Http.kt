@@ -29,7 +29,7 @@ var httpRootUrl = "";
 suspend inline fun <reified T> httpGet(url: String): T? {
     return try {
         val result: String = ktor.get(httpRootUrl + url).body()
-        //logv(result)
+        logv(result)
         val type = object : TypeToken<T>() {}.type
         gson.fromJson<T>(result, type)
     } catch (e: Exception) {
