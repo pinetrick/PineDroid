@@ -11,8 +11,8 @@ inline fun <reified T : Any> model(db: String? = null): ModelK<T> = ModelK(T::cl
 
 class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
 
-    private val constructor = kclass.constructors.first()
-    private val parameters = constructor.parameters
+    private val constructor by lazy { kclass.constructors.first() }
+    private val parameters by lazy {  constructor.parameters }
 
     private val model = Model(kclass.simpleName!!, dbName)
 
@@ -87,7 +87,7 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
             }
             constructor.callBy(args)
         } catch (e: Exception) {
-            logw("Error converting DbRecord to ${kclass.simpleName}: ${e.message}")
+            logw("(is Data class?)Error converting DbRecord to ${kclass.simpleName}: ${e.message}")
             null
         }
     }
