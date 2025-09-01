@@ -17,6 +17,13 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    bundle {
+        language {
+            // 打包所有语言
+            enableSplit = false
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
