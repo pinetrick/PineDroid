@@ -10,6 +10,7 @@ import android.os.Bundle
 import com.pine.pinedroid.PineConfig
 import com.pine.pinedroid.debug.icon.SmallFloatIcon
 import com.pine.pinedroid.debug.window.FunctionWindowController
+import com.pine.pinedroid.language.LanguageManager
 import com.pine.pinedroid.ui.float_window.FloatingWindowHelper
 import com.pine.pinedroid.utils.PineApp.isAppDebug
 import com.pine.pinedroid.utils.PineApp.printSignatures
@@ -26,6 +27,7 @@ class PineContentProvider : ContentProvider() {
         context?.let { context ->
             activityContext = context
             appContext = context.applicationContext
+            LanguageManager.applySavedLanguage()
             registerActivityLifecycleCallbacks()
 
             if (isAppDebug()) {

@@ -67,7 +67,6 @@ object LanguageManager {
         activityContext.createConfigurationContext(config)
         appContext = appContext.createConfigurationContext(config)
 
-
         // 更新状态，通知 UI 刷新
         _appLocaleResource.value = appContext.resources
     }
