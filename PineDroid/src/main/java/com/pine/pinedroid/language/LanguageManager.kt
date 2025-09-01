@@ -1,5 +1,6 @@
 package com.pine.pinedroid.language
 
+import android.app.Activity
 import android.content.res.AssetManager
 import android.content.res.Configuration
 import android.os.Build
@@ -65,11 +66,10 @@ object LanguageManager {
         config.setLocale(locale)
         activityContext.createConfigurationContext(config)
         appContext = appContext.createConfigurationContext(config)
-        // 更新应用级别的配置
-        resources.updateConfiguration(config, resources.displayMetrics)
+
 
         // 更新状态，通知 UI 刷新
-        _appLocaleState.value = locale
+        _appLocaleResource.value = appContext.resources
     }
 
 

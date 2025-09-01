@@ -9,16 +9,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalResources
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pine.pinedroid.activity.db_selection.DbSelection
 import com.pine.pinedroid.activity.sql.RunSqlScreen
 import com.pine.pinedroid.activity.table_selection.TableSelection
-import com.pine.pinedroid.language._appLocaleState
-import java.util.Locale
+import com.pine.pinedroid.language._appLocaleResource
 
 
 class PineDroidActivity : ComponentActivity() {
@@ -27,8 +26,7 @@ class PineDroidActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            val LocalAppLocale = compositionLocalOf { Locale.getDefault() }
-            CompositionLocalProvider(LocalAppLocale provides _appLocaleState.value) {
+            CompositionLocalProvider(LocalResources provides _appLocaleResource.value) {
                 MainScreen()
             }
         }
