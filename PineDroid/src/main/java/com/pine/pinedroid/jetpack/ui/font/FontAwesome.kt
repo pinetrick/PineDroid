@@ -1,10 +1,12 @@
 package com.pine.pinedroid.jetpack.ui.font
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextLayoutResult
@@ -43,7 +45,7 @@ fun PineIcon(
     fontFamily: FontFamily = FontAwesomeSolid,
     letterSpacing: TextUnit = TextUnit.Unspecified,
     textDecoration: TextDecoration? = null,
-    textAlign: TextAlign? = null,
+    textAlign: TextAlign? = TextAlign.Center,
     lineHeight: TextUnit = TextUnit.Unspecified,
     overflow: TextOverflow = TextOverflow.Clip,
     softWrap: Boolean = true,
@@ -54,7 +56,7 @@ fun PineIcon(
 ) {
     Text(
         text = text,
-        modifier = modifier,
+        modifier = modifier.wrapContentHeight(align = Alignment.CenterVertically),
         color = color,
         fontSize = fontSize,
         fontStyle = fontStyle,

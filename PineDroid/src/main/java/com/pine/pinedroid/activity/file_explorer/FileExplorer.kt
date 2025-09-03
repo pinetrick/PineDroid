@@ -52,11 +52,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.pine.pinedroid.db.bean.DatabaseInfo
+import com.pine.pinedroid.jetpack.ui.font.PineIcon
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import com.pine.pinedroid.utils.file.bToDisplayFileSize
 import com.pine.pinedroid.utils.file.kbToDisplayFileSize
 import com.pine.pinedroid.utils.formatDate
+import com.pine.pinedroid.utils.getFontAwesomeIcon
 import com.pine.pinedroid.utils.ui.pct
+import com.pine.pinedroid.utils.ui.pctw
 import com.pine.pinedroid.utils.ui.spwh
 import java.io.File
 import java.text.SimpleDateFormat
@@ -113,9 +116,10 @@ fun FileExplorerScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "文件浏览器",
+                        text = state.currentDir,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        fontSize = 12.spwh
                     )
                 },
                 navigationIcon = {
@@ -203,22 +207,6 @@ fun FileList(
     onItemClick: (File) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
-        // 当前路径显示
-        Text(
-            text = "当前路径: $currentDir",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .padding(8.dp),
-            fontSize = 12.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
-        )
 
         if (files.isEmpty()) {
             EmptyDirectoryView()
@@ -256,25 +244,25 @@ fun FileListItem(file: File, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(vertical = 1.pct)
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(8.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(2.pct),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = if (file.isDirectory) Icons.Default.Storage else Icons.Default.PlusOne,
-                contentDescription = if (file.isDirectory) "文件夹" else "文件",
-                modifier = Modifier.size(24.dp),
-                tint = if (file.isDirectory) MaterialTheme.colorScheme.primary
-                else MaterialTheme.colorScheme.secondary
+            PineIcon(
+                text = file.getFontAwesomeIcon(),
+                fontSize = 24.spwh,
+                color = if (file.isDirectory) MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.size(14.pct),
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(3.pct))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
@@ -294,19 +282,20 @@ fun FileListItem(file: File, onClick: () -> Unit) {
                                 SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
                                     .format(Date(file.lastModified()))
                     },
-                    fontSize = 12.sp,
+                    fontSize = 16.spwh,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
             }
 
-            if (file.isDirectory) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "进入文件夹",
-                    modifier = Modifier.size(16.dp),
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
-            }
+            PineIcon(
+                text = "\uf105",
+                fontSize = 24.spwh,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                modifier = Modifier.size(16.pct),
+            )
+
+
+
         }
     }
 }
