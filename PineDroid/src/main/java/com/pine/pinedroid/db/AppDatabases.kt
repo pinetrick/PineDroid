@@ -66,7 +66,7 @@ object AppDatabases {
     /**
      * 检查文件是否是 SQLite 数据库文件（通过文件头）
      */
-    private fun isSqliteDatabaseFile(file: File): Boolean {
+    fun isSqliteDatabaseFile(file: File): Boolean {
         return try {
             FileInputStream(file).use { stream ->
                 val header = ByteArray(16)

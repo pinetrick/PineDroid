@@ -54,7 +54,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@color/yellow"
-                    android:text="Database"
+                    android:text="Files"
                     android:textColor="@color/black"/>
 
                 <Button

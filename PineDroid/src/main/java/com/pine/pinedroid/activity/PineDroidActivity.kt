@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pine.pinedroid.activity.db_selection.DbSelection
+import com.pine.pinedroid.activity.file_explorer.FileExplorer
 import com.pine.pinedroid.activity.sql.RunSqlScreen
 import com.pine.pinedroid.activity.table_selection.TableSelection
 import com.pine.pinedroid.language._appLocaleResource
@@ -44,9 +45,14 @@ class PineDroidActivity : ComponentActivity() {
             // 3. NavHost 管理不同 Composable 页面
             NavHost(
                 navController = navController,
-                startDestination = "db",
+                startDestination = "file",
                 modifier = Modifier.padding(innerPadding)
             ) {
+                composable("file") { FileExplorer(navController) }
+                composable("text_editor/{filePath}") { backStackEntry ->  // 注意这里改成 {dbname}
+                    val filePath = backStackEntry.arguments?.getString("filePath")!!
+                    TableSelection(navController, filePath)
+                }
                 composable("db") { DbSelection(navController) }
                 composable("table/{dbName}") { backStackEntry ->  // 注意这里改成 {dbname}
                     val dbName = backStackEntry.arguments?.getString("dbName")
