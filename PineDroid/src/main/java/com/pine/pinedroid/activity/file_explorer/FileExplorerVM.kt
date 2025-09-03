@@ -29,7 +29,7 @@ class FileExplorerVM : BaseViewModel() {
         if (isSqliteDatabaseFile(file)) {
             navigateTo("table/" + file.name)
         }
-        else if (file.isTxtFile()) {
+        else{ // if (file.isTxtFile()) {
             navigateTo("text_editor/" + file.absoluteFile.toString().replace("/", "$"))
         }
     }
