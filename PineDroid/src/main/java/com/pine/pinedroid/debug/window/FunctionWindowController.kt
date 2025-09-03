@@ -2,6 +2,8 @@ package com.pine.pinedroid.debug.window
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.view.View
 import androidx.core.net.toUri
 import com.pine.pinedroid.activity.PineDroidActivity
@@ -69,12 +71,20 @@ object FunctionWindowController {
 
                 exitProcess(0)
             } else if (id == 2) {
-                val intent = Intent()
-                intent.setAction(Intent.ACTION_DELETE)
-                intent.setData(
-                    ("package:" + appContext.packageName).toUri()
-                )
-                activityContext.startActivity(intent)
+                val packageUri = "package:${appContext.packageName}".toUri()
+
+                var intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = packageUri
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                currentActivity.startActivity(intent)
+
+//                intent = Intent(Intent.ACTION_DELETE, packageUri).apply {
+//                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                }
+//                currentActivity.startActivity(intent)
+
+
             }
         }.show("How Can I Help You！", "Clean Data", "Uninstall", "Cancel")
     }
