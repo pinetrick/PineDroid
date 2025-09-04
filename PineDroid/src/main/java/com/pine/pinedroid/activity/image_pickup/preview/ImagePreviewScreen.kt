@@ -21,7 +21,7 @@ import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 
 @Composable
 fun ImagePreviewScreen(
-    navController: NavHostController,
+    navController: NavHostController? = null,
     viewModel: ImagePreviewScreenVM = viewModel()
 ) {
     HandleNavigation(navController = navController, viewModel = viewModel)
@@ -36,7 +36,7 @@ fun ImagePreviewScreen(
 
     GeneralPineScreen(
         title = {
-            PineTopAppBar("Preview", onReturn = navController::popBackStack)
+            PineTopAppBar("Preview", onReturn =  viewModel::navigateBack)
         },
         content = {
             ImagePreviewScreenContent(

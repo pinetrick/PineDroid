@@ -22,15 +22,23 @@ fun ZoomablePineImage(
     modifier: Modifier = Modifier
 ) {
     var scale by remember { mutableFloatStateOf(1f) }
-    var rotation by remember { mutableFloatStateOf(0f) }
     var offsetX by remember { mutableFloatStateOf(0f) }
     var offsetY by remember { mutableFloatStateOf(0f) }
 
     val transformableState = rememberTransformableState { zoomChange, panChange, rotationChange ->
-        scale *= zoomChange
-        rotation += rotationChange
-        offsetX += panChange.x
-        offsetY += panChange.y
+        // 计算新的缩放比例，但不允许小于1（即不允许缩小到小于控件尺寸）
+        val newScale = scale * zoomChange
+        scale = newScale.coerceAtLeast(1f)
+
+        // 只有在缩放比例大于1时才允许平移
+        if (scale > 1f) {
+            offsetX += panChange.x
+            offsetY += panChange.y
+        } else {
+            // 当缩放比例为1时，重置偏移量
+            offsetX = 0f
+            offsetY = 0f
+        }
     }
 
     Box(
@@ -46,7 +54,6 @@ fun ZoomablePineImage(
                 .graphicsLayer(
                     scaleX = scale,
                     scaleY = scale,
-                    rotationZ = rotation,
                     translationX = offsetX,
                     translationY = offsetY
                 ),

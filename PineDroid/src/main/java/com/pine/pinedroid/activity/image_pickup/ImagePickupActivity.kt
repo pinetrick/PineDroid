@@ -5,21 +5,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
+import com.pine.pinedroid.activity.image_pickup.pickup.ImagePickupScreenVM
 
 class ImagePickupActivity : ComponentActivity() {
-    companion object {
-        var onResultCallback: ((List<Uri>) -> Unit)? = null
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val allowCamera = intent.getBooleanExtra("allowCamera", true)
-        val allowMultiple = intent.getBooleanExtra("allowMultiple", true)
+        val initScreen = intent.getStringExtra("initScreen") ?: "pickup"
 
         setContent {
             MaterialTheme {
-                RequirePermissionForImagePickUp(allowCamera, allowMultiple)
+                RequirePermissionForImagePickUp(initScreen)
 
 
             }
@@ -28,6 +26,6 @@ class ImagePickupActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        onResultCallback = null
+        ImagePickupScreenVM.inputImages = emptyList()
     }
 }

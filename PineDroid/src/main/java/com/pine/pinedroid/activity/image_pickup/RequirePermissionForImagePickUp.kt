@@ -17,7 +17,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pine.pinedroid.activity.db_selection.DbSelection
+import com.pine.pinedroid.activity.image_pickup.camera.CameraScreen
+import com.pine.pinedroid.activity.image_pickup.camera.CameraScreenState
 import com.pine.pinedroid.activity.image_pickup.pickup.ImagePickupScreen
+import com.pine.pinedroid.activity.image_pickup.pickup.ImagePickupScreenVM
 import com.pine.pinedroid.activity.image_pickup.preview.ImagePreviewScreen
 import com.pine.pinedroid.activity.sql.RunSqlScreen
 import com.pine.pinedroid.activity.table_selection.TableSelection
@@ -25,7 +28,7 @@ import com.pine.pinedroid.activity.text_editor.TextEditorScreen
 import com.pine.pinedroid.jetpack.ui.require_permission.rememberPermissionController
 
 @Composable
-fun RequirePermissionForImagePickUp(allowCamera: Boolean, allowMultiple: Boolean) {
+fun RequirePermissionForImagePickUp(initScreen: String) {
     // 构建正确的权限列表
     val requiredPermissions = buildList {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -41,7 +44,7 @@ fun RequirePermissionForImagePickUp(allowCamera: Boolean, allowMultiple: Boolean
         }
 
         // 相机权限（如果需要）
-        if (allowCamera) {
+        if (ImagePickupScreenVM.allowCamera) {
             add(Manifest.permission.CAMERA)
         }
     }
@@ -66,7 +69,7 @@ fun RequirePermissionForImagePickUp(allowCamera: Boolean, allowMultiple: Boolean
 
     when (hasPermission) {
         true -> {
-            ImagePickupScaffold(allowCamera, allowMultiple)
+            ImagePickupScaffold(initScreen)
         }
 
         false -> {
@@ -85,7 +88,7 @@ fun RequirePermissionForImagePickUp(allowCamera: Boolean, allowMultiple: Boolean
 
 @Composable
 fun ImagePickupScaffold(
-    allowCamera: Boolean, allowMultiple: Boolean
+    initScreen: String
 ){
     val navController = rememberNavController()
     
@@ -97,11 +100,12 @@ fun ImagePickupScaffold(
         // 3. NavHost 管理不同 Composable 页面
         NavHost(
             navController = navController,
-            startDestination = "pickup",
+            startDestination = initScreen,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("pickup") { ImagePickupScreen(navController, allowCamera, allowMultiple, onBack = { navController.popBackStack() }) }
+            composable("pickup") { ImagePickupScreen(navController, onBack = { navController.popBackStack() }) }
             composable("preview") { ImagePreviewScreen(navController) }
+            composable("camera") { CameraScreen(navController) }
 
         }
     }

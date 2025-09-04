@@ -1,24 +1,21 @@
 package com.pine.pinedroid.activity.image_pickup
 
-
 import android.content.Intent
-import android.net.Uri
-import androidx.compose.foundation.Image
+import com.pine.pinedroid.activity.image_pickup.camera.CameraScreenVM
 import com.pine.pinedroid.activity.image_pickup.pickup.ImagePickupScreenVM
 import com.pine.pinedroid.file.image.Gallery.getGalleryImages
 import com.pine.pinedroid.utils.currentActivity
 
-object ImagePickup {
+object TakePhoto {
 
 
-    fun pickImageFromGallery(
-        allowCamera: Boolean = true,
-        allowMultiple: Boolean = true,
-        callback: suspend (List<OneImage>) -> Unit
+    fun takePhoto(
+        allowFlash: Boolean = false,
+        callback: (suspend (OneImage?) -> Unit)?
     ) {
-        ImagePickupScreenVM.allowCamera = allowCamera
-        ImagePickupScreenVM.allowMultiple = allowMultiple
-        ImagePickupScreenVM.inputImages = getGalleryImages().map { OneImage.UriImage(it) }
+        CameraScreenVM.allowFlash = allowFlash
+        CameraScreenVM.callback = callback
+
 
         val intent = Intent(currentActivity, ImagePickupActivity::class.java).apply {
             putExtra("initScreen", "pickup")
@@ -28,7 +25,7 @@ object ImagePickup {
         currentActivity.startActivity(intent)
 
         // 使用回调机制返回结果
-        ImagePickupScreenVM.callback = callback
+        CameraScreenVM.callback = callback
     }
 
 

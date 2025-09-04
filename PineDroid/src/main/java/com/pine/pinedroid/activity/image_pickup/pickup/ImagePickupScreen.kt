@@ -43,6 +43,7 @@ import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
 import com.pine.pinedroid.jetpack.ui.button.PineButton
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
+import com.pine.pinedroid.jetpack.ui.loading.PineLoading
 import com.pine.pinedroid.jetpack.ui.nav.GeneralPineScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
@@ -52,9 +53,7 @@ import com.pine.pinedroid.utils.ui.spwh
 
 @Composable
 fun ImagePickupScreen(
-    navController: NavHostController,
-    allowCamera: Boolean,
-    allowMultiple: Boolean,
+    navController: NavHostController? = null,
     onBack: () -> Unit,
     viewModel: ImagePickupScreenVM = viewModel()
 ) {
@@ -64,7 +63,7 @@ fun ImagePickupScreen(
 
     // 模拟加载图片数据（实际应用中应该从媒体库加载）
     LaunchedEffect(Unit) {
-        viewModel.onInit(allowCamera, allowMultiple)
+        viewModel.onInit()
     }
 
     GeneralPineScreen(
@@ -99,32 +98,36 @@ fun Content(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        if (viewState.loading) {
+            PineLoading("正在处理...")
+        }
+        else {
+            // 图片网格
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(4),
+                contentPadding = PaddingValues(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                if (viewState.enabledCamera) {
+                    item(null) {
+                        ImageGridItem(
+                            oneImage = OneImage.Resource(R.drawable.camera),
+                            allowSelection = false,
+                            onImageClicked = onTakePhoto,
+                        )
+                    }
+                }
 
-        // 图片网格
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(4),
-            contentPadding = PaddingValues(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            if (viewState.enabledCamera) {
-                item(null) {
+                items(viewState.imageUris) { oneImage ->
                     ImageGridItem(
-                        oneImage = OneImage.Resource(R.drawable.camera),
-                        allowSelection = false,
-                        onImageClicked = onTakePhoto,
+                        oneImage = oneImage,
+                        allowSelection = true,
+                        isSelected = viewState.selectedImages.contains(oneImage),
+                        onSelectChange = onSelectChange,
+                        onImageClicked = onImageClicked,
                     )
                 }
-            }
-
-            items(viewState.imageUris) { oneImage ->
-                ImageGridItem(
-                    oneImage = oneImage,
-                    allowSelection = true,
-                    isSelected = viewState.selectedImages.contains(oneImage),
-                    onSelectChange = onSelectChange,
-                    onImageClicked = onImageClicked,
-                )
             }
         }
     }

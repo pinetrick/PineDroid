@@ -4,6 +4,7 @@ import com.pine.pinedroid.activity.image_pickup.OneImage
 
 
 data class ImagePickupScreenState(
+    val loading: Boolean = true,
     val enabledCamera: Boolean = false,
     val enabledMultiple: Boolean = false,
     val selectedImages: List<OneImage> = emptyList(),

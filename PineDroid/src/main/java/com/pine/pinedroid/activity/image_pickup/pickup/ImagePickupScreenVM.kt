@@ -1,31 +1,40 @@
 package com.pine.pinedroid.activity.image_pickup.pickup
 
+import androidx.lifecycle.viewModelScope
 import com.pine.pinedroid.activity.image_pickup.OneImage
+import com.pine.pinedroid.activity.image_pickup.TakePhoto
+import com.pine.pinedroid.activity.image_pickup.camera.CameraScreenVM
 import com.pine.pinedroid.activity.image_pickup.preview.ImagePreviewScreenVM
 import com.pine.pinedroid.file.image.Gallery.getGalleryImages
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class ImagePickupScreenVM : BaseViewModel() {
     private val _viewState = MutableStateFlow(ImagePickupScreenState())
     val viewState: StateFlow<ImagePickupScreenState> = _viewState
 
-    fun onInit(allowCamera: Boolean, allowMultiple: Boolean) {
-        val pictureUris = getGalleryImages().map { OneImage.UriImage(it) }
+    fun onInit() {
         _viewState.update {
             it.copy(
+                loading = false,
                 enabledCamera = allowCamera,
                 enabledMultiple = allowMultiple,
-                imageUris = pictureUris.toList()
+                imageUris = inputImages
+            )
+        }
+    }
+
+    fun onComplete() = viewModelScope.launch{
+        _viewState.update {
+            it.copy(
+                loading = true
             )
         }
 
-
-    }
-
-    fun onComplete(){
+        callback?.invoke(_viewState.value.selectedImages)
 
     }
 
@@ -36,8 +45,12 @@ class ImagePickupScreenVM : BaseViewModel() {
     }
 
     fun onTakePhoto(oneImage: OneImage) {
+        CameraScreenVM.allowFlash = true
+        CameraScreenVM.callback = {
 
 
+        }
+        navigateTo("camera")
     }
 
     fun onSelectChange(oneImage: OneImage) {
@@ -55,6 +68,15 @@ class ImagePickupScreenVM : BaseViewModel() {
             it.copy(selectedImages = selectedImages.toList())
         }
 
+
+    }
+
+    companion object {
+        var inputImages: List<OneImage> = emptyList()
+        var allowCamera: Boolean = true
+        var allowMultiple: Boolean = true
+
+        var callback: (suspend (List<OneImage>) -> Unit)? = null
 
     }
 }
