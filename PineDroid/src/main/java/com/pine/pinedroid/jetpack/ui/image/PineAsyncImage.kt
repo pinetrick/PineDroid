@@ -1,4 +1,4 @@
-package com.pine.pinedroid.jetpack.ui
+package com.pine.pinedroid.jetpack.ui.image
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,8 +14,8 @@ import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter.State
 import coil.compose.DefaultModelEqualityDelegate
 import coil.compose.EqualityDelegate
-import coil.compose.rememberAsyncImagePainter
 import com.pine.pinedroid.R
+import com.pine.pinedroid.activity.image_pickup.OneImage
 
 @Composable
 fun PineAsyncImage(
@@ -35,10 +35,18 @@ fun PineAsyncImage(
     filterQuality: FilterQuality = DefaultFilterQuality,
     clipToBounds: Boolean = true,
     modelEqualityDelegate: EqualityDelegate = DefaultModelEqualityDelegate,
-){
+) {
+
+    val processedModel = when (model) {
+        is OneImage.UriImage -> model.uri
+        is OneImage.HttpImage -> model.url
+        is OneImage.LocalImage -> model.localUrl
+        is OneImage.Resource -> model.resourceId
+        else -> model // 保持其他类型不变
+    }
 
     AsyncImage(
-        model = model,
+        model = processedModel,
         contentDescription = contentDescription,
         modifier = modifier,
         placeholder = placeholder,
@@ -55,5 +63,5 @@ fun PineAsyncImage(
         clipToBounds = clipToBounds,
         modelEqualityDelegate = modelEqualityDelegate,
 
-    )
+        )
 }

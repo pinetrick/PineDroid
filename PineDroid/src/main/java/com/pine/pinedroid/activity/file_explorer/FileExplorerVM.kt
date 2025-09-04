@@ -1,15 +1,10 @@
 package com.pine.pinedroid.activity.file_explorer
 
-import android.app.Activity
 import androidx.lifecycle.viewModelScope
-import com.pine.pinedroid.db.AppDatabases
 import com.pine.pinedroid.db.AppDatabases.isSqliteDatabaseFile
-import com.pine.pinedroid.db.bean.DatabaseInfo
 
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
-import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.appContext
-import com.pine.pinedroid.utils.isTxtFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

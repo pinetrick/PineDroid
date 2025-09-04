@@ -1,7 +1,6 @@
-package com.pine.pinedroid.utils
+package com.pine.pinedroid.file
 
 import java.io.File
-import java.util.Locale
 
 fun File.getFontAwesomeIcon(): String{
     if (isDirectory) return "\uf07b"
