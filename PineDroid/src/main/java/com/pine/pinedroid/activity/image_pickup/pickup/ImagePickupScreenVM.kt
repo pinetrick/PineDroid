@@ -2,10 +2,8 @@ package com.pine.pinedroid.activity.image_pickup.pickup
 
 import androidx.lifecycle.viewModelScope
 import com.pine.pinedroid.activity.image_pickup.OneImage
-import com.pine.pinedroid.activity.image_pickup.TakePhoto
 import com.pine.pinedroid.activity.image_pickup.camera.CameraScreenVM
 import com.pine.pinedroid.activity.image_pickup.preview.ImagePreviewScreenVM
-import com.pine.pinedroid.file.image.Gallery.getGalleryImages
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,14 +15,18 @@ class ImagePickupScreenVM : BaseViewModel() {
     val viewState: StateFlow<ImagePickupScreenState> = _viewState
 
     fun onInit() {
-        _viewState.update {
-            it.copy(
-                loading = false,
-                enabledCamera = allowCamera,
-                enabledMultiple = allowMultiple,
-                imageUris = inputImages
-            )
-        }
+
+            _viewState.update {
+                it.copy(
+                    loading = false,
+                    enabledCamera = allowCamera,
+                    enabledMultiple = allowMultiple,
+                    imageUris = inputImages
+                )
+            }
+
+
+
     }
 
     fun onComplete() = viewModelScope.launch{
@@ -46,7 +48,24 @@ class ImagePickupScreenVM : BaseViewModel() {
 
     fun onTakePhoto(oneImage: OneImage) {
         CameraScreenVM.allowFlash = true
-        CameraScreenVM.callback = {
+        CameraScreenVM.callback = { oneImage ->
+            oneImage?.let { oneImage ->
+
+                val imageUris = listOf(oneImage) + _viewState.value.imageUris
+                val choiceImages = listOf(oneImage) + _viewState.value.selectedImages
+
+                // 使用协程确保在主线程更新
+                viewModelScope.launch {
+                    _viewState.update {
+                        it.copy(
+                            imageUris = imageUris,
+                            selectedImages = choiceImages
+                        )
+                    }
+                }
+
+
+            }
 
 
         }

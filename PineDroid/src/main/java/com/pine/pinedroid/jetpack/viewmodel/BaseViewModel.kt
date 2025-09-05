@@ -10,7 +10,14 @@ import kotlinx.coroutines.launch
 open class BaseViewModel : ViewModel() {
     private val _navEvents = MutableSharedFlow<NavEvent>()
     val navEvents: SharedFlow<NavEvent> = _navEvents
+    private var initialized = false
 
+    suspend fun runOnce(block: suspend () -> Unit) {
+        if (!initialized) {
+            initialized = true
+            block()
+        }
+    }
 
     fun navigateTo(route: String, isPopThis: Boolean = false) {
         viewModelScope.launch {

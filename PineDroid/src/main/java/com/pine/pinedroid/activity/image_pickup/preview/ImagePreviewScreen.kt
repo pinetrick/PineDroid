@@ -31,7 +31,9 @@ fun ImagePreviewScreen(
 
     // 模拟加载图片数据（实际应用中应该从媒体库加载）
     LaunchedEffect(Unit) {
-        viewModel.onInit()
+        viewModel.runOnce {
+            viewModel.onInit()
+        }
     }
 
     GeneralPineScreen(

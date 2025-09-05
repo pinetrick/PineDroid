@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,11 +15,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,16 +41,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.pine.pinedroid.R
 import com.pine.pinedroid.activity.image_pickup.OneImage
-import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
 import com.pine.pinedroid.jetpack.ui.button.PineButton
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
+import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
 import com.pine.pinedroid.jetpack.ui.loading.PineLoading
 import com.pine.pinedroid.jetpack.ui.nav.GeneralPineScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
+import com.pine.pinedroid.jetpack.ui.score_bar.PineScrollIndicator
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import com.pine.pinedroid.utils.ui.pct
 import com.pine.pinedroid.utils.ui.spwh
-
 
 @Composable
 fun ImagePickupScreen(
@@ -63,7 +64,9 @@ fun ImagePickupScreen(
 
     // 模拟加载图片数据（实际应用中应该从媒体库加载）
     LaunchedEffect(Unit) {
-        viewModel.onInit()
+        viewModel.runOnce {
+            viewModel.onInit()
+        }
     }
 
     GeneralPineScreen(
@@ -100,35 +103,44 @@ fun Content(
     ) {
         if (viewState.loading) {
             PineLoading("正在处理...")
-        }
-        else {
-            // 图片网格
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(4),
-                contentPadding = PaddingValues(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                if (viewState.enabledCamera) {
-                    item(null) {
+        } else {
+            val scrollState = rememberLazyGridState()
+
+            Box(modifier = Modifier.fillMaxSize()) {
+                LazyVerticalGrid(
+                    modifier = Modifier.PineScrollIndicator(scrollState),
+                    state = scrollState,
+                    columns = GridCells.Fixed(4),
+                    contentPadding = PaddingValues(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    if (viewState.enabledCamera) {
+                        item(null) {
+                            ImageGridItem(
+                                oneImage = OneImage.Resource(R.drawable.camera),
+                                allowSelection = false,
+                                onImageClicked = onTakePhoto,
+                            )
+                        }
+                    }
+                    items(
+                        items = viewState.imageUris,
+                        key = { it.hashCode().toString() }
+                    ) { oneImage ->
                         ImageGridItem(
-                            oneImage = OneImage.Resource(R.drawable.camera),
-                            allowSelection = false,
-                            onImageClicked = onTakePhoto,
+                            oneImage = oneImage,
+                            allowSelection = true,
+                            isSelected = viewState.selectedImages.contains(oneImage),
+                            onSelectChange = onSelectChange,
+                            onImageClicked = onImageClicked,
                         )
                     }
                 }
 
-                items(viewState.imageUris) { oneImage ->
-                    ImageGridItem(
-                        oneImage = oneImage,
-                        allowSelection = true,
-                        isSelected = viewState.selectedImages.contains(oneImage),
-                        onSelectChange = onSelectChange,
-                        onImageClicked = onImageClicked,
-                    )
-                }
+
             }
+
         }
     }
 
@@ -207,7 +219,7 @@ fun ImageGridItem(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(4.dp)
-                    .size(32.dp)
+                    .size(25.dp)
                     .clickable {
                         onSelectChange(oneImage)
                     }
@@ -241,13 +253,8 @@ fun ImageGridItem(
                     )
                 } else {
                     // 未选中时的圆圈图标（可选）
-                    Icon(
-                        imageVector = Icons.Default.Circle,
-                        contentDescription = "未选择",
-                        tint = Color.Gray.copy(alpha = 0.5f),
+                    Spacer(
                         modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(13.dp)
                     )
                 }
             }

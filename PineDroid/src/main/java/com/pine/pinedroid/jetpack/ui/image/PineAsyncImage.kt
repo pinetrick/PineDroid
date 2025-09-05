@@ -1,5 +1,7 @@
 package com.pine.pinedroid.jetpack.ui.image
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -11,11 +13,19 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
 import coil.compose.AsyncImagePainter.State
 import coil.compose.DefaultModelEqualityDelegate
 import coil.compose.EqualityDelegate
 import com.pine.pinedroid.R
 import com.pine.pinedroid.activity.image_pickup.OneImage
+import java.io.File
+
+
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
+
+
 
 @Composable
 fun PineAsyncImage(
@@ -40,7 +50,7 @@ fun PineAsyncImage(
     val processedModel = when (model) {
         is OneImage.UriImage -> model.uri
         is OneImage.HttpImage -> model.url
-        is OneImage.LocalImage -> model.localUrl
+        is OneImage.LocalImage -> File(model.localUrl)
         is OneImage.Resource -> model.resourceId
         else -> model // 保持其他类型不变
     }
@@ -62,6 +72,5 @@ fun PineAsyncImage(
         filterQuality = filterQuality,
         clipToBounds = clipToBounds,
         modelEqualityDelegate = modelEqualityDelegate,
-
-        )
+    )
 }
