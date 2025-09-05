@@ -1,8 +1,9 @@
 package com.pine.pinedroid.activity.image_pickup.camera
 
+import android.net.Uri
+import androidx.activity.result.ActivityResultLauncher
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCapture.FLASH_MODE_AUTO
 import androidx.camera.core.ImageCapture.FLASH_MODE_OFF
 import androidx.camera.core.ImageCapture.FLASH_MODE_ON
 import androidx.compose.foundation.background
@@ -11,8 +12,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -21,9 +24,10 @@ import androidx.compose.material.icons.filled.Cameraswitch
 import androidx.compose.material.icons.filled.FlashAuto
 import androidx.compose.material.icons.filled.FlashOff
 import androidx.compose.material.icons.filled.FlashOn
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,16 +38,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.pine.pinedroid.R
-import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.jetpack.ui.CameraPreview
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
-import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
 import com.pine.pinedroid.jetpack.ui.image.ZoomablePineImage
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import com.pine.pinedroid.utils.ui.pct
@@ -52,20 +54,74 @@ import com.pine.pinedroid.utils.ui.spwh
 @Composable
 fun CameraScreen(
     navController: NavHostController? = null,
+    cameraLauncher: ActivityResultLauncher<Uri>? = null,
     viewModel: CameraScreenVM = viewModel()
 ) {
     HandleNavigation(navController = navController, viewModel = viewModel)
 
     val viewState by viewModel.viewState.collectAsState()
-    var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
+
 
     // 模拟加载图片数据（实际应用中应该从媒体库加载）
     LaunchedEffect(Unit) {
         viewModel.runOnce {
-            viewModel.onInit()
+            viewModel.onInit(cameraLauncher)
         }
     }
 
+    if (viewState.useSystemCamera) {
+        CameraStarting()
+    }
+    else{
+        JetPackCameraView(viewModel, viewState)
+    }
+
+
+}
+
+@Composable
+fun CameraStarting(){
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.8f)),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // 加载指示器
+            CircularProgressIndicator(
+                modifier = Modifier.size(64.dp),
+                color = Color.White,
+                strokeWidth = 4.dp
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // 提示文本
+            Text(
+                text = "正在启动相机...",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "请稍候",
+                color = Color.White.copy(alpha = 0.8f),
+                fontSize = 14.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun JetPackCameraView(viewModel: CameraScreenVM, viewState: CameraScreenState) {
+    var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
 
     Box(
         modifier = Modifier
@@ -87,7 +143,7 @@ fun CameraScreen(
             )
         } else {
             ZoomablePineImage(
-                image = viewState.cameraPhoto!!,
+                image = viewState.cameraPhoto,
             )
         }
 
@@ -202,7 +258,6 @@ fun CameraScreen(
         }
     }
 }
-
 
 @Preview
 @Composable

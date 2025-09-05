@@ -1,7 +1,9 @@
 package com.pine.pinedroid.activity.image_pickup
 
 import android.Manifest
+import android.net.Uri
 import android.os.Build
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -16,19 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.pine.pinedroid.activity.db_selection.DbSelection
 import com.pine.pinedroid.activity.image_pickup.camera.CameraScreen
-import com.pine.pinedroid.activity.image_pickup.camera.CameraScreenState
 import com.pine.pinedroid.activity.image_pickup.pickup.ImagePickupScreen
 import com.pine.pinedroid.activity.image_pickup.pickup.ImagePickupScreenVM
 import com.pine.pinedroid.activity.image_pickup.preview.ImagePreviewScreen
-import com.pine.pinedroid.activity.sql.RunSqlScreen
-import com.pine.pinedroid.activity.table_selection.TableSelection
-import com.pine.pinedroid.activity.text_editor.TextEditorScreen
 import com.pine.pinedroid.jetpack.ui.require_permission.rememberPermissionController
 
 @Composable
-fun RequirePermissionForImagePickUp(initScreen: String) {
+fun RequirePermissionForImagePickUp(initScreen: String, cameraLauncher: ActivityResultLauncher<Uri>) {
     // 构建正确的权限列表
     val requiredPermissions = buildList {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -69,7 +66,7 @@ fun RequirePermissionForImagePickUp(initScreen: String) {
 
     when (hasPermission) {
         true -> {
-            ImagePickupScaffold(initScreen)
+            ImagePickupScaffold(initScreen, cameraLauncher)
         }
 
         false -> {
@@ -88,7 +85,8 @@ fun RequirePermissionForImagePickUp(initScreen: String) {
 
 @Composable
 fun ImagePickupScaffold(
-    initScreen: String
+    initScreen: String,
+    cameraLauncher: ActivityResultLauncher<Uri>
 ){
     val navController = rememberNavController()
     
@@ -105,7 +103,7 @@ fun ImagePickupScaffold(
         ) {
             composable("pickup") { ImagePickupScreen(navController, onBack = { navController.popBackStack() }) }
             composable("preview") { ImagePreviewScreen(navController) }
-            composable("camera") { CameraScreen(navController) }
+            composable("camera") { CameraScreen(navController, cameraLauncher) }
 
         }
     }

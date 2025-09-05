@@ -6,6 +6,7 @@ import com.pine.pinedroid.activity.image_pickup.OneImage
 // 更新 State 类
 data class CameraScreenState(
     val allowFlash: Boolean = false,
+    val useSystemCamera: Boolean = true,
     val flashMode: Int = FLASH_MODE_AUTO,
     val isFrontCamera: Boolean = false,
     val cameraPhoto: OneImage? = null,

@@ -29,5 +29,16 @@
             android:name=".content_provider.PineContentProvider"
             android:authorities="${applicationId}.floatinginitprovider"
             android:exported="false" />
+
+        <!-- 解决 Android 7.0 及以上版本的文件共享问题 - 拍照 -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/camera_paths" />
+        </provider>
     </application>
 </manifest>

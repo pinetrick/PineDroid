@@ -68,24 +68,27 @@ fun ImagePickupScreen(
             viewModel.onInit()
         }
     }
-
-    GeneralPineScreen(
-        title = {
-            Title(
-                totalAccount = viewState.selectedImages.size,
-                onBack,
-                viewModel::onComplete
-            )
-        },
-        content = {
-            Content(
-                viewState,
-                viewModel::onSelectChange,
-                viewModel::onImageClicked,
-                viewModel::onTakePhoto
-            )
-        },
-    )
+    if (viewState.loading) {
+        PineLoading("正在处理...")
+    } else {
+        GeneralPineScreen(
+            title = {
+                Title(
+                    totalAccount = viewState.selectedImages.size,
+                    onBack,
+                    viewModel::onComplete
+                )
+            },
+            content = {
+                Content(
+                    viewState,
+                    viewModel::onSelectChange,
+                    viewModel::onImageClicked,
+                    viewModel::onTakePhoto
+                )
+            },
+        )
+    }
 
 
 }
@@ -101,47 +104,45 @@ fun Content(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        if (viewState.loading) {
-            PineLoading("正在处理...")
-        } else {
-            val scrollState = rememberLazyGridState()
 
-            Box(modifier = Modifier.fillMaxSize()) {
-                LazyVerticalGrid(
-                    modifier = Modifier.PineScrollIndicator(scrollState),
-                    state = scrollState,
-                    columns = GridCells.Fixed(4),
-                    contentPadding = PaddingValues(8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    if (viewState.enabledCamera) {
-                        item(null) {
-                            ImageGridItem(
-                                oneImage = OneImage.Resource(R.drawable.camera),
-                                allowSelection = false,
-                                onImageClicked = onTakePhoto,
-                            )
-                        }
-                    }
-                    items(
-                        items = viewState.imageUris,
-                        key = { it.hashCode().toString() }
-                    ) { oneImage ->
+        val scrollState = rememberLazyGridState()
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            LazyVerticalGrid(
+                modifier = Modifier.PineScrollIndicator(scrollState),
+                state = scrollState,
+                columns = GridCells.Fixed(4),
+                contentPadding = PaddingValues(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                if (viewState.enabledCamera) {
+                    item(null) {
                         ImageGridItem(
-                            oneImage = oneImage,
-                            allowSelection = true,
-                            isSelected = viewState.selectedImages.contains(oneImage),
-                            onSelectChange = onSelectChange,
-                            onImageClicked = onImageClicked,
+                            oneImage = OneImage.Resource(R.drawable.camera),
+                            allowSelection = false,
+                            onImageClicked = onTakePhoto,
                         )
                     }
                 }
-
-
+                items(
+                    items = viewState.imageUris,
+                    key = { it.hashCode().toString() }
+                ) { oneImage ->
+                    ImageGridItem(
+                        oneImage = oneImage,
+                        allowSelection = true,
+                        isSelected = viewState.selectedImages.contains(oneImage),
+                        onSelectChange = onSelectChange,
+                        onImageClicked = onImageClicked,
+                    )
+                }
             }
 
+
         }
+
+
     }
 
 

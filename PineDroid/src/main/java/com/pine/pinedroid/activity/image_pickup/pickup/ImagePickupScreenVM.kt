@@ -16,20 +16,19 @@ class ImagePickupScreenVM : BaseViewModel() {
 
     fun onInit() {
 
-            _viewState.update {
-                it.copy(
-                    loading = false,
-                    enabledCamera = allowCamera,
-                    enabledMultiple = allowMultiple,
-                    imageUris = inputImages
-                )
-            }
-
+        _viewState.update {
+            it.copy(
+                loading = false,
+                enabledCamera = allowCamera,
+                enabledMultiple = allowMultiple,
+                imageUris = inputImages
+            )
+        }
 
 
     }
 
-    fun onComplete() = viewModelScope.launch{
+    fun onComplete() = viewModelScope.launch {
         _viewState.update {
             it.copy(
                 loading = true
@@ -37,7 +36,6 @@ class ImagePickupScreenVM : BaseViewModel() {
         }
 
         callback?.invoke(_viewState.value.selectedImages)
-
     }
 
     fun onImageClicked(oneImage: OneImage) {
@@ -47,6 +45,7 @@ class ImagePickupScreenVM : BaseViewModel() {
     }
 
     fun onTakePhoto(oneImage: OneImage) {
+
         CameraScreenVM.allowFlash = true
         CameraScreenVM.callback = { oneImage ->
             oneImage?.let { oneImage ->
@@ -70,7 +69,10 @@ class ImagePickupScreenVM : BaseViewModel() {
 
         }
         navigateTo("camera")
+
+
     }
+
 
     fun onSelectChange(oneImage: OneImage) {
         val selectedImages = _viewState.value.selectedImages.toMutableList()
@@ -94,6 +96,7 @@ class ImagePickupScreenVM : BaseViewModel() {
         var inputImages: List<OneImage> = emptyList()
         var allowCamera: Boolean = true
         var allowMultiple: Boolean = true
+        var allowVideo: Boolean = true
 
         var callback: (suspend (List<OneImage>) -> Unit)? = null
 

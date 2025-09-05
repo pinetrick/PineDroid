@@ -1,13 +1,22 @@
 package com.pine.pinedroid.activity.image_pickup
 
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.MaterialTheme
 import com.pine.pinedroid.activity.image_pickup.pickup.ImagePickupScreenVM
+import com.pine.pinedroid.utils.log.loge
 
 class ImagePickupActivity : ComponentActivity() {
+    val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success) {
+            // 照片拍摄成功，处理图片
+            if (onPhotoToken == null) return@registerForActivityResult loge("Please set onPhotoToken first")
+
+            onPhotoToken?.invoke()
+        }
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,15 +26,20 @@ class ImagePickupActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                RequirePermissionForImagePickUp(initScreen)
+                RequirePermissionForImagePickUp(initScreen, cameraLauncher)
 
 
             }
         }
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
         ImagePickupScreenVM.inputImages = emptyList()
+    }
+
+    companion object {
+        var onPhotoToken: (() -> Unit)? = null
     }
 }
