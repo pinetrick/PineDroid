@@ -22,8 +22,11 @@ object GoogleSignIn{
         sp("FirebaseUser", "null")
     }
 
+    fun getSignedInUser(): FirebaseUser? = sp("FirebaseUser")
+
+
     suspend fun signIn(): FirebaseUser? {
-        val user: FirebaseUser? = sp("FirebaseUser")
+        val user: FirebaseUser? = getSignedInUser()
         if (user != null) return user
 
         // Instantiate a Google sign-in request
