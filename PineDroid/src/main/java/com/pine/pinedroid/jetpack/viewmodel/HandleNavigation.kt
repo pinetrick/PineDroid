@@ -8,7 +8,8 @@ import androidx.navigation.NavController
 @Composable
 fun HandleNavigation(
     navController: NavController?,
-    viewModel: BaseViewModel
+    viewModel: BaseViewModel,
+    runOnceBlock: (suspend () -> Unit)? = null,
 ) {
     // 当有未保存的更改时拦截返回
     BackHandler(enabled = true) {
@@ -38,6 +39,16 @@ fun HandleNavigation(
             }
         }
     }
+
+    LaunchedEffect(Unit) {
+        runOnceBlock?.let { runOnceBlock ->
+            viewModel.runOnce {
+                runOnceBlock()
+            }
+        }
+
+    }
+
 }
 
 // 构建带参数的路由

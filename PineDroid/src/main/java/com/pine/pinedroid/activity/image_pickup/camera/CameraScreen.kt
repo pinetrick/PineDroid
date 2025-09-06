@@ -60,17 +60,14 @@ fun CameraScreen(
     cameraLauncher: ActivityResultLauncher<Uri>? = null,
     viewModel: CameraScreenVM = viewModel()
 ) {
-    HandleNavigation(navController = navController, viewModel = viewModel)
+
 
     val viewState by viewModel.viewState.collectAsState()
-
-
-    // 模拟加载图片数据（实际应用中应该从媒体库加载）
-    LaunchedEffect(Unit) {
-        viewModel.runOnce {
-            viewModel.onInit(cameraLauncher)
-        }
+    HandleNavigation(navController = navController, viewModel = viewModel) {
+        viewModel.onInit(cameraLauncher)
     }
+
+
 
     if (viewState.handlingPicture) {
         PineLoading(

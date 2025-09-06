@@ -28,17 +28,14 @@ fun ImagePreviewScreen(
     navController: NavHostController? = null,
     viewModel: ImagePreviewScreenVM = viewModel()
 ) {
-    HandleNavigation(navController = navController, viewModel = viewModel)
+
 
     val viewState by viewModel.viewState.collectAsState()
 
-
-    // 模拟加载图片数据（实际应用中应该从媒体库加载）
-    LaunchedEffect(Unit) {
-        viewModel.runOnce {
-            viewModel.onInit()
-        }
+    HandleNavigation(navController = navController, viewModel = viewModel) {
+        viewModel.onInit()
     }
+
 
     GeneralPineScreen(
         title = {

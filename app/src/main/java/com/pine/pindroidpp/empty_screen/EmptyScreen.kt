@@ -16,13 +16,10 @@ fun EmptyScreen(
     navController: NavController? = null,
     viewModel: EmptyScreenVM = viewModel()
 ) {
-    // 处理导航
-    HandleNavigation(navController = navController, viewModel = viewModel)
     val viewState by viewModel.viewState.collectAsState()
-    LaunchedEffect(Unit) {
-        viewModel.runOnce {
-            viewModel.onInit()
-        }
+    
+    HandleNavigation(navController = navController, viewModel = viewModel) {
+        viewModel.onInit()
     }
 
     GeneralPineScreen(
