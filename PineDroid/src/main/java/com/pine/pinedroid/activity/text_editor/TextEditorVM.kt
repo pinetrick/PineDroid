@@ -19,9 +19,8 @@ import java.nio.charset.Charset
 
 
 // TextEditorVM.kt
-class TextEditorVM : BaseViewModel() {
-    private val _viewState = MutableStateFlow(TextEditorState())
-    val viewState: StateFlow<TextEditorState> = _viewState
+class TextEditorVM : BaseViewModel<TextEditorState>(TextEditorState::class) {
+
 
     private var originalContent: String = ""
 

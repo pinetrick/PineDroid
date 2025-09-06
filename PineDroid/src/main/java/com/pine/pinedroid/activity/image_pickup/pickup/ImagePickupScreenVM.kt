@@ -11,9 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class ImagePickupScreenVM : BaseViewModel() {
-    private val _viewState = MutableStateFlow(ImagePickupScreenState())
-    val viewState: StateFlow<ImagePickupScreenState> = _viewState
+class ImagePickupScreenVM : BaseViewModel<ImagePickupScreenState>(ImagePickupScreenState::class) {
 
     fun onInit() {
         if (inputImages.isEmpty()) {

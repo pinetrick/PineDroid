@@ -17,9 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class RunSqlScreenVM : BaseViewModel() {
-    private val _viewState = MutableStateFlow(RunSqlScreenStatus())
-    val viewState: StateFlow<RunSqlScreenStatus> = _viewState
+class RunSqlScreenVM : BaseViewModel<RunSqlScreenStatus>(RunSqlScreenStatus::class) {
 
     fun initialize(dbName: String, tableName: String) {
         viewModelScope.launch(Dispatchers.IO) {

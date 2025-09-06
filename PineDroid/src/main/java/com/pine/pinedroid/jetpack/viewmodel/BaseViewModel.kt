@@ -2,14 +2,26 @@ package com.pine.pinedroid.jetpack.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pine.pinedroid.utils.reflect.createInstance
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 // 简化的 ViewModel 基类
-open class BaseViewModel : ViewModel() {
+open class BaseViewModel<T: Any>(val clazz: KClass<T>): ViewModel() {
     private val _navEvents = MutableSharedFlow<NavEvent>()
     val navEvents: SharedFlow<NavEvent> = _navEvents
+
+    protected val _viewState = MutableStateFlow(getInitialViewState())
+    val viewState: StateFlow<T> = _viewState
+
+    open fun getInitialViewState(): T{
+        return createInstance(clazz)
+    }
+
     private var initialized = false
 
     suspend fun runOnce(block: suspend () -> Unit) {

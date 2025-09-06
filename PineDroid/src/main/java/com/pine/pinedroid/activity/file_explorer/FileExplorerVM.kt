@@ -12,9 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
 
-class FileExplorerVM : BaseViewModel() {
-    private val _viewState = MutableStateFlow(FileExplorerState())
-    val viewState: StateFlow<FileExplorerState> = _viewState
+class FileExplorerVM : BaseViewModel<FileExplorerState>(FileExplorerState::class) {
 
     fun initialize() {
         loadDirectory("/data/data/${appContext.packageName}")

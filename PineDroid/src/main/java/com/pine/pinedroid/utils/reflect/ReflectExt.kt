@@ -18,3 +18,12 @@ fun <T : Any> KClass<*>.getCompanionObjVar(varName: String): T? {
 
     return property.getter.call(companion) as? T
 }
+
+
+fun<T : Any> createInstance(clazz: KClass<T>): T {
+    return try {
+        clazz.java.getDeclaredConstructor().newInstance()
+    } catch (e: Exception) {
+        throw IllegalArgumentException("Type ${clazz.simpleName} must have a no-args constructor")
+    }
+}

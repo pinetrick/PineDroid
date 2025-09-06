@@ -8,9 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-class ImagePreviewScreenVM: BaseViewModel() {
-    private val _viewState = MutableStateFlow(ImagePreviewScreenState())
-    val viewState: StateFlow<ImagePreviewScreenState> = _viewState
+class ImagePreviewScreenVM: BaseViewModel<ImagePreviewScreenState>(ImagePreviewScreenState::class) {
 
     fun onInit() {
         _viewState.update { currentState ->

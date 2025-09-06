@@ -6,9 +6,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
 
 @Composable
-fun HandleNavigation(
+fun <T: Any> HandleNavigation(
     navController: NavController?,
-    viewModel: BaseViewModel,
+    viewModel: BaseViewModel<T>,
     runOnceBlock: (suspend () -> Unit)? = null,
 ) {
     // 当有未保存的更改时拦截返回

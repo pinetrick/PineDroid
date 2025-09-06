@@ -12,9 +12,8 @@ import kotlinx.coroutines.flow.update
 import kotlin.toString
 
 
-class RootScreenVM : BaseViewModel() {
-    private val _viewState = MutableStateFlow(RootScreenState())
-    val viewState: StateFlow<RootScreenState> = _viewState
+class RootScreenVM : BaseViewModel<RootScreenState>(RootScreenState::class) {
+
 
     fun onInit() {
 

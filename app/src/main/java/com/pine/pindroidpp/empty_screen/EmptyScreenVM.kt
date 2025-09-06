@@ -7,9 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 
-class EmptyScreenVM : BaseViewModel() {
-    private val _viewState = MutableStateFlow(EmptyScreenState())
-    val viewState: StateFlow<EmptyScreenState> = _viewState
+class EmptyScreenVM : BaseViewModel<EmptyScreenState>(EmptyScreenState::class) {
 
     fun onInit() {
 

@@ -14,9 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
-class DbSelectionVM : BaseViewModel() {
-    private val _viewState = MutableStateFlow(DbSelectionStatus())
-    val viewState: StateFlow<DbSelectionStatus> = _viewState
+class DbSelectionVM : BaseViewModel<DbSelectionStatus>(DbSelectionStatus::class) {
 
     fun initialize() {
         viewModelScope.launch(Dispatchers.IO) {

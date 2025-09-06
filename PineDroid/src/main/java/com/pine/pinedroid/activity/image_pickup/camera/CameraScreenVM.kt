@@ -26,9 +26,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class CameraScreenVM : BaseViewModel() {
-    private val _viewState = MutableStateFlow(CameraScreenState())
-    val viewState: StateFlow<CameraScreenState> = _viewState
+class CameraScreenVM : BaseViewModel<CameraScreenState>(CameraScreenState::class) {
 
     var cameraLauncher: ActivityResultLauncher<Uri>? = null
     fun onInit(cameraLauncher: ActivityResultLauncher<Uri>?) {

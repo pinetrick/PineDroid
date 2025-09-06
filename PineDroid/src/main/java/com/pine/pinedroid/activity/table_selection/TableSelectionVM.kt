@@ -13,9 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class TableSelectionVM : BaseViewModel() {
-    private val _viewState = MutableStateFlow(TableSelectionStatus())
-    val viewState: StateFlow<TableSelectionStatus> = _viewState
+class TableSelectionVM : BaseViewModel<TableSelectionStatus>(TableSelectionStatus::class) {
 
     fun initialize(dbName: String) {
         viewModelScope.launch(Dispatchers.IO) {
