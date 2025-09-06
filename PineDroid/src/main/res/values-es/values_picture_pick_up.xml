@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="pine_camera_starting">Iniciando cámara</string>
+    <string name="pine_camera_processing">Procesando</string>
+    <string name="pine_camera_starting_subtitle">Por favor espere…</string>
+
+    <string name="pine_image_pickup_processing">Procesando</string>
+    <string name="pine_image_pickup_title">Seleccionar imagen</string>
+
+    <string name="pine_preview_title">Vista previa de imagen</string>
+    <string name="pine_preview_no_picture">Sin imagen</string>
+
+    <string name="pine_image_permission_denied_title">Se requiere permiso de acceso</string>
+    <string name="pine_image_permission_denied_subtitle">Necesitamos acceso a sus fotos y cámara para permitirle seleccionar o tomar imágenes.</string>
+    <string name="pine_image_permission_denied_button">Permitir acceso</string>
+    <string name="pine_image_permission_denied_permanently_title">Permiso denegado permanentemente</string>
+    <string name="pine_image_permission_denied_permanently_subtitle">Por favor habilite manualmente los permisos de [Almacenamiento/Cámara] en la configuración del sistema, de lo contrario no podrá continuar usando la función de selección de imágenes.</string>
+    <string name="pine_image_permission_denied_permanently_button">Intentar de nuevo</string>
 
 </resources>

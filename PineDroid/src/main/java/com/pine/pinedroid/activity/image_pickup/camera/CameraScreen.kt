@@ -38,15 +38,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.pine.pinedroid.R
 import com.pine.pinedroid.jetpack.ui.CameraPreview
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
 import com.pine.pinedroid.jetpack.ui.image.ZoomablePineImage
+import com.pine.pinedroid.jetpack.ui.loading.PineLoading
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import com.pine.pinedroid.utils.ui.pct
 import com.pine.pinedroid.utils.ui.spwh
@@ -69,10 +72,17 @@ fun CameraScreen(
         }
     }
 
-    if (viewState.useSystemCamera) {
-        CameraStarting()
-    }
-    else{
+    if (viewState.handlingPicture) {
+        PineLoading(
+            title = stringResource(R.string.pine_camera_processing),
+            subtitle = stringResource(R.string.pine_camera_starting_subtitle)
+        )
+    } else if (viewState.useSystemCamera) {
+        PineLoading(
+            title = stringResource(R.string.pine_camera_starting),
+            subtitle = stringResource(R.string.pine_camera_starting_subtitle)
+        )
+    } else {
         JetPackCameraView(viewModel, viewState)
     }
 
@@ -80,7 +90,7 @@ fun CameraScreen(
 }
 
 @Composable
-fun CameraStarting(){
+fun CameraStarting() {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -102,7 +112,7 @@ fun CameraStarting(){
 
             // 提示文本
             Text(
-                text = "正在启动相机...",
+                text = stringResource(R.string.pine_camera_starting),
                 color = Color.White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium
@@ -111,7 +121,7 @@ fun CameraStarting(){
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "请稍候",
+                text = stringResource(R.string.pine_camera_starting_subtitle),
                 color = Color.White.copy(alpha = 0.8f),
                 fontSize = 14.sp
             )
@@ -209,7 +219,7 @@ fun JetPackCameraView(viewModel: CameraScreenVM, viewState: CameraScreenState) {
                             FLASH_MODE_OFF -> Icons.Default.FlashOff
                             else -> Icons.Default.FlashAuto
                         },
-                        contentDescription = "闪光灯",
+                        contentDescription = "",
                         tint = Color.White,
                         modifier = Modifier.size(32.dp)
                     )
@@ -249,7 +259,7 @@ fun JetPackCameraView(viewModel: CameraScreenVM, viewState: CameraScreenState) {
                 ) {
                     Icon(
                         imageVector = Icons.Default.Cameraswitch,
-                        contentDescription = "切换摄像头",
+                        contentDescription = "",
                         tint = Color.White,
                         modifier = Modifier.size(32.dp)
                     )
@@ -259,7 +269,7 @@ fun JetPackCameraView(viewModel: CameraScreenVM, viewState: CameraScreenState) {
     }
 }
 
-@Preview
+@Preview()
 @Composable
 fun Preview() {
     CameraScreen()

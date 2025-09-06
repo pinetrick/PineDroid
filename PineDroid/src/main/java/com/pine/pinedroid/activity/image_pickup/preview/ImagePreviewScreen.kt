@@ -11,9 +11,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.pine.pinedroid.R
 import com.pine.pinedroid.activity.image_pickup.OneImage
+import com.pine.pinedroid.activity.image_pickup.pickup.ImagePickupScreen
 import com.pine.pinedroid.jetpack.ui.image.ZoomablePineImage
 import com.pine.pinedroid.jetpack.ui.nav.GeneralPineScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
@@ -38,7 +42,7 @@ fun ImagePreviewScreen(
 
     GeneralPineScreen(
         title = {
-            PineTopAppBar("Preview", onReturn =  viewModel::navigateBack)
+            PineTopAppBar(stringResource(R.string.pine_preview_title), onReturn =  viewModel::navigateBack)
         },
         content = {
             ImagePreviewScreenContent(
@@ -59,10 +63,10 @@ fun ImagePreviewScreenContent(images: List<OneImage>) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black),
+                .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            Text("No Picture")
+            Text(stringResource(R.string.pine_preview_no_picture))
         }
     } else {
         // 显示第一张图片并支持手势缩放
@@ -71,4 +75,11 @@ fun ImagePreviewScreenContent(images: List<OneImage>) {
             modifier = Modifier.fillMaxSize()
         )
     }
+}
+
+
+@Preview
+@Composable
+fun Preview() {
+    ImagePreviewScreen()
 }

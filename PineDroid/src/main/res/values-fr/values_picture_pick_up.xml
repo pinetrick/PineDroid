@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="pine_camera_starting">Démarrage de l'appareil photo</string>
+    <string name="pine_camera_processing">Traitement en cours</string>
+    <string name="pine_camera_starting_subtitle">Veuillez patienter…</string>
+
+    <string name="pine_image_pickup_processing">Traitement en cours</string>
+    <string name="pine_image_pickup_title">Sélectionner une image</string>
+
+    <string name="pine_preview_title">Aperçu de l'image</string>
+    <string name="pine_preview_no_picture">Aucune image</string>
+
+    <string name="pine_image_permission_denied_title">Autorisation d'accès requise</string>
+    <string name="pine_image_permission_denied_subtitle">Nous avons besoin d'accéder à vos photos et à votre appareil photo pour vous permettre de sélectionner ou de prendre des images.</string>
+    <string name="pine_image_permission_denied_button">Autoriser l'accès</string>
+    <string name="pine_image_permission_denied_permanently_title">Autorisation refusée de manière permanente</string>
+    <string name="pine_image_permission_denied_permanently_subtitle">Veuillez activer manuellement les autorisations [Stockage/Appareil photo] dans les paramètres système, sinon vous ne pourrez pas continuer à utiliser la fonction de sélection d'images.</string>
+    <string name="pine_image_permission_denied_permanently_button">Réessayer</string>
 
 </resources>

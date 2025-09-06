@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="pine_camera_starting">Kamera wird gestartet</string>
+    <string name="pine_camera_processing">Verarbeitung läuft</string>
+    <string name="pine_camera_starting_subtitle">Bitte warten…</string>
+
+    <string name="pine_image_pickup_processing">Verarbeitung läuft</string>
+    <string name="pine_image_pickup_title">Bild auswählen</string>
+
+    <string name="pine_preview_title">Bildvorschau</string>
+    <string name="pine_preview_no_picture">Kein Bild</string>
+
+    <string name="pine_image_permission_denied_title">Zugriffsberechtigung erforderlich</string>
+    <string name="pine_image_permission_denied_subtitle">Wir benötigen Zugriff auf Ihre Fotos und Kamera, damit Sie Bilder auswählen oder aufnehmen können.</string>
+    <string name="pine_image_permission_denied_button">Berechtigung erlauben</string>
+    <string name="pine_image_permission_denied_permanently_title">Berechtigung dauerhaft verweigert</string>
+    <string name="pine_image_permission_denied_permanently_subtitle">Bitte aktivieren Sie die [Speicher/Kamera] Berechtigungen manuell in den Systemeinstellungen, sonst können Sie die Bildauswahl nicht weiter nutzen.</string>
+    <string name="pine_image_permission_denied_permanently_button">Erneut versuchen</string>
 
 </resources>

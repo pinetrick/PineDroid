@@ -10,12 +10,9 @@ import com.pine.pinedroid.utils.log.loge
 
 class ImagePickupActivity : ComponentActivity() {
     val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-        if (success) {
-            // 照片拍摄成功，处理图片
-            if (onPhotoToken == null) return@registerForActivityResult loge("Please set onPhotoToken first")
-
-            onPhotoToken?.invoke()
-        }
+        // 照片拍摄成功，处理图片
+        if (onPhotoToken == null) return@registerForActivityResult loge("Please set onPhotoToken first")
+        onPhotoToken?.invoke(success)
     }
 
 
@@ -27,8 +24,6 @@ class ImagePickupActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 RequirePermissionForImagePickUp(initScreen, cameraLauncher)
-
-
             }
         }
     }
@@ -40,6 +35,6 @@ class ImagePickupActivity : ComponentActivity() {
     }
 
     companion object {
-        var onPhotoToken: (() -> Unit)? = null
+        var onPhotoToken: ((isSuccess: Boolean) -> Unit)? = null
     }
 }

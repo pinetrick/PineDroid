@@ -16,6 +16,7 @@ import com.pine.pinedroid.activity.image_pickup.pickup.ImagePickupScreenVM
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.log.logd
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -51,7 +52,11 @@ class CameraScreenVM : BaseViewModel() {
 
 
     fun confirmPicture() = viewModelScope.launch {
-
+        _viewState.update {
+            it.copy(
+                handlingPicture = true
+            )
+        }
         callback?.invoke(_viewState.value.cameraPhoto)
         callback = null
 
@@ -126,6 +131,17 @@ class CameraScreenVM : BaseViewModel() {
             photoFile
         )
         cameraLauncher?.launch(photoURI)
+
+        //摄像头打开后 就展示成正在处理
+        viewModelScope.launch {
+            delay(500)
+            _viewState.update {
+                it.copy(
+                    handlingPicture = true
+                )
+            }
+        }
+
     }
 
     private fun createImageFile(): File {
@@ -143,8 +159,12 @@ class CameraScreenVM : BaseViewModel() {
         }
     }
 
-    private fun handleImage() = viewModelScope.launch {
-        if (currentPhotoPath == null) {
+    private fun handleImage(isSuccess: Boolean) = viewModelScope.launch {
+
+        if (!isSuccess) {
+            callback?.invoke(null)
+        }
+        else if (currentPhotoPath == null) {
             callback?.invoke(null)
         }
         else{

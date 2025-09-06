@@ -34,7 +34,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -55,7 +57,7 @@ import com.pine.pinedroid.utils.ui.spwh
 @Composable
 fun ImagePickupScreen(
     navController: NavHostController? = null,
-    onBack: () -> Unit,
+    onBack: () -> Unit = {},
     viewModel: ImagePickupScreenVM = viewModel()
 ) {
     HandleNavigation(navController = navController, viewModel = viewModel)
@@ -69,7 +71,7 @@ fun ImagePickupScreen(
         }
     }
     if (viewState.loading) {
-        PineLoading("正在处理...")
+        PineLoading(stringResource(R.string.pine_image_pickup_processing))
     } else {
         GeneralPineScreen(
             title = {
@@ -158,7 +160,7 @@ fun Title(
     PineTopAppBar(
         title = {
             Text(
-                text = "选择图片" + if (totalAccount > 0) "(${totalAccount})" else "",
+                text = stringResource(R.string.pine_image_pickup_title) + if (totalAccount > 0) "(${totalAccount})" else "",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.spwh
@@ -175,7 +177,7 @@ fun Title(
         },
         actions = {
             PineButton(
-                text = "确定",
+                text = stringResource(R.string.pine_confirm),
                 onClick = onConfirm,
                 enabled = totalAccount > 0,
                 modifier = Modifier.padding(end = 3.pct)
@@ -246,7 +248,7 @@ fun ImageGridItem(
                 if (isSelected) {
                     Icon(
                         imageVector = Icons.Default.Check,
-                        contentDescription = "已选择",
+                        contentDescription = "",
                         tint = Color.White,
                         modifier = Modifier
                             .align(Alignment.Center)
@@ -261,4 +263,10 @@ fun ImageGridItem(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun Preview() {
+    ImagePickupScreen()
 }

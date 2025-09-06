@@ -82,7 +82,7 @@ fun ZoomablePineImage(
     ) {
         PineAsyncImage(
             model = image,
-            contentDescription = "预览图片",
+            contentDescription = "",
             modifier = Modifier
                 .fillMaxSize()
                 .onGloballyPositioned { layoutCoordinates ->
