@@ -1,0 +1,17 @@
+package com.pine.pindroidpp.empty_screen
+
+
+import com.pine.pindroidpp.root.RootScreenState
+import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+
+class EmptyScreenVM : BaseViewModel() {
+    private val _viewState = MutableStateFlow(EmptyScreenState())
+    val viewState: StateFlow<EmptyScreenState> = _viewState
+
+    fun onInit() {
+
+    }
+}
