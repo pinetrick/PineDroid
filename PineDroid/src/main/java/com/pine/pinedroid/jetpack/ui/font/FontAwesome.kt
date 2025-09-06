@@ -71,7 +71,7 @@ fun PineIcon(
         maxLines = maxLines,
         minLines = minLines,
         onTextLayout = onTextLayout,
-        style = style
+        style = style,
     )
 }
 
