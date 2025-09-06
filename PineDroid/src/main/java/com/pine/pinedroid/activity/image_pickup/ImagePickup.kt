@@ -25,7 +25,6 @@ object ImagePickup {
         ImagePickupScreenVM.allowCamera = allowCamera
         ImagePickupScreenVM.allowMultiple = allowMultiple
         ImagePickupScreenVM.allowVideo = allowVideo
-        ImagePickupScreenVM.inputImages = getGalleryImages().map { OneImage.UriImage(it) }
         CameraScreenVM.useSystemCamera = useSystemCamera
 
         val intent = Intent(currentActivity, ImagePickupActivity::class.java).apply {

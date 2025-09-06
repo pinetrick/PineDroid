@@ -164,11 +164,7 @@ fun ImagePickupScaffold(
             startDestination = initScreen,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("pickup") {
-                ImagePickupScreen(
-                    navController,
-                    onBack = { navController.popBackStack() })
-            }
+            composable("pickup") { ImagePickupScreen(navController) }
             composable("preview") { ImagePreviewScreen(navController) }
             composable("camera") { CameraScreen(navController, cameraLauncher) }
 

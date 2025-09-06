@@ -57,7 +57,6 @@ import com.pine.pinedroid.utils.ui.spwh
 @Composable
 fun ImagePickupScreen(
     navController: NavHostController? = null,
-    onBack: () -> Unit = {},
     viewModel: ImagePickupScreenVM = viewModel()
 ) {
     HandleNavigation(navController = navController, viewModel = viewModel)
@@ -77,7 +76,7 @@ fun ImagePickupScreen(
             title = {
                 Title(
                     totalAccount = viewState.selectedImages.size,
-                    onBack,
+                    onBack = viewModel::onReturnClick,
                     viewModel::onComplete
                 )
             },

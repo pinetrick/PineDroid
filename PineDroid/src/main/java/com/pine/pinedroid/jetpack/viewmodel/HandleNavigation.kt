@@ -1,5 +1,6 @@
 package com.pine.pinedroid.jetpack.viewmodel
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
@@ -9,7 +10,10 @@ fun HandleNavigation(
     navController: NavController?,
     viewModel: BaseViewModel
 ) {
-
+    // 当有未保存的更改时拦截返回
+    BackHandler(enabled = true) {
+        viewModel::onReturnClick
+    }
 
     LaunchedEffect(Unit) {
         viewModel.navEvents.collect { event ->

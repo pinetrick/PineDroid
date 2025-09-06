@@ -50,6 +50,15 @@ class CameraScreenVM : BaseViewModel() {
     }
 
 
+    override fun onReturnClick() {
+        super.onReturnClick()
+        _viewState.update {
+            it.copy(
+                cameraPhoto = null
+            )
+        }
+        confirmPicture()
+    }
 
     fun confirmPicture() = viewModelScope.launch {
         _viewState.update {
@@ -61,6 +70,7 @@ class CameraScreenVM : BaseViewModel() {
         callback = null
 
         navigateBack()
+        cleanUp()
     }
 
     //从新拍照
@@ -171,12 +181,18 @@ class CameraScreenVM : BaseViewModel() {
             callback?.invoke(OneImage.LocalImage(currentPhotoPath!!))
         }
         navigateBack()
-
+        cleanUp()
     }
 
     companion object {
         var useSystemCamera = true
         var allowFlash: Boolean = true
         var callback: (suspend (OneImage?) -> Unit)? = null
+
+        fun cleanUp(){
+            useSystemCamera = true
+            allowFlash = true
+            callback = null
+        }
     }
 }

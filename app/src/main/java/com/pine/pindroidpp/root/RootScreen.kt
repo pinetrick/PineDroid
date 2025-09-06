@@ -34,8 +34,7 @@ fun RootScreen(
     GeneralPineScreen(
         title = {
             PineTopAppBar(
-                title = "Home Screen",
-                onReturn = viewModel::navigateBack
+                title = "Home Screen"
             )
         },
         content = {
@@ -54,6 +53,12 @@ fun RootScreenContent(
         }
         Button(onClick = viewModel::onTakePhoto) {
             Text("Take Photo")
+        }
+        Button(onClick = viewModel::onDbTest) {
+            Text("Database Test")
+        }
+        Button(onClick = viewModel::onMessageBoxTest) {
+            Text("Messagebox Test")
         }
     }
 }

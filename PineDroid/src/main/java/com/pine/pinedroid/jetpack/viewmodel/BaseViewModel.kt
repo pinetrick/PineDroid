@@ -19,6 +19,11 @@ open class BaseViewModel : ViewModel() {
         }
     }
 
+    open fun onReturnClick(){
+        navigateBack()
+
+    }
+
     fun navigateTo(route: String, isPopThis: Boolean = false) {
         viewModelScope.launch {
             if (isPopThis) _navEvents.emit(NavEvent.NavigateBack)

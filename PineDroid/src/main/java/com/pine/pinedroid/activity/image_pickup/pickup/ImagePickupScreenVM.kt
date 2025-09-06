@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.activity.image_pickup.camera.CameraScreenVM
 import com.pine.pinedroid.activity.image_pickup.preview.ImagePreviewScreenVM
+import com.pine.pinedroid.file.image.Gallery.getGalleryImages
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +16,10 @@ class ImagePickupScreenVM : BaseViewModel() {
     val viewState: StateFlow<ImagePickupScreenState> = _viewState
 
     fun onInit() {
+        if (inputImages.isEmpty()) {
+            inputImages = getGalleryImages().map { OneImage.UriImage(it) }
+        }
+
 
         _viewState.update {
             it.copy(
@@ -28,6 +33,16 @@ class ImagePickupScreenVM : BaseViewModel() {
 
     }
 
+    override fun onReturnClick() {
+        super.onReturnClick()
+        _viewState.update {
+            it.copy(
+                selectedImages = emptyList()
+            )
+        }
+        onComplete()
+    }
+
     fun onComplete() = viewModelScope.launch {
         _viewState.update {
             it.copy(
@@ -36,6 +51,9 @@ class ImagePickupScreenVM : BaseViewModel() {
         }
 
         callback?.invoke(_viewState.value.selectedImages)
+
+        cleanUp()
+        navigateBack()
     }
 
     fun onImageClicked(oneImage: OneImage) {
@@ -92,6 +110,8 @@ class ImagePickupScreenVM : BaseViewModel() {
 
     }
 
+
+
     companion object {
         var inputImages: List<OneImage> = emptyList()
         var allowCamera: Boolean = true
@@ -100,5 +120,13 @@ class ImagePickupScreenVM : BaseViewModel() {
 
         var callback: (suspend (List<OneImage>) -> Unit)? = null
 
+        fun cleanUp(){
+            inputImages = emptyList()
+            allowMultiple = true
+            allowCamera = true
+            allowVideo = true
+            callback = null
+
+        }
     }
 }
