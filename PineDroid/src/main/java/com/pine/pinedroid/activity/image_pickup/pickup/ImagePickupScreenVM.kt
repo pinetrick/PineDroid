@@ -19,8 +19,8 @@ class ImagePickupScreenVM : BaseViewModel<ImagePickupScreenState>(ImagePickupScr
         }
 
 
-        _viewState.update {
-            it.copy(
+        setState {
+            copy(
                 loading = false,
                 enabledCamera = allowCamera,
                 enabledMultiple = allowMultiple,

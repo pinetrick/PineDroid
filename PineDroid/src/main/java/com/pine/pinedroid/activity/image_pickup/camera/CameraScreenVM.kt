@@ -108,8 +108,8 @@ class CameraScreenVM : BaseViewModel<CameraScreenState>(CameraScreenState::class
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     logd("CameraScreen", "保存成功: ${file.absolutePath}")
 
-                    _viewState.update { currentState ->
-                        currentState.copy(
+                    setState {
+                        copy(
                             cameraPhoto = OneImage.LocalImage(file.absolutePath)
                         )
                     }
@@ -120,9 +120,9 @@ class CameraScreenVM : BaseViewModel<CameraScreenState>(CameraScreenState::class
     }
 
     fun switchCamera() {
-        _viewState.update { currentState ->
-            currentState.copy(
-                isFrontCamera = !currentState.isFrontCamera
+        setState {
+            copy(
+                isFrontCamera = !isFrontCamera
             )
         }
     }

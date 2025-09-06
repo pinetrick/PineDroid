@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
@@ -33,7 +34,12 @@ open class BaseViewModel<T: Any>(val clazz: KClass<T>): ViewModel() {
 
     open fun onReturnClick(){
         navigateBack()
+    }
 
+    fun setState(block: T.() -> T){
+        _viewState.update { currentState ->
+            currentState.block()
+        }
     }
 
     fun navigateTo(route: String, isPopThis: Boolean = false) {
@@ -49,7 +55,7 @@ open class BaseViewModel<T: Any>(val clazz: KClass<T>): ViewModel() {
         }
     }
 
-    fun navigateBack() {
+    open fun navigateBack() {
         viewModelScope.launch {
             _navEvents.emit(NavEvent.NavigateBack)
         }

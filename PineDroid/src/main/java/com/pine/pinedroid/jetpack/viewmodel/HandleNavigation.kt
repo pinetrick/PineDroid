@@ -13,7 +13,7 @@ fun <T: Any> HandleNavigation(
 ) {
     // 当有未保存的更改时拦截返回
     BackHandler(enabled = true) {
-        viewModel::onReturnClick
+        viewModel.onReturnClick()
     }
 
     LaunchedEffect(Unit) {

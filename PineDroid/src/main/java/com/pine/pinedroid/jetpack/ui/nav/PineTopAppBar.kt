@@ -133,6 +133,5 @@ fun Preview(){
             }
 
         },
-        windowInsets = WindowInsets(0, 0, 0, 0)
     )
 }

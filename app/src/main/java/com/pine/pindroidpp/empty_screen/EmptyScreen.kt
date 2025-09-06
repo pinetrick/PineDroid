@@ -17,7 +17,7 @@ fun EmptyScreen(
     viewModel: EmptyScreenVM = viewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    
+
     HandleNavigation(navController = navController, viewModel = viewModel) {
         viewModel.onInit()
     }
@@ -30,7 +30,12 @@ fun EmptyScreen(
             )
         },
         content = {
-
+            Content(viewModel, viewState)
         },
     )
+}
+
+@Composable
+fun Content(viewModel: EmptyScreenVM, viewState: EmptyScreenState) {
+
 }
