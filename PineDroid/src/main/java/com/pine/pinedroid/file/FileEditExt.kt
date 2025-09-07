@@ -19,6 +19,15 @@ fun File.getFontAwesomeIcon(): String{
     }
 
 }
+
+fun File.isPicture(): Boolean{
+    return !isDirectory && (extension.equals("jpg", true) ||
+            extension.equals("png", true) ||
+            extension.equals("jpeg", true) ||
+            extension.equals("webp", true) ||
+            extension.equals("svg", true) ||
+            extension.equals("gif", true))
+}
 fun File.isTxtFile(): Boolean {
     return !isDirectory && (extension.equals("txt", true) ||
             extension.equals("log", true) ||

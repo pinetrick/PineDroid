@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pine.pinedroid.activity.db_selection.DbSelection
 import com.pine.pinedroid.activity.file_explorer.FileExplorer
+import com.pine.pinedroid.activity.image_pickup.preview.ImagePreviewScreen
 import com.pine.pinedroid.activity.sql.RunSqlScreen
 import com.pine.pinedroid.activity.table_selection.TableSelection
 import com.pine.pinedroid.activity.text_editor.TextEditorScreen
@@ -64,6 +65,7 @@ class PineDroidActivity : ComponentActivity() {
                     val tableName = backStackEntry.arguments!!.getString("tableName")!!
                     RunSqlScreen(navController, dbName, tableName)
                 }
+                composable("preview") { ImagePreviewScreen(navController) }
             }
         }
     }

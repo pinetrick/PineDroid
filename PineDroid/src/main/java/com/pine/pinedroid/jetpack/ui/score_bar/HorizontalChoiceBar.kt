@@ -1,4 +1,4 @@
-package com.pine.pinedroid.jetpack.ui.horizontal_choice_bar
+package com.pine.pinedroid.jetpack.ui.score_bar
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +34,6 @@ fun HorizontalChoiceBar(
         modifier = Modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState()),
-//        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         horizontalChoiceBar.forEach { (cityName, isSelected) ->
             CityItem(
@@ -99,8 +96,8 @@ fun Preview() {
     Column {
         HorizontalChoiceBar(
             mapOf(
-                "ShangHai" to true,
-                "GuangZhou" to false,
+                "奥克兰" to true,
+                "惠灵顿" to false,
                 "ShenZhen" to false,
                 "HangZhou" to false,
                 "ShangHa1i" to false,

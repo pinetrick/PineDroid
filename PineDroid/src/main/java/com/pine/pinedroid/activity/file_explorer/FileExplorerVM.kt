@@ -1,7 +1,11 @@
 package com.pine.pinedroid.activity.file_explorer
 
 import androidx.lifecycle.viewModelScope
+import com.pine.pinedroid.activity.image_pickup.OneImage
+import com.pine.pinedroid.activity.image_pickup.preview.ImagePreviewScreenVM
 import com.pine.pinedroid.db.AppDatabases.isSqliteDatabaseFile
+import com.pine.pinedroid.file.isPicture
+import com.pine.pinedroid.file.isTxtFile
 
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import com.pine.pinedroid.utils.appContext
@@ -22,7 +26,11 @@ class FileExplorerVM : BaseViewModel<FileExplorerState>(FileExplorerState::class
         if (isSqliteDatabaseFile(file)) {
             navigateTo("table/" + file.name)
         }
-        else{ // if (file.isTxtFile()) {
+        else if (file.isPicture()){
+            ImagePreviewScreenVM.images = listOf(OneImage.LocalImage(file.absoluteFile.toString()))
+            navigateTo("preview")
+        }
+        else if (file.isTxtFile()) {
             navigateTo("text_editor/" + file.absoluteFile.toString().replace("/", "$"))
         }
     }
