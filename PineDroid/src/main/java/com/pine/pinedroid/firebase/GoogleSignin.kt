@@ -8,6 +8,7 @@ import androidx.credentials.GetCredentialResponse
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.loge
@@ -43,14 +44,14 @@ object GoogleSignIn{
             .build()
 
 
-        val credentialManager = CredentialManager.create(appContext)
+        val credentialManager = CredentialManager.create(activityContext)
 
 
 
         return try {
             val result = credentialManager.getCredential(
                 request = request,
-                context = appContext,
+                context = activityContext,
             )
             handleSignIn(result)
             // 登录成功

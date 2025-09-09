@@ -1,4 +1,4 @@
-package com.pine.pinedroid.jetpack.ui.dropdown_search_bar
+package com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar
 
 import com.pine.pinedroid.activity.image_pickup.OneImage
 

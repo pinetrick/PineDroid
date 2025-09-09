@@ -1,4 +1,4 @@
-package com.pine.pinedroid.jetpack.ui.dropdown_search_bar
+package com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -163,7 +163,7 @@ fun DropdownSearchBar(
                             .height((suggestions.size * 56.dp).coerceAtMost(280.dp))
                     ) {
                         items(suggestions) { suggestion ->
-                            SearchSuggestionItem(
+                            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.SearchSuggestionItem(
                                 suggestion = suggestion,
                                 onClick = {
                                     onSuggestionSelected(suggestion)
@@ -256,24 +256,44 @@ fun DropdownSearchBarExample() {
     var searchQuery by remember { mutableStateOf("") }
     val suggestions = remember {
         listOf(
-            SearchSuggestion("Auckland", "New Zealand", "City", OneImage.Resource(R.drawable.pinedroid_image_loading)),
-            SearchSuggestion("Queenstown", "New Zealand", "City", OneImage.Resource(R.drawable.pinedroid_image_loading)),
-            SearchSuggestion(
+            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.SearchSuggestion(
+                "Auckland",
+                "New Zealand",
+                "City",
+                OneImage.Resource(R.drawable.pinedroid_image_loading)
+            ),
+            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.SearchSuggestion(
+                "Queenstown",
+                "New Zealand",
+                "City",
+                OneImage.Resource(R.drawable.pinedroid_image_loading)
+            ),
+            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.SearchSuggestion(
                 "Sky Tower",
                 "Auckland attraction",
                 "Attraction",
                 OneImage.Resource(R.drawable.pinedroid_image_loading),
             ),
-            SearchSuggestion("Sydney", "Australia", "City", OneImage.Resource(R.drawable.pinedroid_image_loading)),
-            SearchSuggestion( "Melbourne", "Australia", "City", OneImage.Resource(R.drawable.pinedroid_image_loading)),
+            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.SearchSuggestion(
+                "Sydney",
+                "Australia",
+                "City",
+                OneImage.Resource(R.drawable.pinedroid_image_loading)
+            ),
+            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.SearchSuggestion(
+                "Melbourne",
+                "Australia",
+                "City",
+                OneImage.Resource(R.drawable.pinedroid_image_loading)
+            ),
         )
     }
 
     Column(modifier = Modifier.padding(16.dp)) {
-        DropdownSearchBar(
+        _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.DropdownSearchBar(
             value = searchQuery,
             focused = false,
-            onValueChange = {  },
+            onValueChange = { },
             placeholder = "Search destinations...",
             suggestions = suggestions,
             onSuggestionSelected = { suggestion -> },

@@ -1,4 +1,4 @@
-package com.pine.pinedroid.ui.value_drag_control
+package com.pine.pinedroid.jetpack.ui.value_drag_control
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement

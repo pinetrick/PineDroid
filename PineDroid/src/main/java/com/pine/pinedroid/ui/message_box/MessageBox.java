@@ -64,7 +64,7 @@ public class MessageBox implements OnClickListener, OnKeyListener,
     }
 
 
-    private MessageBox(Context context) {
+    protected MessageBox(Context context) {
         this.context = context;
     }
 

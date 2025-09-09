@@ -7,24 +7,39 @@ import com.pine.pinedroid.utils.log.logv
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.forms.formData
+import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import java.io.File
 
 val ktor by lazy {
     HttpClient(OkHttp) {
         install(ContentNegotiation) {
             json(Json { ignoreUnknownKeys = true })
         }
+        install(HttpTimeout) {
+            requestTimeoutMillis = 60_000
+            connectTimeoutMillis = 30_000
+            socketTimeoutMillis = 60_000
+        }
     }
 }
 
 var httpRootUrl = "";
+var uploadRootUrl = "";
 
 suspend inline fun <reified T> httpGet(url: String): T? {
     return try {
@@ -51,6 +66,45 @@ suspend inline fun <reified T> httpPostJson(
             contentType(ContentType.Application.Json)
             setBody(body) // 直接传对象，ktor 会转成 JSON
         }.body()
+        logv(result)
+        val type = object : TypeToken<T>() {}.type
+        gson.fromJson<T>(result, type)
+    } catch (e: Exception) {
+        logv(result)
+        loge(e)
+        null
+    }
+}
+
+
+suspend inline fun <reified T> httpUploadFile(
+    url: String,
+    params: Map<String, Any> = emptyMap() // form-data 字段，可以是 File 或 String
+): T? = withContext(Dispatchers.IO) {
+    var result = ""
+    try {
+        result = ktor.submitFormWithBinaryData(
+            url = uploadRootUrl + url,
+            formData = formData {
+                for ((key, value) in params) {
+                    when (value) {
+                        is File -> append(key, value.readBytes(), Headers.build {
+                            append(
+                                HttpHeaders.ContentDisposition,
+                                "form-data; name=\"$key\"; filename=\"${value.name}\""
+                            )
+                            append(
+                                HttpHeaders.ContentType,
+                                ContentType.Application.OctetStream.toString()
+                            )
+                        })
+
+                        else -> append(key, value.toString())
+                    }
+                }
+            }
+        ).bodyAsText()
+
         logv(result)
         val type = object : TypeToken<T>() {}.type
         gson.fromJson<T>(result, type)

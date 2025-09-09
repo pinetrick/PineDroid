@@ -1,9 +1,8 @@
-package com.pine.pinedroid.jetpack.ui.score_bar
+package com.pine.pinedroid.jetpack.ui.modifier
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -18,15 +17,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import kotlin.math.min
 
 
 @Composable
-fun Modifier.PineScrollIndicator(
+fun Modifier.pineScrollIndicator(
     state: LazyGridState,
     width: Dp = 8.dp,
     enableDrag: Boolean = true

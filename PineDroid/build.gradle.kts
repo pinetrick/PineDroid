@@ -16,6 +16,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
     }
 
     buildTypes {
@@ -33,6 +34,7 @@ android {
     }
     buildFeatures {
         compose = true //Allow jetpack function expose
+        buildConfig = true  //必须开启，否则自定义字段无效
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -67,6 +69,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.ui:ui")
+    implementation(libs.androidx.exifinterface)
     debugImplementation("androidx.compose.ui:ui-tooling")
 
     //Google play 好评api

@@ -29,17 +29,14 @@ import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
 
 @Composable
 fun PineShoppingListItemHorizontal(
-    image: OneImage? = null,
-    title: String? = null,
-    subtitle: String? = null,
-    price: Double? = null,
-    onItemClick: (() -> Unit)? = null
+    shoppingItemBean: ShoppingItemBean = ShoppingItemBean(),
+    onItemClick: ((ShoppingItemBean) -> Unit)? = null
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable(enabled = onItemClick != null) { onItemClick?.invoke() },
+            .clickable(enabled = onItemClick != null) { onItemClick?.invoke(shoppingItemBean) },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(
@@ -61,7 +58,7 @@ fun PineShoppingListItemHorizontal(
                     .background(MaterialTheme.colorScheme.surfaceVariant)
             ) {
                 PineAsyncImage(
-                    model = image,
+                    model = shoppingItemBean.image,
                     modifier = Modifier
                         .size(80.dp)
                         .clip(RoundedCornerShape(8.dp))
@@ -74,7 +71,7 @@ fun PineShoppingListItemHorizontal(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 // 商品标题
-                title?.let {
+                shoppingItemBean.title?.let {
                     Text(
                         text = it,
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
@@ -85,7 +82,7 @@ fun PineShoppingListItemHorizontal(
                 }
 
                 // 商品副标题
-                subtitle?.let {
+                shoppingItemBean.subtitle?.let {
                     Text(
                         text = it,
                         style = MaterialTheme.typography.bodySmall,
@@ -96,7 +93,7 @@ fun PineShoppingListItemHorizontal(
                 }
 
                 // 商品价格
-                price?.let {
+                shoppingItemBean.price?.let {
                     Text(
                         text = "$${String.format("%.2f", it)}",
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
@@ -123,26 +120,32 @@ fun PineShoppingListItemHorizontal(
 @Composable
 fun PineShoppingListItemPreview() {
     MaterialTheme {
-        Column() {
+        Column {
             PineShoppingListItemHorizontal(
-                image = OneImage.Resource(R.drawable.pinedroid_image_loading),
-                title = "Mac Book Pro 16-inch with M2 Max Chip",
-                subtitle = "Cheapest and most powerful laptop for professionals",
-                price = 2499.99
+                shoppingItemBean = ShoppingItemBean(
+                    image = OneImage.Resource(R.drawable.pinedroid_image_loading),
+                    title = "Mac Book Pro 16-inch with M2 Max Chip",
+                    subtitle = "Cheapest and most powerful laptop for professionals",
+                    price = 2499.99
+                )
             )
 
             PineShoppingListItemHorizontal(
-                image = null,
-                title = "iPhone 15 Pro",
-                subtitle = "Latest flagship smartphone",
-                price = 999.99
+                shoppingItemBean = ShoppingItemBean(
+                    image = null,
+                    title = "iPhone 15 Pro",
+                    subtitle = "Latest flagship smartphone",
+                    price = 999.99
+                )
             )
 
             PineShoppingListItemHorizontal(
-                image = OneImage.Resource(R.drawable.pinedroid_image_loading),
-                title = "Short title",
-                subtitle = null,
-                price = 49.99
+                shoppingItemBean = ShoppingItemBean(
+                    image = OneImage.Resource(R.drawable.pinedroid_image_loading),
+                    title = "Short title",
+                    subtitle = null,
+                    price = 49.99
+                )
             )
         }
     }

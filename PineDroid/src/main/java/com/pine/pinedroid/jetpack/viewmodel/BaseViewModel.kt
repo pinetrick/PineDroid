@@ -18,6 +18,8 @@ open class BaseViewModel<T: Any>(val clazz: KClass<T>): ViewModel() {
 
     protected val _viewState = MutableStateFlow(getInitialViewState())
     val viewState: StateFlow<T> = _viewState
+    val currentState
+        get() = _viewState.value
 
     open fun getInitialViewState(): T{
         return createInstance(clazz)

@@ -26,7 +26,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -49,7 +48,7 @@ import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
 import com.pine.pinedroid.jetpack.ui.loading.PineLoading
 import com.pine.pinedroid.jetpack.ui.nav.GeneralPineScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
-import com.pine.pinedroid.jetpack.ui.score_bar.PineScrollIndicator
+import com.pine.pinedroid.jetpack.ui.modifier.pineScrollIndicator
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import com.pine.pinedroid.utils.ui.pct
 import com.pine.pinedroid.utils.ui.spwh
@@ -106,7 +105,7 @@ fun Content(
 
         Box(modifier = Modifier.fillMaxSize()) {
             LazyVerticalGrid(
-                modifier = Modifier.PineScrollIndicator(scrollState),
+                modifier = Modifier.pineScrollIndicator(scrollState),
                 state = scrollState,
                 columns = GridCells.Fixed(4),
                 contentPadding = PaddingValues(8.dp),

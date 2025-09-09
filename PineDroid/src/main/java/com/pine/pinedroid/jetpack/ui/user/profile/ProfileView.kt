@@ -1,4 +1,4 @@
-package com.pine.pinedroid.jetpack.ui.profile
+package com.pine.pinedroid.jetpack.ui.user.profile
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -57,8 +57,8 @@ fun ProfileView(
                     shape = CircleShape
                 )
                 .border(
-                    width = 2.dp,
-                    color = MaterialTheme.colorScheme.primary,
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f),
                     shape = CircleShape
                 ),
             contentAlignment = Alignment.Center
@@ -78,7 +78,7 @@ fun ProfileView(
                 // 默认头像
                 Icon(
                     imageVector = Icons.Default.Person,
-                    contentDescription = "默认头像",
+                    contentDescription = "",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(50.dp)
                 )

@@ -3,36 +3,38 @@ package com.pine.pinedroid.jetpack.ui.tab
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import com.pine.pinedroid.jetpack.ui.font.FontAwesomeRegular
 import com.pine.pinedroid.jetpack.ui.font.FontAwesomeSolid
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
 import com.pine.pinedroid.utils.ui.pct
-import kotlin.collections.listOf
+import com.pine.pinedroid.utils.ui.spwh
 
 
 @Composable
 fun BottomTagScreen(
     tabs: List<Tab>,
     onTabSelected: (Tab) -> Unit,
-    block: @Composable (PaddingValues, selectedTab: Tab) -> Unit,
+    block: @Composable (selectedTab: Tab) -> Unit,
 ) {
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0), // 去掉自动加的内边距
@@ -40,7 +42,7 @@ fun BottomTagScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(13.pct) // 导航栏高度
+                    .height(10.pct) // 导航栏高度
                     .background(NavigationBarDefaults.containerColor),     // 背景色
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
@@ -55,9 +57,12 @@ fun BottomTagScreen(
                 }
             }
         },
-        content = { paddingValues ->
-            val selectedTab = tabs.find { it.isSelected } ?: tabs.first()
-            block(paddingValues, selectedTab)
+        content = { _ ->
+            Box(modifier = Modifier.padding(bottom = 10.pct)) {
+                val selectedTab = tabs.find { it.isSelected } ?: tabs.first()
+                block(selectedTab)
+            }
+
         }
     )
 }
@@ -75,7 +80,10 @@ fun NavItem(
 
     Column(
         modifier = modifier
-            .clickable { onClick(navItem) }
+            .clickable(
+                indication = null, // 去掉涟漪/背景变化
+                interactionSource = remember { MutableInteractionSource() }
+            ) { onClick(navItem) }
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -88,7 +96,7 @@ fun NavItem(
         )
         Text(
             text = navItem.title,
-            fontSize = 12.sp,
+            fontSize = 15.spwh,
             color = if (selected) selectedColor else unselectedColor,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
         )
@@ -109,7 +117,7 @@ fun PreviewDark() {
         listOf(
             Tab("Home", "\uf015", true),
             Tab("Profile", "\uf007", false),
-        ), {}, {_, _ -> }
+        ), {}, { _ -> }
     )
 
 }
