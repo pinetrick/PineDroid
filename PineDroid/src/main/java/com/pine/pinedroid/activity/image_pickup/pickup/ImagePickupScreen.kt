@@ -45,10 +45,11 @@ import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.jetpack.ui.button.PineButton
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
 import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
+import com.pine.pinedroid.jetpack.ui.list.vertical_grid.PineLazyVerticalGrid
 import com.pine.pinedroid.jetpack.ui.loading.PineLoading
 import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
-import com.pine.pinedroid.jetpack.ui.modifier.pineScrollIndicator
+import com.pine.pinedroid.jetpack.ui.list.vertical_grid.pineScrollIndicator
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import com.pine.pinedroid.utils.ui.pct
 import com.pine.pinedroid.utils.ui.spwh
@@ -104,7 +105,7 @@ fun Content(
         val scrollState = rememberLazyGridState()
 
         Box(modifier = Modifier.fillMaxSize()) {
-            LazyVerticalGrid(
+            PineLazyVerticalGrid(
                 modifier = Modifier.pineScrollIndicator(scrollState),
                 state = scrollState,
                 columns = GridCells.Fixed(4),

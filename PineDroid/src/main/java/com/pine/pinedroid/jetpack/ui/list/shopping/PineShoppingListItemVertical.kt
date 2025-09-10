@@ -1,4 +1,4 @@
-package com.pine.pinedroid.jetpack.ui.shopping
+package com.pine.pinedroid.jetpack.ui.list.shopping
 
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.pine.pinedroid.jetpack.ui.PineIsScreenPortrait
 import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
-import com.pine.pinedroid.jetpack.ui.modifier.pineScrollIndicator
+import com.pine.pinedroid.jetpack.ui.list.vertical_grid.pineScrollIndicator
 import com.pine.pinedroid.utils.ui.pct
 import com.pine.pinedroid.utils.ui.spwh
 
@@ -42,9 +42,9 @@ import com.pine.pinedroid.utils.ui.spwh
 @Composable
 fun PineShoppingListItemVertical(
     modifier: Modifier = Modifier,
-    shoppingItemBean: ShoppingItemBean = ShoppingItemBean(),
+    shoppingItemBean: PineShoppingItemBean = PineShoppingItemBean(),
     maxImageHeight: Dp = 180.dp, // 图片最大高度
-    onItemClick: ((ShoppingItemBean) -> Unit)? = null
+    onItemClick: ((PineShoppingItemBean) -> Unit)? = null
 ) {
     Card(
         modifier = modifier
@@ -193,7 +193,7 @@ fun PineShoppingListItemVerticalPreview() {
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
 
-            items(ShoppingItemBeanDemo) { destination ->
+            items(PineShoppingItemBean.ShoppingItemBeanDemo) { destination ->
                 PineShoppingListItemVertical(
                     shoppingItemBean = destination,
                     onItemClick = { }
@@ -213,7 +213,7 @@ fun PineShoppingListItemVerticalPreview() {
 fun SinglePineShoppingListItemPreview() {
     MaterialTheme {
         PineShoppingListItemVertical(
-            shoppingItemBean = ShoppingItemBeanDemo[0],
+            shoppingItemBean = PineShoppingItemBean.ShoppingItemBeanDemo[0],
             maxImageHeight = 150.dp
         )
     }
@@ -229,7 +229,7 @@ fun SinglePineShoppingListItemPreview() {
 fun CompactPineShoppingListItemPreview() {
     MaterialTheme {
         PineShoppingListItemVertical(
-            shoppingItemBean = ShoppingItemBeanDemo[1],
+            shoppingItemBean = PineShoppingItemBean.ShoppingItemBeanDemo[1],
             maxImageHeight = 80.dp
         )
     }

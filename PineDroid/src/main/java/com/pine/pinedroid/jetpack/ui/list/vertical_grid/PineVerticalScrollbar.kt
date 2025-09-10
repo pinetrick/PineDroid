@@ -1,4 +1,4 @@
-package com.pine.pinedroid.jetpack.ui.modifier
+package com.pine.pinedroid.jetpack.ui.list.vertical_grid
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween

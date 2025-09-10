@@ -1,4 +1,4 @@
-package com.pine.pinedroid.jetpack.ui.shopping
+package com.pine.pinedroid.jetpack.ui.list.shopping
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -29,8 +29,8 @@ import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
 
 @Composable
 fun PineShoppingListItemHorizontal(
-    shoppingItemBean: ShoppingItemBean = ShoppingItemBean(),
-    onItemClick: ((ShoppingItemBean) -> Unit)? = null
+    shoppingItemBean: PineShoppingItemBean = PineShoppingItemBean(),
+    onItemClick: ((PineShoppingItemBean) -> Unit)? = null
 ) {
     Card(
         modifier = Modifier
@@ -122,7 +122,7 @@ fun PineShoppingListItemPreview() {
     MaterialTheme {
         Column {
             PineShoppingListItemHorizontal(
-                shoppingItemBean = ShoppingItemBean(
+                shoppingItemBean = PineShoppingItemBean(
                     image = OneImage.Resource(R.drawable.pinedroid_image_loading),
                     title = "Mac Book Pro 16-inch with M2 Max Chip",
                     subtitle = "Cheapest and most powerful laptop for professionals",
@@ -131,7 +131,7 @@ fun PineShoppingListItemPreview() {
             )
 
             PineShoppingListItemHorizontal(
-                shoppingItemBean = ShoppingItemBean(
+                shoppingItemBean = PineShoppingItemBean(
                     image = null,
                     title = "iPhone 15 Pro",
                     subtitle = "Latest flagship smartphone",
@@ -140,7 +140,7 @@ fun PineShoppingListItemPreview() {
             )
 
             PineShoppingListItemHorizontal(
-                shoppingItemBean = ShoppingItemBean(
+                shoppingItemBean = PineShoppingItemBean(
                     image = OneImage.Resource(R.drawable.pinedroid_image_loading),
                     title = "Short title",
                     subtitle = null,

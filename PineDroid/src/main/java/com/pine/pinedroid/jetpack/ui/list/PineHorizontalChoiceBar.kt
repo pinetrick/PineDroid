@@ -1,4 +1,4 @@
-package com.pine.pinedroid.jetpack.ui.score_bar
+package com.pine.pinedroid.jetpack.ui.list
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
