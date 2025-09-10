@@ -26,6 +26,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -70,7 +71,7 @@ fun PineLazyVerticalStaggeredGrid(
         if(scoreBar) {
             PineLazyVerticalStaggeredGridScrollBar(
                 state = state,
-                modifier = Modifier.fillMaxHeight(),
+                modifier = Modifier.fillMaxHeight().padding(end = 10.dp),
                 draggable = true,
                 width = 13.dp,
             )

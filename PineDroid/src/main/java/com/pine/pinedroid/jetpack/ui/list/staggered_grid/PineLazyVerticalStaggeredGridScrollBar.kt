@@ -104,7 +104,7 @@ fun PineLazyVerticalStaggeredGridScrollBar(
     BoxWithConstraints(
         modifier = modifier.alpha(alpha)
     ) {
-        val scrollBarHeightPercent = (0.1f + 0.9f / (scrollableItems + 1)).coerceIn(0f, 1f)
+        val scrollBarHeightPercent = (0.1f + 0.9f / (scrollableItems / 10 + 1)).coerceIn(0f, 1f)
 
         val trackHeight = maxHeight
         // 滚动条高度固定为15%
