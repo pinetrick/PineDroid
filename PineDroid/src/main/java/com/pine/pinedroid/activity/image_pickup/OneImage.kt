@@ -1,12 +1,23 @@
 package com.pine.pinedroid.activity.image_pickup
 
+import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
+import android.util.Size
 import androidx.core.net.toUri
 import com.pine.pinedroid.hardware.gps.PineLatLng
+import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.toLocalUrl
 
 sealed class OneImage {
-    data class UriImage(val uri: Uri) : OneImage()
+    data class UriImage(val uri: Uri) : OneImage() {
+        val thumbnail: Bitmap?
+            get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                appContext.contentResolver.loadThumbnail(uri, Size(200, 200), null)
+            } else {
+                null
+            }
+    }
     data class LocalImage(val localUrl: String) : OneImage()
     data class Resource(val resourceId: Int) : OneImage()
     data class HttpImage(val url: String) : OneImage()

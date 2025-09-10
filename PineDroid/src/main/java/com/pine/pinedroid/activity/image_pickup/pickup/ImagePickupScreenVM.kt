@@ -1,11 +1,14 @@
 package com.pine.pinedroid.activity.image_pickup.pickup
 
+import android.os.Build
+import android.util.Size
 import androidx.lifecycle.viewModelScope
 import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.activity.image_pickup.camera.CameraScreenVM
 import com.pine.pinedroid.activity.image_pickup.preview.ImagePreviewScreenVM
 import com.pine.pinedroid.file.image.Gallery.getGalleryImages
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
+import com.pine.pinedroid.utils.appContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -15,7 +18,9 @@ class ImagePickupScreenVM : BaseViewModel<ImagePickupScreenState>(ImagePickupScr
 
     fun onInit() {
         if (inputImages.isEmpty()) {
-            inputImages = getGalleryImages().map { OneImage.UriImage(it) }
+            inputImages = getGalleryImages().map {
+                OneImage.UriImage(it)
+            }
         }
 
 

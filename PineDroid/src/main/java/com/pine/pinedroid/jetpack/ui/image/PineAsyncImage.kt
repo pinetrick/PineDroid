@@ -48,7 +48,7 @@ fun PineAsyncImage(
 ) {
 
     val processedModel = when (model) {
-        is OneImage.UriImage -> model.uri
+        is OneImage.UriImage -> model.thumbnail ?: model.uri
         is OneImage.HttpImage -> model.url
         is OneImage.LocalImage -> File(model.localUrl)
         is OneImage.Resource -> model.resourceId
