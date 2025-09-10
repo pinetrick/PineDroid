@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import com.pine.pinedroid.utils.ui.pct
 
 @Composable
-fun GeneralPineScreen(
+fun PineGeneralScreen(
     title: @Composable () -> Unit,
     content: @Composable () -> Unit,
 ){

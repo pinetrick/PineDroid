@@ -31,10 +31,10 @@ import com.pine.pinedroid.utils.ui.spwh
 
 
 @Composable
-fun BottomTagScreen(
-    tabs: List<Tab>,
-    onTabSelected: (Tab) -> Unit,
-    block: @Composable (selectedTab: Tab) -> Unit,
+fun PineBottomTagScreen(
+    pineTabs: List<PineTab>,
+    onTabSelected: (PineTab) -> Unit,
+    block: @Composable (selectedPineTab: PineTab) -> Unit,
 ) {
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0), // 去掉自动加的内边距
@@ -47,7 +47,7 @@ fun BottomTagScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                tabs.forEachIndexed { index, title ->
+                pineTabs.forEachIndexed { index, title ->
                     NavItem(
                         navItem = title,
                         selected = title.isSelected,
@@ -59,7 +59,7 @@ fun BottomTagScreen(
         },
         content = { _ ->
             Box(modifier = Modifier.padding(bottom = 10.pct)) {
-                val selectedTab = tabs.find { it.isSelected } ?: tabs.first()
+                val selectedTab = pineTabs.find { it.isSelected } ?: pineTabs.first()
                 block(selectedTab)
             }
 
@@ -69,10 +69,10 @@ fun BottomTagScreen(
 
 @Composable
 fun NavItem(
-    navItem: Tab,
+    navItem: PineTab,
     modifier: Modifier = Modifier,
     selected: Boolean = false,
-    onClick: (Tab) -> Unit = {},
+    onClick: (PineTab) -> Unit = {},
 ) {
     // 定义选中和未选中的颜色
     val selectedColor = MaterialTheme.colorScheme.primary
@@ -113,10 +113,10 @@ fun NavItem(
 )
 @Composable
 fun PreviewDark() {
-    BottomTagScreen(
+    PineBottomTagScreen(
         listOf(
-            Tab("Home", "\uf015", true),
-            Tab("Profile", "\uf007", false),
+            PineTab("Home", "\uf015", true),
+            PineTab("Profile", "\uf007", false),
         ), {}, { _ -> }
     )
 

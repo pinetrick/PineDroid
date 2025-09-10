@@ -29,7 +29,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,9 +45,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.pine.pinedroid.R
-import com.pine.pinedroid.jetpack.ui.CameraPreview
+import com.pine.pinedroid.jetpack.ui.PineCameraPreview
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
-import com.pine.pinedroid.jetpack.ui.image.ZoomablePineImage
+import com.pine.pinedroid.jetpack.ui.image.PineZoomableImage
 import com.pine.pinedroid.jetpack.ui.loading.PineLoading
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import com.pine.pinedroid.utils.ui.pct
@@ -138,7 +137,7 @@ fun JetPackCameraView(viewModel: CameraScreenVM, viewState: CameraScreenState) {
         // 相机预览区域 - 这里应该是实际的相机预览
         // 真正的相机预览
         if (viewState.cameraPhoto == null) {
-            CameraPreview(
+            PineCameraPreview(
                 modifier = Modifier.fillMaxSize(),
                 cameraSelector = if (viewState.isFrontCamera) {
                     CameraSelector.DEFAULT_FRONT_CAMERA
@@ -149,7 +148,7 @@ fun JetPackCameraView(viewModel: CameraScreenVM, viewState: CameraScreenState) {
                 onUseCase = { imageCapture = it }
             )
         } else {
-            ZoomablePineImage(
+            PineZoomableImage(
                 image = viewState.cameraPhoto,
             )
         }

@@ -45,7 +45,7 @@ fun <T> logv(content: T?) = log("null", content, Log.VERBOSE)
 
 
 private fun _log(tag: String, content: String, level: Int = Log.DEBUG) {
-    val finalTag = tag.ifEmpty {
+    var finalTag = tag.ifEmpty {
         // 获取调用者的类名
         Thread.currentThread().stackTrace
             .firstOrNull { !it.className.contains("Log") && !it.className.contains("_log") }
@@ -53,6 +53,7 @@ private fun _log(tag: String, content: String, level: Int = Log.DEBUG) {
             ?.substringAfterLast('.')
             ?: "UnknownClass"
     }
+    finalTag = "Pine_$finalTag"
 
 
     when (level) {

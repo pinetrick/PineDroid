@@ -4,7 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
-import com.pine.pinedroid.jetpack.ui.SyncSystemNavBarWithBottomBar
+import com.pine.pinedroid.jetpack.ui.PineSyncSystemNavBarWithBottomBar
 
 @Composable
 fun <T: Any> HandleNavigation(
@@ -50,7 +50,7 @@ fun <T: Any> HandleNavigation(
 
     }
 
-    SyncSystemNavBarWithBottomBar()
+    PineSyncSystemNavBarWithBottomBar()
 }
 
 // 构建带参数的路由

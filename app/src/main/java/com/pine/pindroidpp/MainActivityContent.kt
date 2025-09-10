@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.pine.pindroidpp.demo_screen.DemoScreen
 import com.pine.pindroidpp.empty_screen.EmptyScreen
 import com.pine.pindroidpp.empty_screen.EmptyScreenVM
 import com.pine.pindroidpp.root.RootScreen
@@ -32,6 +33,7 @@ fun GetRootContent(){
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable("root") { RootScreen(navController) }
+                composable("demo") { DemoScreen(navController) }
                 composable("empty") { EmptyScreen(navController) }
 
 

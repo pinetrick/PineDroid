@@ -4,16 +4,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.pine.pinedroid.R
-import com.pine.pinedroid.activity.image_pickup.pickup.Content
-import com.pine.pinedroid.activity.image_pickup.pickup.Title
-import com.pine.pinedroid.jetpack.ui.nav.GeneralPineScreen
+import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 
@@ -27,7 +22,7 @@ fun RootScreen(
         viewModel.onInit()
     }
 
-    GeneralPineScreen(
+    PineGeneralScreen(
         title = {
             PineTopAppBar(
                 title = "Home Screen"
@@ -55,6 +50,9 @@ fun RootScreenContent(
         }
         Button(onClick = viewModel::onMessageBoxTest) {
             Text("Messagebox Test")
+        }
+        Button(onClick = {viewModel.navigateTo("demo")}) {
+            Text("Demo Screen")
         }
     }
 }

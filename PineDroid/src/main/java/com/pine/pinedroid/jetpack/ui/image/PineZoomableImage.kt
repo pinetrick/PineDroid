@@ -23,10 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.toSize
 import com.pine.pinedroid.R
 import com.pine.pinedroid.activity.image_pickup.OneImage
-import kotlin.math.abs
 
 @Composable
-fun ZoomablePineImage(
+fun PineZoomableImage(
     image: OneImage,
     modifier: Modifier = Modifier
 ) {
@@ -120,7 +119,7 @@ private fun calculateMaxOffsetY(containerSize: Size, imageSize: Size, scale: Flo
 @Preview
 @Composable
 fun PreviewZoomablePineImage() {
-    ZoomablePineImage(
+    PineZoomableImage(
         image = OneImage.Resource(R.drawable.camera),
         modifier = Modifier.fillMaxSize()
     )

@@ -32,7 +32,7 @@ import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
 
 @Composable
-fun ProfileView(
+fun PineProfileView(
     image: OneImage? = null,
     name: String? = null,
     onLogin: () -> Unit = {},
@@ -152,7 +152,7 @@ fun ProfileView(
 )
 @Composable
 fun PreviewProfileScreenLogout() {
-    ProfileView()
+    PineProfileView()
 }
 
 
@@ -164,7 +164,7 @@ fun PreviewProfileScreenLogout() {
 )
 @Composable
 fun PreviewProfileScreen() {
-    ProfileView(
+    PineProfileView(
         OneImage.Resource(R.drawable.camera),
         "张三",
         onLogin = {},

@@ -46,7 +46,7 @@ import com.pine.pinedroid.jetpack.ui.button.PineButton
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
 import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
 import com.pine.pinedroid.jetpack.ui.loading.PineLoading
-import com.pine.pinedroid.jetpack.ui.nav.GeneralPineScreen
+import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
 import com.pine.pinedroid.jetpack.ui.modifier.pineScrollIndicator
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
@@ -67,7 +67,7 @@ fun ImagePickupScreen(
     if (viewState.loading) {
         PineLoading(stringResource(R.string.pine_image_pickup_processing))
     } else {
-        GeneralPineScreen(
+        PineGeneralScreen(
             title = {
                 Title(
                     totalAccount = viewState.selectedImages.size,

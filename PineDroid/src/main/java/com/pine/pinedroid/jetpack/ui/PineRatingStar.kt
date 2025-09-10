@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun RatingStar(
+fun PineRatingStar(
     rating: Float,
     maxRating: Int = 5,
     color: Color = MaterialTheme.colorScheme.primary,
@@ -46,5 +46,5 @@ fun RatingStar(
 )
 @Composable
 fun RatingStarPreview() {
-    RatingStar(2.5f, 5)
+    PineRatingStar(2.5f, 5)
 }

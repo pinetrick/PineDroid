@@ -1,6 +1,6 @@
 package com.pine.pinedroid.jetpack.ui.tab
 
-data class Tab(
+data class PineTab(
 
     val title: String = "",
     val icon: String = "",

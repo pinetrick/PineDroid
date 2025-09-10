@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 @Composable
-fun SyncSystemNavBarWithBottomBar() {
+fun PineSyncSystemNavBarWithBottomBar() {
     val view = LocalView.current
     // 底部导航栏你用的背景色
     val navBarColor: Color = NavigationBarDefaults.containerColor

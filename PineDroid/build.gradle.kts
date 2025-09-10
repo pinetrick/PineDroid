@@ -69,7 +69,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.ui:ui")
-    implementation(libs.androidx.exifinterface)
+
     debugImplementation("androidx.compose.ui:ui-tooling")
 
     //Google play 好评api
@@ -94,6 +94,8 @@ dependencies {
     implementation("androidx.camera:camera-view:1.3.4")
     implementation("androidx.camera:camera-extensions:1.3.4")
 
+    //从图片中获取exif
+    implementation("androidx.exifinterface:exifinterface:1.3.6")
 
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:34.1.0"))

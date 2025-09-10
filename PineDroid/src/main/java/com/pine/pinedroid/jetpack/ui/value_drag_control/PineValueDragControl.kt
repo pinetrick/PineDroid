@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ValueDragControl(
+fun PineValueDragControl(
     value: Float,
     onValueChange: (Float) -> Unit,
     valueRange: ClosedFloatingPointRange<Float> = 0f..100f,
@@ -121,7 +121,7 @@ fun ValueDragControl(
 )
 @Composable
 fun RadiusControl() {
-    ValueDragControl(
+    PineValueDragControl(
         value = 500f,
         onValueChange = {  },
         valueRange = 50f..1000f,

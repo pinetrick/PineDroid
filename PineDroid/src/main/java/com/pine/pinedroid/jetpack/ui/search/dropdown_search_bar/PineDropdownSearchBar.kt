@@ -21,8 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,7 +43,6 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import com.pine.pinedroid.R
@@ -54,14 +51,14 @@ import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
 import kotlinx.coroutines.delay
 
 @Composable
-fun DropdownSearchBar(
+fun PineDropdownSearchBar(
     modifier: Modifier = Modifier,
     value: String = "",
     focused: Boolean = false,
     onValueChange: (String) -> Unit,
     placeholder: String = "Search destinations...",
-    suggestions: List<SearchSuggestion> = emptyList(),
-    onSuggestionSelected: (SearchSuggestion) -> Unit,
+    suggestions: List<PineDropdownSearchSuggestion> = emptyList(),
+    onSuggestionSelected: (PineDropdownSearchSuggestion) -> Unit,
     onSearch: (String) -> Unit,
     enabled: Boolean = true
 ) {
@@ -193,7 +190,7 @@ fun DropdownSearchBar(
 
 @Composable
 fun SearchSuggestionItem(
-    suggestion: SearchSuggestion,
+    suggestion: PineDropdownSearchSuggestion,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -256,31 +253,31 @@ fun DropdownSearchBarExample() {
     var searchQuery by remember { mutableStateOf("") }
     val suggestions = remember {
         listOf(
-            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.SearchSuggestion(
+            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.PineDropdownSearchSuggestion(
                 "Auckland",
                 "New Zealand",
                 "City",
                 OneImage.Resource(R.drawable.pinedroid_image_loading)
             ),
-            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.SearchSuggestion(
+            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.PineDropdownSearchSuggestion(
                 "Queenstown",
                 "New Zealand",
                 "City",
                 OneImage.Resource(R.drawable.pinedroid_image_loading)
             ),
-            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.SearchSuggestion(
+            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.PineDropdownSearchSuggestion(
                 "Sky Tower",
                 "Auckland attraction",
                 "Attraction",
                 OneImage.Resource(R.drawable.pinedroid_image_loading),
             ),
-            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.SearchSuggestion(
+            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.PineDropdownSearchSuggestion(
                 "Sydney",
                 "Australia",
                 "City",
                 OneImage.Resource(R.drawable.pinedroid_image_loading)
             ),
-            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.SearchSuggestion(
+            _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.PineDropdownSearchSuggestion(
                 "Melbourne",
                 "Australia",
                 "City",
@@ -290,7 +287,7 @@ fun DropdownSearchBarExample() {
     }
 
     Column(modifier = Modifier.padding(16.dp)) {
-        _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.DropdownSearchBar(
+        _root_ide_package_.com.pine.pinedroid.jetpack.ui.search.dropdown_search_bar.PineDropdownSearchBar(
             value = searchQuery,
             focused = false,
             onValueChange = { },

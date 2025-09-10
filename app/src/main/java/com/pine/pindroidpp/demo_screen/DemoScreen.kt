@@ -1,4 +1,4 @@
-package com.pine.pindroidpp.empty_screen
+package com.pine.pindroidpp.demo_screen
 
 
 import androidx.compose.runtime.Composable
@@ -11,9 +11,9 @@ import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 
 @Composable
-fun EmptyScreen(
+fun DemoScreen(
     navController: NavController? = null,
-    viewModel: EmptyScreenVM = viewModel()
+    viewModel: DemoScreenVM = viewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
 
@@ -35,6 +35,6 @@ fun EmptyScreen(
 }
 
 @Composable
-fun Content(viewModel: EmptyScreenVM, viewState: EmptyScreenState) {
+fun Content(viewModel: DemoScreenVM, viewState: DemoScreenState) {
 
 }
