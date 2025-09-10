@@ -106,9 +106,9 @@ fun Content(
 
         Box(modifier = Modifier.fillMaxSize()) {
             PineLazyVerticalGrid(
-                modifier = Modifier.pineScrollIndicator(scrollState),
+                scoreBar = true,
                 state = scrollState,
-                columns = GridCells.Fixed(4),
+                columns = GridCells.Adaptive(80.dp),
                 contentPadding = PaddingValues(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)

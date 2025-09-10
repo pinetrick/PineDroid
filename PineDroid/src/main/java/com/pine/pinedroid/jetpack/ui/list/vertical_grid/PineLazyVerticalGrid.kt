@@ -26,6 +26,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -62,11 +63,12 @@ fun PineLazyVerticalGrid(
     content: LazyGridScope.() -> Unit,
 ) {
     Box (
+        modifier = modifier,
         contentAlignment = Alignment.CenterEnd
     ){
         LazyVerticalGrid(
             columns = columns,
-            modifier = modifier,
+            modifier = Modifier.fillMaxSize(),
             state = state,
             contentPadding = contentPadding,
             reverseLayout = reverseLayout,
