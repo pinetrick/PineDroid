@@ -3,6 +3,7 @@ package com.pine.pinedroid.activity.image_pickup.pickup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -106,12 +108,10 @@ fun Content(
 
         Box(modifier = Modifier.fillMaxSize()) {
             PineLazyVerticalGrid(
-                scoreBar = true,
                 state = scrollState,
                 columns = GridCells.Adaptive(80.dp),
-                contentPadding = PaddingValues(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
+                verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 if (viewState.enabledCamera) {
                     item(null) {
@@ -193,16 +193,15 @@ fun ImageGridItem(
     Box(
         modifier = Modifier
             .aspectRatio(1f)
-            .clip(RoundedCornerShape(8.dp))
             .border(
                 width = if (isSelected) 3.dp else 0.dp,
                 color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent,
-                shape = RoundedCornerShape(8.dp)
             )
     ) {
         // 图片 - 点击显示大图
         PineAsyncImage(
             model = oneImage,
+            useThumbnail = true,
             modifier = Modifier
                 .fillMaxSize()
                 .clickable {
@@ -210,17 +209,28 @@ fun ImageGridItem(
                 },
             contentScale = ContentScale.Crop
         )
+        // 选中时的黑色遮罩效果
+        if (isSelected) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f))
+            )
+        }
 
         // 选择框 - 只在点击选择框时触发选中
         if (allowSelection) {
             Box(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(4.dp)
-                    .size(25.dp)
-                    .clickable {
+                    .clickable(
+                        indication = null, // 去掉涟漪/背景变化
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
                         onSelectChange(oneImage)
                     }
+                    .padding(start = 10.dp, end = 4.dp, top = 4.dp, bottom = 10.dp) //这个边距可以被点击吗
+                    .size(25.dp)
             ) {
                 // 选择框背景
                 Box(
@@ -248,11 +258,6 @@ fun ImageGridItem(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .size(15.dp)
-                    )
-                } else {
-                    // 未选中时的圆圈图标（可选）
-                    Spacer(
-                        modifier = Modifier
                     )
                 }
             }

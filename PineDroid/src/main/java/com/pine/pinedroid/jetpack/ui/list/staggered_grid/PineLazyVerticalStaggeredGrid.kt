@@ -42,7 +42,6 @@ import kotlinx.coroutines.launch
 fun PineLazyVerticalStaggeredGrid(
     modifier: Modifier = Modifier,
     columns: StaggeredGridCells = StaggeredGridCells.Adaptive(150.dp),
-    scoreBar: Boolean = true,
     state: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
     contentPadding: PaddingValues = PaddingValues(0.dp),
     reverseLayout: Boolean = false,
@@ -70,14 +69,7 @@ fun PineLazyVerticalStaggeredGrid(
             horizontalArrangement = horizontalArrangement,
             content = content,
         )
-        if(scoreBar) {
-            PineLazyVerticalStaggeredGridScrollBar(
-                state = state,
-                modifier = Modifier.fillMaxHeight().padding(end = 10.dp),
-                draggable = true,
-                width = 13.dp,
-            )
-        }
+
     }
 
 }

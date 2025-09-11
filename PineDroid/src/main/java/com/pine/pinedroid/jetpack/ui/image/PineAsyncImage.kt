@@ -30,6 +30,7 @@ import coil.compose.SubcomposeAsyncImageContent
 @Composable
 fun PineAsyncImage(
     model: Any?,
+    useThumbnail: Boolean = false,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
     placeholder: Painter? = painterResource(R.drawable.pinedroid_image_loading),
@@ -45,10 +46,15 @@ fun PineAsyncImage(
     filterQuality: FilterQuality = DefaultFilterQuality,
     clipToBounds: Boolean = true,
     modelEqualityDelegate: EqualityDelegate = DefaultModelEqualityDelegate,
+
 ) {
 
+
     val processedModel = when (model) {
-        is OneImage.UriImage -> model.thumbnail ?: model.uri
+        is OneImage.UriImage -> {
+            if (useThumbnail) model.thumbnail ?: model.uri
+            else model.uri
+        }
         is OneImage.HttpImage -> model.url
         is OneImage.LocalImage -> File(model.localUrl)
         is OneImage.Resource -> model.resourceId

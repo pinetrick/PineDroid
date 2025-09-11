@@ -7,12 +7,14 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,6 +34,8 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.pine.pinedroid.utils.log.logw
+import com.pine.pinedroid.utils.ui.dp2Px
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -39,16 +43,17 @@ import kotlinx.coroutines.launch
 @Composable
 fun PineLazyVerticalGridScrollbar(
     state: LazyGridState,
+    elementRowCount: Int,
     modifier: Modifier = Modifier,
     draggable: Boolean = true,
-    width: Dp = 8.dp,
+    width: Dp = 24.dp,
     autoHide: Boolean = true,
     hideDelay: Long = 1500L // 1.5秒后隐藏
 ) {
     var isDragging by remember { mutableStateOf(false) }
     var dragOffset by remember { mutableFloatStateOf(0f) }
     var isScrolling by remember { mutableStateOf(false) }
-    var shouldShow by remember { mutableStateOf(true) }
+    var shouldShow by remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -106,7 +111,7 @@ fun PineLazyVerticalGridScrollbar(
     BoxWithConstraints(
         modifier = modifier.alpha(alpha)
     ) {
-        val scrollBarHeightPercent = (0.1f + 0.9f / (scrollableItems / 10 + 1)).coerceIn(0f, 1f)
+        val scrollBarHeightPercent = (0.1f + 0.9f / (scrollableItems / 10f + 1f)).coerceIn(0f, 1f) //0.15f
 
         val trackHeight = maxHeight
         // 滚动条高度固定为15%
@@ -159,24 +164,25 @@ fun PineLazyVerticalGridScrollbar(
                                     onDragEnd = {
                                         isDragging = false
                                     }
-                                ) { _, dragAmount ->
-                                    dragOffset = (dragOffset + dragAmount.y / scrollableSpace.value)
+                                ) { change, dragAmount ->
+                                    change.consume()
+
+                                    dragOffset = (dragOffset + dragAmount.y / trackHeight.dp2Px())
                                         .coerceIn(0f, 1f)
 
-                                    // 根据拖拽位置计算目标item索引
-                                    val targetIndex = if (scrollableItems > 0) {
-                                        (dragOffset * scrollableItems).toInt().coerceIn(0, scrollableItems)
-                                    } else 0
+                                    val targetIndex = (dragOffset * (totalItems - visibleItemsCount))
+                                        .toInt()
+                                        .coerceIn(0, totalItems - 1)
 
                                     coroutineScope.launch {
-                                        state.scrollToItem(targetIndex)
+                                        state.scrollBy(dragAmount.y)
                                     }
                                 }
                             }
                             .pointerInput(Unit) {
                                 detectTapGestures { offset ->
                                     shouldShow = true
-                                    val trackPosition = offset.y / scrollableSpace.value
+                                    val trackPosition = offset.y / scrollableSpace.value.dp2Px()
                                     val targetIndex = if (scrollableItems > 0) {
                                         (trackPosition * scrollableItems).toInt().coerceIn(0, totalItems - 1)
                                     } else 0
