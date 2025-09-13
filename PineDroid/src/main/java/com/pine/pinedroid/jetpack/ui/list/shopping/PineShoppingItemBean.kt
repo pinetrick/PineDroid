@@ -10,7 +10,7 @@ data class PineShoppingItemBean(
     var image: OneImage? = null,
     var title: String? = null,
     var subtitle: String? = null,
-    var priceUnit: String? = "$",
+    var priceUnit: String? = null,
     var price: Double? = null,
     var textOnImage: String? = null,
     var priceHint: String? = null,
