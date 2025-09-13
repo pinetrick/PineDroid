@@ -4,6 +4,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+fun Date.pineToString(format: String = "yyyy-MM-dd HH:mm:ss"): String {
+    val sdf = SimpleDateFormat(format, Locale.getDefault())
+    return sdf.format(this)
+}
+
 fun Long.secondsToMinSec(): String {
     if (this < 0) return "00:00" // 处理负数情况
 

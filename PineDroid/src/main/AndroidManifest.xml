@@ -7,8 +7,14 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 用户位置信息 长时间获取  -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission
+        android:name="android.permission.FOREGROUND_SERVICE_LOCATION"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
@@ -28,6 +34,13 @@
         <provider
             android:name=".content_provider.PineContentProvider"
             android:authorities="${applicationId}.floatinginitprovider"
+            android:exported="false" />
+
+        <!-- 注册位置服务 -->
+        <service
+            android:name=".hardware.gps.PineLocationForegroundService"
+            android:enabled="true"
+            android:foregroundServiceType="location"
             android:exported="false" />
 
         <!-- 解决 Android 7.0 及以上版本的文件共享问题 - 拍照 -->

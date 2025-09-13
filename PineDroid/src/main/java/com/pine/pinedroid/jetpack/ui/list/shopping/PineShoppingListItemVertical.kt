@@ -43,7 +43,6 @@ import com.pine.pinedroid.utils.ui.spwh
 fun PineShoppingListItemVertical(
     modifier: Modifier = Modifier,
     shoppingItemBean: PineShoppingItemBean = PineShoppingItemBean(),
-    maxImageHeight: Dp = 180.dp, // 图片最大高度
     onItemClick: ((PineShoppingItemBean) -> Unit)? = null
 ) {
     Card(
@@ -64,8 +63,6 @@ fun PineShoppingListItemVertical(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(shoppingItemBean.imageAspectRatio)
-                    .height(maxImageHeight)
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.TopEnd
             ) {
@@ -214,7 +211,6 @@ fun SinglePineShoppingListItemPreview() {
     MaterialTheme {
         PineShoppingListItemVertical(
             shoppingItemBean = PineShoppingItemBean.ShoppingItemBeanDemo[0],
-            maxImageHeight = 150.dp
         )
     }
 }
@@ -230,7 +226,6 @@ fun CompactPineShoppingListItemPreview() {
     MaterialTheme {
         PineShoppingListItemVertical(
             shoppingItemBean = PineShoppingItemBean.ShoppingItemBeanDemo[1],
-            maxImageHeight = 80.dp
         )
     }
 }

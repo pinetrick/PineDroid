@@ -5,7 +5,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.Size
 import androidx.core.net.toUri
-import com.pine.pinedroid.hardware.gps.PineLatLng
+import com.pine.pinedroid.R
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.toLocalUrl
 
@@ -18,6 +18,7 @@ sealed class OneImage {
                 null
             }
     }
+
     data class LocalImage(val localUrl: String) : OneImage()
     data class Resource(val resourceId: Int) : OneImage()
     data class HttpImage(val url: String) : OneImage()
@@ -57,3 +58,10 @@ fun OneImage.toLocalUrl(): String? {
         else -> null
     }
 }
+
+val DEMO_ONE_IMAGE_LIST = listOf<OneImage>(
+    OneImage.Resource(R.drawable.pinedroid_image_off),
+    OneImage.Resource(R.drawable.pinedroid_image_loading),
+    OneImage.Resource(R.drawable.pinedroid_warning),
+    OneImage.Resource(R.drawable.pine_droid_icon),
+)
