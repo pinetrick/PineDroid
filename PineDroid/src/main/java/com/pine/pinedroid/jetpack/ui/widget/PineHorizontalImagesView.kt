@@ -60,7 +60,6 @@ fun PineHorizontalImageView(
     Box(
         modifier = modifier
             .height(300.dp)
-            .clip(RoundedCornerShape(12.dp))
     ) {
 
         HorizontalPager(
