@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.pine.pinedroid.utils.log.logw
@@ -63,6 +64,7 @@ class PermissionController(
 )
 
 // 使用方式
+@Preview
 @Composable
 fun MyScreen() {
     // 构建正确的权限列表

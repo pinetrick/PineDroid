@@ -3,6 +3,7 @@ package com.pine.pindroidpp.root
 import com.pine.pindroidpp.db.TableTest
 import com.pine.pinedroid.activity.image_pickup.ImagePickup
 import com.pine.pinedroid.activity.image_pickup.preview.ImagePreviewScreenVM
+import com.pine.pinedroid.hardware.gps.route_recorder.PineRouteRecorder
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import com.pine.pinedroid.ui.message_box.MessageBox
 import com.pine.pinedroid.utils.toast
@@ -52,4 +53,7 @@ class RootScreenVM : BaseViewModel<RootScreenState>(RootScreenState::class) {
             toast("Clicked: $messageBoxChoose")
         }.show("title" ,"btn1", "btn2")
     }
+
+
+
 }

@@ -6,8 +6,8 @@ import com.pine.pinedroid.hardware.gps.PineLocationForegroundService
 
 open class PineRouteRecorder {
     init {
-        PineLocationForegroundService.Companion.subscribe(::onLocationChanged)
         table<PineRecorderLatLngBean>().createTable()
+        PineLocationForegroundService.subscribe(::onLocationChanged)
     }
 
     private fun onLocationChanged(location: PineLatLng) {

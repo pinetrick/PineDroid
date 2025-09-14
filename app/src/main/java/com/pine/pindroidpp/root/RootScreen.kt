@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.pine.pinedroid.jetpack.ui.button.PineButton
 import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
@@ -54,5 +55,10 @@ fun RootScreenContent(
         Button(onClick = {viewModel.navigateTo("demo")}) {
             Text("Demo Screen")
         }
+        PineButton(
+            text = "Record location",
+            onClick =  {viewModel.navigateTo("location")}
+        )
+
     }
 }

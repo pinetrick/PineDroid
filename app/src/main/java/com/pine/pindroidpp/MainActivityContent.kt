@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.pine.pindroidpp.demo_screen.DemoScreen
 import com.pine.pindroidpp.empty_screen.EmptyScreen
 import com.pine.pindroidpp.empty_screen.EmptyScreenVM
+import com.pine.pindroidpp.location_screen.LocationScreen
 import com.pine.pindroidpp.root.RootScreen
 import com.pine.pindroidpp.root.RootScreenVM
 import com.pine.pindroidpp.ui.theme.PinDroidppTheme
@@ -34,6 +35,7 @@ fun GetRootContent(){
             ) {
                 composable("root") { RootScreen(navController) }
                 composable("demo") { DemoScreen(navController) }
+                composable("location") { LocationScreen(navController) }
                 composable("empty") { EmptyScreen(navController) }
 
 
