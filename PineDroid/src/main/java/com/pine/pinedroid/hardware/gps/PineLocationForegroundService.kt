@@ -21,6 +21,9 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.pine.pinedroid.utils.appContext
+import com.pine.pinedroid.utils.log.logd
+import com.pine.pinedroid.utils.log.logi
+import com.pine.pinedroid.utils.toast
 import java.lang.ref.WeakReference
 
 class PineLocationForegroundService : Service() {
@@ -38,23 +41,17 @@ class PineLocationForegroundService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        serviceInstance = WeakReference(this)
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = createLocationRequest()
         createLocationCallback()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForegroundService()
-        return START_STICKY
-    }
-
-    override fun onBind(intent: Intent): IBinder {
-        return binder
-    }
-
-    private fun startForegroundService() {
         createNotificationChannel()
         val notification = buildNotification()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(
                 NOTIFICATION_ID,
@@ -64,14 +61,22 @@ class PineLocationForegroundService : Service() {
         } else {
             startForeground(NOTIFICATION_ID, notification)
         }
+
         startLocationUpdates()
+        return START_STICKY
     }
+
+    override fun onBind(intent: Intent): IBinder {
+        return binder
+    }
+
+
 
     private fun createNotificationChannel() {
         val serviceChannel = NotificationChannel(
             CHANNEL_ID,
             "位置服务通道",
-            NotificationManager.IMPORTANCE_DEFAULT
+            NotificationManager.IMPORTANCE_HIGH
         )
         val manager = getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(serviceChannel)
@@ -94,7 +99,7 @@ class PineLocationForegroundService : Service() {
                 10000L // 间隔时间10秒
             ).apply {
                 setMinUpdateIntervalMillis(5000L) // 最快间隔5秒
-                setWaitForAccurateLocation(true)
+                setMinUpdateDistanceMeters(1f) // 即使没动也触发
             }.build()
         } else {
             // 兼容旧版本的方式
@@ -103,6 +108,7 @@ class PineLocationForegroundService : Service() {
                 interval = 10000 // 10秒
                 fastestInterval = 5000 // 5秒
                 priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                smallestDisplacement = 1f
             }
         }
     }
@@ -110,6 +116,7 @@ class PineLocationForegroundService : Service() {
     private fun createLocationCallback() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
+                logd("onLocationChanged: $locationResult")
                 locationResult.lastLocation?.let { location ->
                     currentLocation = location
 
@@ -160,18 +167,28 @@ class PineLocationForegroundService : Service() {
 
         val callbackFunctionList: ArrayList<WeakReference<(PineLatLng) -> Unit>> = arrayListOf()
 
-        var isLocationServerStarted = false
+
+        private var serviceInstance: WeakReference<PineLocationForegroundService>? = null
+
+        fun isServiceRunning(): Boolean {
+            return serviceInstance?.get() != null
+        }
+
+        fun getServiceInstance(): PineLocationForegroundService? {
+            return serviceInstance?.get()
+        }
 
         // 启动服务的Intent
         private fun startService() {
-            if (isLocationServerStarted) return
+            if (isServiceRunning()) return
 
             val intent = Intent(appContext, PineLocationForegroundService::class.java)
             appContext.startForegroundService(intent)
-            isLocationServerStarted = true
         }
 
-
+        /**
+         * 请注意 这个是弱引用，需要一个强引用这个函数确认生命周期
+         */
         fun subscribe(onSuccess: (PineLatLng) -> Unit) {
             callbackFunctionList.add(WeakReference(onSuccess))
             startService()

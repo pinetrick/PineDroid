@@ -11,11 +11,6 @@
     <string name="pine_preview_title">이미지 미리보기</string>
     <string name="pine_preview_no_picture">이미지 없음</string>
 
-    <string name="pine_image_permission_denied_title">접근 권한이 필요합니다</string>
-    <string name="pine_image_permission_denied_subtitle">이미지를 선택하거나 촬영하려면 사진 및 카메라 접근 권한이 필요합니다.</string>
-    <string name="pine_image_permission_denied_button">권한 허용</string>
-    <string name="pine_image_permission_denied_permanently_title">권한이 영구적으로 거부되었습니다</string>
-    <string name="pine_image_permission_denied_permanently_subtitle">시스템 설정에서 [저장공간/카메라] 권한을 수동으로 활성화해 주세요. 그렇지 않으면 이미지 선택 기능을 계속 사용할 수 없습니다.</string>
-    <string name="pine_image_permission_denied_permanently_button">다시 시도</string>
+
 
 </resources>

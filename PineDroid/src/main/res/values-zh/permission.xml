@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pine_permission_system_alert_window_text">需要悬浮窗权限以显示悬浮内容</string>
+    <string name="pine_permission_system_alert_window_description">此权限用于在其他应用上层显示悬浮窗口，如迷你窗口、气泡提示等</string>
+
+    <string name="pine_permission_camera_text">需要相机权限以使用相关功能</string>
+    <string name="pine_permission_camera_description">此权限用于拍照、扫描二维码等需要使用相机的功能</string>
+
+    <string name="pine_permission_coarse_location_text">需要位置权限以获取大致地理位置</string>
+    <string name="pine_permission_coarse_location_description">此权限用于基于网络的位置服务，如查询附近内容</string>
+
+    <string name="pine_permission_fine_location_text">需要精确位置权限以提供定位服务</string>
+    <string name="pine_permission_fine_location_description">此权限用于地图、导航等需要精确定位的功能</string>
+
+    <string name="pine_permission_foreground_service_location_text">需要前台位置服务权限以持续获取位置</string>
+    <string name="pine_permission_foreground_service_location_description">此权限允许应用在后台运行时持续获取您的位置信息，用于导航、运动追踪等功能</string>
+
+    <string name="pine_permission_read_external_storage_text">需要读取存储权限以访问文件</string>
+    <string name="pine_permission_read_external_storage_description">此权限用于读取设备中的照片、文件等媒体内容</string>
+
+    <string name="pine_permission_read_media_audio_text">需要访问音频权限以浏览媒体内容</string>
+    <string name="pine_permission_read_media_audio_description">此权限用于读取设备中的音频文件</string>
+
+    <string name="pine_permission_read_media_images_text">需要读取存储权限以访问照片</string>
+    <string name="pine_permission_read_media_images_description">此权限用于读取设备中的照片、文件等媒体内容</string>
+
+    <string name="pine_permission_read_media_video_text">需要访问视频权限以浏览媒体内容</string>
+    <string name="pine_permission_read_media_video_description">此权限用于读取设备中的视频文件</string>
+
+    <string name="pine_permission_record_audio_text">需要麦克风权限以进行录音</string>
+    <string name="pine_permission_record_audio_description">此权限用于语音输入、录音等需要使用麦克风的功能</string>
+
+    <string name="pine_permission_write_external_storage_text">需要存储权限以保存文件</string>
+    <string name="pine_permission_write_external_storage_description">此权限用于将照片、文件等内容保存至设备</string>
+
+
+    <string name="pine_permission_title">权限请求</string>
+    <string name="pine_permission_redirect_to_setting">去应用设置授权</string>
+    <string name="pine_permission_auth_now">立即授权</string>
+    <string name="pine_permission_auth_later">稍后再说</string>
+    <string name="pine_permission_descritpion">授权后您可以享受更完整的功能体验</string>
+
+
+
+</resources>

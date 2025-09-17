@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pine_permission_system_alert_window_text">फ्लोटिंग सामग्री प्रदर्शित करने के लिए फ्लोटिंग विंडो अनुमति आवश्यक है</string>
+    <string name="pine_permission_system_alert_window_description">यह अनुमति अन्य ऐप्स के ऊपर फ्लोटिंग विंडोज़ प्रदर्शित करने के लिए उपयोग की जाती है, जैसे मिनी विंडोज़, बबल टिप्स, आदि।</string>
+
+    <string name="pine_permission_camera_text">संबंधित सुविधाओं का उपयोग करने के लिए कैमरा अनुमति आवश्यक है</string>
+    <string name="pine_permission_camera_description">यह अनुमति उन सुविधाओं के लिए उपयोग की जाती है जिनमें कैमरे की आवश्यकता होती है, जैसे फोटो लेना, QR कोड स्कैन करना, आदि।</string>
+
+    <string name="pine_permission_coarse_location_text">अनुमानित भौगोलिक स्थान प्राप्त करने के लिए स्थान अनुमति आवश्यक है</string>
+    <string name="pine_permission_coarse_location_description">यह अनुमति नेटवर्क-आधारित स्थान सेवाओं के लिए उपयोग की जाती है, जैसे आस-पास की सामग्री क्वेरी करना।</string>
+
+    <string name="pine_permission_fine_location_text">स्थान सेवाएं प्रदान करने के लिए सटीक स्थान अनुमति आवश्यक है</string>
+    <string name="pine_permission_fine_location_description">यह अनुमति उन सुविधाओं के लिए उपयोग की जाती है जिनमें सटीक स्थान निर्धारण की आवश्यकता होती है, जैसे मानचित्र, नेविगेशन, आदि।</string>
+
+    <string name="pine_permission_foreground_service_location_text">निरंतर स्थान प्राप्त करने के लिए फोरग्राउंड स्थान सेवा अनुमति आवश्यक है</string>
+    <string name="pine_permission_foreground_service_location_description">यह अनुमति ऐप को बैकग्राउंड में चलते समय आपकी स्थान जानकारी निरंतर प्राप्त करने की अनुमति देती है, जिसका उपयोग नेविगेशन, व्यायाम ट्रैकिंग और अन्य सुविधाओं के लिए किया जाता है।</string>
+
+    <string name="pine_permission_read_external_storage_text">फ़ाइलों तक पहुंचने के लिए संग्रहण पढ़ने की अनुमति आवश्यक है</string>
+    <string name="pine_permission_read_external_storage_description">यह अनुमति डिवाइस पर फोटो, फ़ाइलों आदि मीडिया सामग्री को पढ़ने के लिए उपयोग की जाती है।</string>
+
+    <string name="pine_permission_read_media_audio_text">मीडिया सामग्री ब्राउज़ करने के लिए ऑडियो एक्सेस अनुमति आवश्यक है</string>
+    <string name="pine_permission_read_media_audio_description">यह अनुमति डिवाइस पर ऑडियो फ़ाइलों को पढ़ने के लिए उपयोग की जाती है।</string>
+
+    <string name="pine_permission_read_media_images_text">फोटो तक पहुंचने के लिए संग्रहण पढ़ने की अनुमति आवश्यक है</string>
+    <string name="pine_permission_read_media_images_description">यह अनुमति डिवाइस पर फोटो, फ़ाइलों आदि मीडिया सामग्री को पढ़ने के लिए उपयोग की जाती है।</string>
+
+    <string name="pine_permission_read_media_video_text">मीडिया सामग्री ब्राउज़ करने के लिए वीडियो एक्सेस अनुमति आवश्यक है</string>
+    <string name="pine_permission_read_media_video_description">यह अनुमति डिवाइस पर वीडियो फ़ाइलों को पढ़ने के लिए उपयोग की जाती है。</string>
+
+    <string name="pine_permission_record_audio_text">रिकॉर्डिंग के लिए माइक्रोफोन अनुमति आवश्यक है</string>
+    <string name="pine_permission_record_audio_description">यह अनुमति उन सुविधाओं के लिए उपयोग की जाती है जिनमें माइक्रोफोन की आवश्यकता होती है, जैसे वॉइस इनपुट, रिकॉर्डिंग, आदि।</string>
+
+    <string name="pine_permission_write_external_storage_text">फ़ाइलें सहेजने के लिए संग्रहण अनुमति आवश्यक है</string>
+    <string name="pine_permission_write_external_storage_description">यह अनुमति फोटो, फ़ाइलों आदि सामग्री को डिवाइस पर सहेजने के लिए उपयोग की जाती है।</string>
+
+
+    <string name="pine_permission_title">अनुमति अनुरोध</string>
+    <string name="pine_permission_redirect_to_setting">अधिकृत करने के लिए ऐप सेटिंग्स पर जाएं</string>
+    <string name="pine_permission_auth_now">अभी अधिकृत करें</string>
+    <string name="pine_permission_auth_later">बाद में</string>
+    <string name="pine_permission_descritpion">अधिकृत होने के बाद, आप अधिक संपूर्ण कार्यात्मक अनुभव का आनंद ले सकते हैं।</string>
+
+
+
+</resources>

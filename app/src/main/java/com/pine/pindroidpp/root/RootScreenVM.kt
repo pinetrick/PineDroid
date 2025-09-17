@@ -1,16 +1,12 @@
 package com.pine.pindroidpp.root
 
+import androidx.lifecycle.viewModelScope
 import com.pine.pindroidpp.db.TableTest
 import com.pine.pinedroid.activity.image_pickup.ImagePickup
-import com.pine.pinedroid.activity.image_pickup.preview.ImagePreviewScreenVM
-import com.pine.pinedroid.hardware.gps.route_recorder.PineRouteRecorder
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import com.pine.pinedroid.ui.message_box.MessageBox
 import com.pine.pinedroid.utils.toast
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
-import kotlin.toString
+import kotlinx.coroutines.launch
 
 
 class RootScreenVM : BaseViewModel<RootScreenState>(RootScreenState::class) {
@@ -20,7 +16,7 @@ class RootScreenVM : BaseViewModel<RootScreenState>(RootScreenState::class) {
 
     }
 
-    fun onTakePhoto() {
+    fun onTakePhoto() = viewModelScope.launch {
         ImagePickup.takePhoto(
             allowVideo = true,
             useSystemCamera = true,
@@ -29,7 +25,7 @@ class RootScreenVM : BaseViewModel<RootScreenState>(RootScreenState::class) {
         }
     }
 
-    fun onImagePickUp() {
+    fun onImagePickUp() = viewModelScope.launch {
         ImagePickup.pickImageFromGallery(
             allowCamera = true,
             allowMultiple = true,

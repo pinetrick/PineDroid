@@ -41,8 +41,8 @@ val ktor by lazy {
 var httpRootUrl = "";
 var uploadRootUrl = "";
 
-suspend inline fun <reified T> httpGet(url: String): T? {
-    return try {
+suspend inline fun <reified T> httpGet(url: String): T? = withContext(Dispatchers.IO) {
+    try {
         val result: String = ktor.get(httpRootUrl + url).body()
         logv(result)
         val type = object : TypeToken<T>() {}.type
@@ -56,10 +56,10 @@ suspend inline fun <reified T> httpGet(url: String): T? {
 suspend inline fun <reified T> httpPostJson(
     url: String,
     body: Any
-): T? {
+): T? = withContext(Dispatchers.IO) {
 
     var result: String = ""
-    return try {
+    try {
         val body = gson.toJson(body)
         logv(body)
         result = ktor.post(httpRootUrl + url) {

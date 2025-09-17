@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pine_permission_system_alert_window_text">フローティングコンテンツを表示するにはフローティングウィンドウの権限が必要です</string>
+    <string name="pine_permission_system_alert_window_description">この権限は、ミニウィンドウやバブルヒントなど、他のアプリの上にフローティングウィンドウを表示するために使用されます。</string>
+
+    <string name="pine_permission_camera_text">関連機能を使用するにはカメラの権限が必要です</string>
+    <string name="pine_permission_camera_description">この権限は、写真撮影、QRコードのスキャンなど、カメラを使用する機能に使用されます。</string>
+
+    <string name="pine_permission_coarse_location_text">おおよその地理位置情報を取得するには位置情報権限が必要です</string>
+    <string name="pine_permission_coarse_location_description">この権限は、近くのコンテンツを検索するなど、ネットワークベースの位置情報サービスに使用されます。</string>
+
+    <string name="pine_permission_fine_location_text">位置情報サービスを提供するには正確な位置情報権限が必要です</string>
+    <string name="pine_permission_fine_location_description">この権限は、地図、ナビゲーションなど、正確な位置情報を必要とする機能に使用されます。</string>
+
+    <string name="pine_permission_foreground_service_location_text">位置情報を継続的に取得するにはフォアグラウンド位置情報サービス権限が必要です</string>
+    <string name="pine_permission_foreground_service_location_description">この権限により、アプリはバックグラウンドで実行中に継続的に位置情報を取得でき、ナビゲーション、運動追跡などの機能に使用されます。</string>
+
+    <string name="pine_permission_read_external_storage_text">ファイルにアクセスするにはストレージ読み取り権限が必要です</string>
+    <string name="pine_permission_read_external_storage_description">この権限は、デバイス内の写真、ファイルなどのメディアコンテンツを読み取るために使用されます。</string>
+
+    <string name="pine_permission_read_media_audio_text">メディアコンテンツを閲覧するにはオーディオアクセス権限が必要です</string>
+    <string name="pine_permission_read_media_audio_description">この権限は、デバイス内のオーディオファイルを読み取るために使用されます。</string>
+
+    <string name="pine_permission_read_media_images_text">写真にアクセスするにはストレージ読み取り権限が必要です</string>
+    <string name="pine_permission_read_media_images_description">この権限は、デバイス内の写真、ファイルなどのメディアコンテンツを読み取るために使用されます。</string>
+
+    <string name="pine_permission_read_media_video_text">メディアコンテンツを閲覧するにはビデオアクセス権限が必要です</string>
+    <string name="pine_permission_read_media_video_description">この権限は、デバイス内のビデオファイルを読み取るために使用されます。</string>
+
+    <string name="pine_permission_record_audio_text">録音するにはマイクの権限が必要です</string>
+    <string name="pine_permission_record_audio_description">この権限は、音声入力、録音など、マイクを使用する機能に使用されます。</string>
+
+    <string name="pine_permission_write_external_storage_text">ファイルを保存するにはストレージ権限が必要です</string>
+    <string name="pine_permission_write_external_storage_description">この権限は、写真、ファイルなどのコンテンツをデバイスに保存するために使用されます。</string>
+
+
+    <string name="pine_permission_title">権限リクエスト</string>
+    <string name="pine_permission_redirect_to_setting">アプリ設定に移動して承認</string>
+    <string name="pine_permission_auth_now">今すぐ承認</string>
+    <string name="pine_permission_auth_later">後で</string>
+    <string name="pine_permission_descritpion">承認後、より完全な機能体験をお楽しみいただけます。</string>
+
+
+
+</resources>

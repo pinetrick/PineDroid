@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pine_permission_system_alert_window_text">Autorisation de fenêtre flottante requise pour afficher le contenu flottant</string>
+    <string name="pine_permission_system_alert_window_description">Cette autorisation est utilisée pour afficher des fenêtres flottantes au-dessus des autres applications, telles que les mini-fenêtres, les bulles d\'information, etc.</string>
+
+    <string name="pine_permission_camera_text">Autorisation de caméra requise pour utiliser les fonctionnalités associées</string>
+    <string name="pine_permission_camera_description">Cette autorisation est utilisée pour les fonctionnalités nécessitant la caméra, comme prendre des photos, scanner des codes QR, etc.</string>
+
+    <string name="pine_permission_coarse_location_text">Autorisation de localisation requise pour obtenir la position géographique approximative</string>
+    <string name="pine_permission_coarse_location_description">Cette autorisation est utilisée pour les services de localisation basés sur le réseau, comme la consultation de contenu à proximité.</string>
+
+    <string name="pine_permission_fine_location_text">Autorisation de localisation précise requise pour fournir des services de localisation</string>
+    <string name="pine_permission_fine_location_description">Cette autorisation est utilisée pour les fonctionnalités nécessitant un positionnement précis, comme les cartes, la navigation, etc.</string>
+
+    <string name="pine_permission_foreground_service_location_text">Autorisation de service de localisation au premier plan requise pour obtenir continuellement la localisation</string>
+    <string name="pine_permission_foreground_service_location_description">Cette autorisation permet à l\'application d\'obtenir continuellement vos informations de localisation lors de son exécution en arrière-plan, utilisée pour la navigation, le suivi d\'exercice et autres fonctionnalités.</string>
+
+    <string name="pine_permission_read_external_storage_text">Autorisation de lecture du stockage requise pour accéder aux fichiers</string>
+    <string name="pine_permission_read_external_storage_description">Cette autorisation est utilisée pour lire le contenu multimédia comme les photos et les fichiers sur l\'appareil.</string>
+
+    <string name="pine_permission_read_media_audio_text">Autorisation d\'accès audio requise pour parcourir le contenu multimédia</string>
+    <string name="pine_permission_read_media_audio_description">Cette autorisation est utilisée pour lire les fichiers audio sur l\'appareil.</string>
+
+    <string name="pine_permission_read_media_images_text">Autorisation de lecture du stockage requise pour accéder aux photos</string>
+    <string name="pine_permission_read_media_images_description">Cette autorisation est utilisée pour lire le contenu multimédia comme les photos et les fichiers sur l\'appareil.</string>
+
+    <string name="pine_permission_read_media_video_text">Autorisation d\'accès vidéo requise pour parcourir le contenu multimédia</string>
+    <string name="pine_permission_read_media_video_description">Cette autorisation est utilisée pour lire les fichiers vidéo sur l\'appareil.</string>
+
+    <string name="pine_permission_record_audio_text">Autorisation de microphone requise pour l\'enregistrement</string>
+    <string name="pine_permission_record_audio_description">Cette autorisation est utilisée pour les fonctionnalités nécessitant le microphone, comme la saisie vocale, l\'enregistrement, etc.</string>
+
+    <string name="pine_permission_write_external_storage_text">Autorisation de stockage requise pour enregistrer des fichiers</string>
+    <string name="pine_permission_write_external_storage_description">Cette autorisation est utilisée pour enregistrer du contenu comme des photos et des fichiers sur l\'appareil.</string>
+
+
+    <string name="pine_permission_title">Demande d\'autorisation</string>
+    <string name="pine_permission_redirect_to_setting">Aller aux paramètres de l\'application pour autoriser</string>
+    <string name="pine_permission_auth_now">Autoriser maintenant</string>
+    <string name="pine_permission_auth_later">Plus tard</string>
+    <string name="pine_permission_descritpion">Après autorisation, vous pouvez profiter d\'une expérience fonctionnelle plus complète.</string>
+
+
+
+</resources>

@@ -1,21 +1,21 @@
 package com.pine.pinedroid.activity.image_pickup
 
 
-import android.app.Activity
 import android.content.Intent
-import android.net.Uri
-import androidx.compose.foundation.Image
-import com.pine.pinedroid.activity.image_pickup.camera.CameraScreen
 import com.pine.pinedroid.activity.image_pickup.camera.CameraScreenVM
 import com.pine.pinedroid.activity.image_pickup.pickup.ImagePickupScreenVM
-import com.pine.pinedroid.file.image.Gallery.getGalleryImages
+import com.pine.pinedroid.hardware.permission.PinePermissionUtils
+import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionCamera
+import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionReadExternalStorage
+import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionReadMediaImages
+import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionReadMediaVideo
 import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.currentActivity
 
 object ImagePickup {
 
 
-    fun pickImageFromGallery(
+    suspend fun pickImageFromGallery(
         allowCamera: Boolean = true,
         allowMultiple: Boolean = true,
         allowVideo: Boolean = true,
@@ -27,11 +27,22 @@ object ImagePickup {
         ImagePickupScreenVM.allowVideo = allowVideo
         CameraScreenVM.useSystemCamera = useSystemCamera
 
-        val intent = Intent(currentActivity, ImagePickupActivity::class.java).apply {
-            putExtra("initScreen", "pickup")
+        PinePermissionUtils.requestPermissions(
+            listOfNotNull(
+                PineOnePermissionReadExternalStorage(),
+                if (allowCamera) PineOnePermissionCamera() else null,
+                if (allowVideo) PineOnePermissionReadMediaVideo() else null,
+                PineOnePermissionReadMediaImages()
+            )
+        ) {
+            if (it) {
+                val intent = Intent(currentActivity, ImagePickupActivity::class.java).apply {
+                    putExtra("initScreen", "pickup")
+                }
+                currentActivity.startActivity(intent)
+            }
         }
 
-        currentActivity.startActivity(intent)
 
         // 使用回调机制返回结果
         ImagePickupScreenVM.callback = {
@@ -42,7 +53,7 @@ object ImagePickup {
         }
     }
 
-    fun takePhoto(
+    suspend fun takePhoto(
         allowVideo: Boolean = true,
         useSystemCamera: Boolean = true,
         callback: suspend (OneImage?) -> Unit
@@ -50,12 +61,20 @@ object ImagePickup {
         ImagePickupScreenVM.allowVideo = allowVideo
         CameraScreenVM.useSystemCamera = useSystemCamera
 
-        val intent = Intent(currentActivity, ImagePickupActivity::class.java).apply {
-            putExtra("initScreen", "camera")
+        PinePermissionUtils.requestPermissions(
+            listOfNotNull(
+                PineOnePermissionCamera()
+            )
+        ) {
+            if (it) {
+
+                val intent = Intent(currentActivity, ImagePickupActivity::class.java).apply {
+                    putExtra("initScreen", "camera")
+                }
+                currentActivity.startActivity(intent)
+            }
         }
 
-
-        currentActivity.startActivity(intent)
 
         // 使用回调机制返回结果
         CameraScreenVM.callback = {

@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
 import com.pine.pinedroid.utils.ui.spwh
@@ -26,6 +27,7 @@ fun PineButton(
     text: String? = null,
     icon: String? = null,
     onClick: () -> Unit = {},
+    fontSize: TextUnit = 18.spwh,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: Shape = ButtonDefaults.shape,
@@ -74,7 +76,7 @@ fun PineButton(
         }
 
         text?.let { text ->
-            Text(text = text, fontSize = 18.spwh)
+            Text(text = text, fontSize = fontSize)
         }
     }
 

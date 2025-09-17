@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pine_permission_system_alert_window_text">Se requiere permiso de ventana flotante para mostrar contenido flotante</string>
+    <string name="pine_permission_system_alert_window_description">Este permiso se utiliza para mostrar ventanas flotantes sobre otras aplicaciones, como ventanas mini, burbujas de sugerencias, etc.</string>
+
+    <string name="pine_permission_camera_text">Se requiere permiso de cámara para usar funciones relacionadas</string>
+    <string name="pine_permission_camera_description">Este permiso se utiliza para funciones que requieren la cámara, como tomar fotos, escanear códigos QR, etc.</string>
+
+    <string name="pine_permission_coarse_location_text">Se requiere permiso de ubicación para obtener la ubicación geográfica aproximada</string>
+    <string name="pine_permission_coarse_location_description">Este permiso se utiliza para servicios de ubicación basados en red, como consultar contenido cercano.</string>
+
+    <string name="pine_permission_fine_location_text">Se requiere permiso de ubicación precisa para proporcionar servicios de ubicación</string>
+    <string name="pine_permission_fine_location_description">Este permiso se utiliza para funciones que requieren posicionamiento preciso, como mapas, navegación, etc.</string>
+
+    <string name="pine_permission_foreground_service_location_text">Se requiere permiso de servicio de ubicación en primer plano para obtener la ubicación continuamente</string>
+    <string name="pine_permission_foreground_service_location_description">Este permiso permite que la aplicación obtenga continuamente su información de ubicación mientras se ejecuta en segundo plano, utilizado para navegación, seguimiento de ejercicio y otras funciones.</string>
+
+    <string name="pine_permission_read_external_storage_text">Se requiere permiso de lectura de almacenamiento para acceder a archivos</string>
+    <string name="pine_permission_read_external_storage_description">Este permiso se utiliza para leer contenido multimedia como fotos y archivos en el dispositivo.</string>
+
+    <string name="pine_permission_read_media_audio_text">Se requiere permiso de acceso a audio para explorar contenido multimedia</string>
+    <string name="pine_permission_read_media_audio_description">Este permiso se utiliza para leer archivos de audio en el dispositivo.</string>
+
+    <string name="pine_permission_read_media_images_text">Se requiere permiso de lectura de almacenamiento para acceder a fotos</string>
+    <string name="pine_permission_read_media_images_description">Este permiso se utiliza para leer contenido multimedia como fotos y archivos en el dispositivo.</string>
+
+    <string name="pine_permission_read_media_video_text">Se requiere permiso de acceso a video para explorar contenido multimedia</string>
+    <string name="pine_permission_read_media_video_description">Este permiso se utiliza para leer archivos de video en el dispositivo.</string>
+
+    <string name="pine_permission_record_audio_text">Se requiere permiso de micrófono para grabar</string>
+    <string name="pine_permission_record_audio_description">Este permiso se utiliza para funciones que requieren el micrófono, como entrada de voz, grabación, etc.</string>
+
+    <string name="pine_permission_write_external_storage_text">Se requiere permiso de almacenamiento para guardar archivos</string>
+    <string name="pine_permission_write_external_storage_description">Este permiso se utiliza para guardar contenido como fotos y archivos en el dispositivo.</string>
+
+
+    <string name="pine_permission_title">Solicitud de permiso</string>
+    <string name="pine_permission_redirect_to_setting">Ir a la configuración de la aplicación para autorizar</string>
+    <string name="pine_permission_auth_now">Autorizar ahora</string>
+    <string name="pine_permission_auth_later">Más tarde</string>
+    <string name="pine_permission_descritpion">Después de la autorización, puede disfrutar de una experiencia funcional más completa.</string>
+
+
+
+</resources>

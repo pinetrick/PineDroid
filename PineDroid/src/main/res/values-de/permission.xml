@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pine_permission_system_alert_window_text">Berechtigung für Schwebefenster erforderlich, um schwebende Inhalte anzuzeigen</string>
+    <string name="pine_permission_system_alert_window_description">Diese Berechtigung wird verwendet, um Schwebefenster über anderen Apps anzuzeigen, wie z. B. Minifenster, Hinweisblasen usw.</string>
+
+    <string name="pine_permission_camera_text">Kameraberechtigung erforderlich, um verwandte Funktionen zu nutzen</string>
+    <string name="pine_permission_camera_description">Diese Berechtigung wird für Funktionen verwendet, die die Kamera benötigen, wie z. B. Fotos machen, QR-Codes scannen usw.</string>
+
+    <string name="pine_permission_coarse_location_text">Standortberechtigung erforderlich, um den ungefähren geografischen Standort zu ermitteln</string>
+    <string name="pine_permission_coarse_location_description">Diese Berechtigung wird für netzwerkbasierte Standortdienste verwendet, wie z. B. die Abfrage von Inhalten in der Nähe.</string>
+
+    <string name="pine_permission_fine_location_text">Präzise Standortberechtigung erforderlich, um Standortdienste bereitzustellen</string>
+    <string name="pine_permission_fine_location_description">Diese Berechtigung wird für Funktionen verwendet, die eine präzise Positionsbestimmung erfordern, wie z. B. Karten, Navigation usw.</string>
+
+    <string name="pine_permission_foreground_service_location_text">Berechtigung für Standortdienste im Vordergrund erforderlich, um den Standort kontinuierlich zu ermitteln</string>
+    <string name="pine_permission_foreground_service_location_description">Diese Berechtigung ermöglicht der App, Ihre Standortinformationen kontinuierlich zu ermitteln, während sie im Hintergrund läuft, und wird für Navigation, Bewegungserfassung und andere Funktionen verwendet.</string>
+
+    <string name="pine_permission_read_external_storage_text">Leseberechtigung für Speicher erforderlich, um auf Dateien zuzugreifen</string>
+    <string name="pine_permission_read_external_storage_description">Diese Berechtigung wird verwendet, um Medieninhalte wie Fotos und Dateien auf dem Gerät zu lesen.</string>
+
+    <string name="pine_permission_read_media_audio_text">Berechtigung zum Zugriff auf Audio erforderlich, um Medieninhalte durchzusehen</string>
+    <string name="pine_permission_read_media_audio_description">Diese Berechtigung wird verwendet, um Audiodateien auf dem Gerät zu lesen.</string>
+
+    <string name="pine_permission_read_media_images_text">Leseberechtigung für Speicher erforderlich, um auf Fotos zuzugreifen</string>
+    <string name="pine_permission_read_media_images_description">Diese Berechtigung wird verwendet, um Medieninhalte wie Fotos und Dateien auf dem Gerät zu lesen.</string>
+
+    <string name="pine_permission_read_media_video_text">Berechtigung zum Zugriff auf Video erforderlich, um Medieninhalte durchzusehen</string>
+    <string name="pine_permission_read_media_video_description">Diese Berechtigung wird verwendet, um Videodateien auf dem Gerät zu lesen.</string>
+
+    <string name="pine_permission_record_audio_text">Mikrofonberechtigung für Aufnahmen erforderlich</string>
+    <string name="pine_permission_record_audio_description">Diese Berechtigung wird für Funktionen verwendet, die das Mikrofon benötigen, wie z. B. Spracheingabe, Aufnahme usw.</string>
+
+    <string name="pine_permission_write_external_storage_text">Speicherberechtigung erforderlich, um Dateien zu speichern</string>
+    <string name="pine_permission_write_external_storage_description">Diese Berechtigung wird verwendet, um Inhalte wie Fotos und Dateien auf dem Gerät zu speichern.</string>
+
+
+    <string name="pine_permission_title">Berechtigungsanfrage</string>
+    <string name="pine_permission_redirect_to_setting">Zu den App-Einstellungen gehen, um zu autorisieren</string>
+    <string name="pine_permission_auth_now">Jetzt autorisieren</string>
+    <string name="pine_permission_auth_later">Später</string>
+    <string name="pine_permission_descritpion">Nach der Autorisierung können Sie ein vollständigeres Funktionserlebnis genießen.</string>
+
+
+
+</resources>

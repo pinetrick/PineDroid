@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pine_permission_system_alert_window_text">플로팅 콘텐츠를 표시하려면 플로팅 창 권한이 필요합니다</string>
+    <string name="pine_permission_system_alert_window_description">이 권한은 미니 창, 버블 팁 등 다른 앱 위에 플로팅 창을 표시하는 데 사용됩니다.</string>
+
+    <string name="pine_permission_camera_text">관련 기능을 사용하려면 카메라 권한이 필요합니다</string>
+    <string name="pine_permission_camera_description">이 권한은 사진 촬영, QR 코드 스캔 등 카메라를 사용하는 기능에 사용됩니다.</string>
+
+    <string name="pine_permission_coarse_location_text">대략적인 지리적 위치를 얻으려면 위치 권한이 필요합니다</string>
+    <string name="pine_permission_coarse_location_description">이 권한은 주변 콘텐츠 조회 등 네트워크 기반 위치 서비스에 사용됩니다.</string>
+
+    <string name="pine_permission_fine_location_text">위치 서비스를 제공하려면 정확한 위치 권한이 필요합니다</string>
+    <string name="pine_permission_fine_location_description">이 권한은 지도, 내비게이션 등 정확한 위치 지정이 필요한 기능에 사용됩니다.</string>
+
+    <string name="pine_permission_foreground_service_location_text">지속적으로 위치를 얻으려면 포그라운드 위치 서비스 권한이 필요합니다</string>
+    <string name="pine_permission_foreground_service_location_description">이 권한은 앱이 백그라운드에서 실행되는 동안 내비게이션, 운동 추적 등에 사용하기 위해 사용자의 위치 정보를 지속적으로 얻을 수 있도록 합니다.</string>
+
+    <string name="pine_permission_read_external_storage_text">파일에 액세스하려면 저장소 읽기 권한이 필요합니다</string>
+    <string name="pine_permission_read_external_storage_description">이 권한은 디바이스의 사진, 파일 등 미디어 콘텐츠를 읽는 데 사용됩니다.</string>
+
+    <string name="pine_permission_read_media_audio_text">미디어 콘텐츠를 탐색하려면 오디오 액세스 권한이 필요합니다</string>
+    <string name="pine_permission_read_media_audio_description">이 권한은 디바이스의 오디오 파일을 읽는 데 사용됩니다.</string>
+
+    <string name="pine_permission_read_media_images_text">사진에 액세스하려면 저장소 읽기 권한이 필요합니다</string>
+    <string name="pine_permission_read_media_images_description">이 권한은 디바이스의 사진, 파일 등 미디어 콘텐츠를 읽는 데 사용됩니다.</string>
+
+    <string name="pine_permission_read_media_video_text">미디어 콘텐츠를 탐색하려면 비디오 액세스 권난이 필요합니다</string>
+    <string name="pine_permission_read_media_video_description">이 권한은 디바이스의 비디오 파일을 읽는 데 사용됩니다.</string>
+
+    <string name="pine_permission_record_audio_text">녹음을 위해 마이크 권한이 필요합니다</string>
+    <string name="pine_permission_record_audio_description">이 권한은 음성 입력, 녹음 등 마이크를 사용하는 기능에 사용됩니다.</string>
+
+    <string name="pine_permission_write_external_storage_text">파일을 저장하려면 저장소 권한이 필요합니다</string>
+    <string name="pine_permission_write_external_storage_description">이 권한은 사진, 파일 등 콘텐츠를 디바이스에 저장하는 데 사용됩니다.</string>
+
+
+    <string name="pine_permission_title">권한 요청</string>
+    <string name="pine_permission_redirect_to_setting">앱 설정으로 이동하여 권한 부여</string>
+    <string name="pine_permission_auth_now">지금 권한 부여</string>
+    <string name="pine_permission_auth_later">나중에</string>
+    <string name="pine_permission_descritpion">권한 부여 후 더 완전한 기능을 경험할 수 있습니다.</string>
+
+
+
+</resources>

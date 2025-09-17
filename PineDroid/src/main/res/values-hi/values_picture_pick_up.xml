@@ -11,11 +11,6 @@
     <string name="pine_preview_title">फोटो पूर्वावलोकन</string>
     <string name="pine_preview_no_picture">कोई फोटो नहीं</string>
 
-    <string name="pine_image_permission_denied_title">एक्सेस अनुमति आवश्यक</string>
-    <string name="pine_image_permission_denied_subtitle">आपको फोटो चुनने या लेने के लिए हमें आपकी फोटो और कैमरा की अनुमति चाहिए।</string>
-    <string name="pine_image_permission_denied_button">अनुमति दें</string>
-    <string name="pine_image_permission_denied_permanently_title">अनुमति स्थायी रूप से अस्वीकृत</string>
-    <string name="pine_image_permission_denied_permanently_subtitle">कृपया सिस्टम सेटिंग्स में [स्टोरेज/कैमरा] अनुमति मैन्युअल रूप से सक्षम करें, अन्यथा आप फोटो चयन सुविधा का उपयोग जारी नहीं रख सकेंगे।</string>
-    <string name="pine_image_permission_denied_permanently_button">पुनः प्रयास करें</string>
+
 
 </resources>

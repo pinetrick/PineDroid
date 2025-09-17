@@ -11,11 +11,6 @@
     <string name="pine_preview_title">图片预览</string>
     <string name="pine_preview_no_picture">暂无图片</string>
 
-    <string name="pine_image_permission_denied_title">需要访问权限</string>
-    <string name="pine_image_permission_denied_subtitle">我们需要读取您的照片和相机权限，以便让您选择或拍摄图片。</string>
-    <string name="pine_image_permission_denied_button">允许权限</string>
-    <string name="pine_image_permission_denied_permanently_title">权限被永久拒绝</string>
-    <string name="pine_image_permission_denied_permanently_subtitle">请到系统设置中手动开启【存储/相机】权限，否则无法继续使用图片选择功能。</string>
-    <string name="pine_image_permission_denied_permanently_button">重新尝试</string>
+
 
 </resources>

@@ -12,6 +12,8 @@ import com.pine.pindroidpp.demo_screen.DemoScreen
 import com.pine.pindroidpp.empty_screen.EmptyScreen
 import com.pine.pindroidpp.empty_screen.EmptyScreenVM
 import com.pine.pindroidpp.location_screen.LocationScreen
+import com.pine.pindroidpp.permission_test.PermissionTestScreen
+import com.pine.pindroidpp.permission_test.PermissionTestScreenVM
 import com.pine.pindroidpp.root.RootScreen
 import com.pine.pindroidpp.root.RootScreenVM
 import com.pine.pindroidpp.ui.theme.PinDroidppTheme
@@ -37,6 +39,7 @@ fun GetRootContent(){
                 composable("demo") { DemoScreen(navController) }
                 composable("location") { LocationScreen(navController) }
                 composable("empty") { EmptyScreen(navController) }
+                composable("permission_test") { PermissionTestScreen(navController) }
 
 
 

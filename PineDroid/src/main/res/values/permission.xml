@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pine_permission_system_alert_window_text">Floating window permission required to display floating content</string>
+    <string name="pine_permission_system_alert_window_description">This permission is used to display floating windows on top of other apps, such as mini windows, bubble tips, etc.</string>
+
+    <string name="pine_permission_camera_text">Camera permission required to use related features</string>
+    <string name="pine_permission_camera_description">This permission is used for features that require the camera, such as taking photos, scanning QR codes, etc.</string>
+
+    <string name="pine_permission_coarse_location_text">Location permission required to obtain approximate geographic location</string>
+    <string name="pine_permission_coarse_location_description">This permission is used for network-based location services, such as querying nearby content.</string>
+
+    <string name="pine_permission_fine_location_text">Precise location permission required to provide location services</string>
+    <string name="pine_permission_fine_location_description">This permission is used for features that require precise positioning, such as maps, navigation, etc.</string>
+
+    <string name="pine_permission_foreground_service_location_text">Foreground location service permission required to continuously obtain location</string>
+    <string name="pine_permission_foreground_service_location_description">This permission allows the app to continuously obtain your location information while running in the background, used for navigation, exercise tracking, and other features.</string>
+
+    <string name="pine_permission_read_external_storage_text">Read storage permission required to access files</string>
+    <string name="pine_permission_read_external_storage_description">This permission is used to read media content such as photos and files on the device.</string>
+
+    <string name="pine_permission_read_media_audio_text">Access audio permission required to browse media content</string>
+    <string name="pine_permission_read_media_audio_description">This permission is used to read audio files on the device.</string>
+
+    <string name="pine_permission_read_media_images_text">Read storage permission required to access photos</string>
+    <string name="pine_permission_read_media_images_description">This permission is used to read media content such as photos and files on the device.</string>
+
+    <string name="pine_permission_read_media_video_text">Access video permission required to browse media content</string>
+    <string name="pine_permission_read_media_video_description">This permission is used to read video files on the device.</string>
+
+    <string name="pine_permission_record_audio_text">Microphone permission required for recording</string>
+    <string name="pine_permission_record_audio_description">This permission is used for features that require the microphone, such as voice input, recording, etc.</string>
+
+    <string name="pine_permission_write_external_storage_text">Storage permission required to save files</string>
+    <string name="pine_permission_write_external_storage_description">This permission is used to save content such as photos and files to the device.</string>
+
+
+    <string name="pine_permission_title">Permission Request</string>
+    <string name="pine_permission_redirect_to_setting">Go to app settings to authorize</string>
+    <string name="pine_permission_auth_now">Authorize Now</string>
+    <string name="pine_permission_auth_later">Later</string>
+    <string name="pine_permission_descritpion">After authorization, you can enjoy a more complete functional experience.</string>
+
+
+
+</resources>

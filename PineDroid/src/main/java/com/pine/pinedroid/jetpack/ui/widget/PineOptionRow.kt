@@ -9,14 +9,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
@@ -27,6 +25,27 @@ fun PineOptionRow(
     icon: String? = null,
     description: String? = null,
     onClick: (() -> Unit)? = null,
+) {
+    PineOptionRowExt(
+        title = title,
+        icon = icon,
+        description = description,
+        onClick = onClick,
+        rightIcon = if (onClick == null) null else "\uf054",
+        rightIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+
+
+}
+
+@Composable
+fun PineOptionRowExt(
+    title: String,
+    icon: String? = null,
+    description: String? = null,
+    onClick: (() -> Unit)? = null,
+    rightIcon: String? = "\uf054",
+    rightIconColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
 ) {
 
     Row(
@@ -64,12 +83,11 @@ fun PineOptionRow(
             }
         }
 
-        onClick?.let {
-            Icon(
-                imageVector = Icons.Default.ChevronRight,
-                contentDescription = "",
+        rightIcon?.let { rightIcon ->
+            PineIcon(
+                text = rightIcon,
                 modifier = Modifier.size(20.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                color = rightIconColor
             )
         }
     }
