@@ -10,6 +10,6 @@ class LocationScreenVM : BaseViewModel<LocationScreenState>(LocationScreenState:
 
     var pineRouteRecorder: PineRouteRecorder? = null
     fun locationRecordStart(){
-        pineRouteRecorder = PineRouteRecorder()
+        pineRouteRecorder = PineRouteRecorder.i()
     }
 }
