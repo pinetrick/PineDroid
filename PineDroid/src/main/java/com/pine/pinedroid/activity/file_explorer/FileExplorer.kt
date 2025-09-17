@@ -112,14 +112,14 @@ fun FileExplorerScreen(
                     )
                 },
                 navigationIcon = {
-                    if (state.currentDir != "/") {
-                        IconButton(onClick = onNavigateToParent) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "返回上级"
-                            )
-                        }
+
+                    IconButton(onClick = onNavigateToParent) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "返回上级"
+                        )
                     }
+
                 },
                 actions = {
                     IconButton(onClick = onDataBases) {

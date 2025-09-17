@@ -9,6 +9,7 @@ import com.pine.pinedroid.file.isTxtFile
 
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import com.pine.pinedroid.utils.appContext
+import com.pine.pinedroid.utils.currentActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -75,6 +76,10 @@ class FileExplorerVM : BaseViewModel<FileExplorerState>(FileExplorerState::class
 
     fun navigateToParent() {
         val currentDir = _viewState.value.currentDir
+        if (currentDir == "/") {
+            currentActivity.finish()
+        }
+
         val parentDir = File(currentDir).parent
         parentDir?.let {
             loadDirectory(it)
