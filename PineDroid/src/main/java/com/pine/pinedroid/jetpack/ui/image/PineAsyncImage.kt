@@ -3,6 +3,8 @@ package com.pine.pinedroid.jetpack.ui.image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -24,7 +26,7 @@ import java.io.File
 
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
-
+import com.pine.pinedroid.activity.image_pickup.toLocalImage
 
 
 @Composable
@@ -55,7 +57,13 @@ fun PineAsyncImage(
             if (useThumbnail) model.thumbnail ?: model.uri
             else model.uri
         }
-        is OneImage.HttpImage -> model.url
+        is OneImage.HttpImage -> {
+            val localImage by produceState<Any?>(initialValue = R.drawable.pinedroid_image_loading, model) {
+                value = File( model.toLocalImage().localUrl)
+            }
+            localImage
+        }
+
         is OneImage.LocalImage -> File(model.localUrl)
         is OneImage.Resource -> model.resourceId
         else -> model // 保持其他类型不变

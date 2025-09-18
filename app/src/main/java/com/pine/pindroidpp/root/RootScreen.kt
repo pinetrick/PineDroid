@@ -6,6 +6,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.pine.pinedroid.activity.image_pickup.OneImage
+import com.pine.pinedroid.activity.image_pickup.toLocalImage
+import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
 import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
 import com.pine.pinedroid.jetpack.ui.widget.PineOptionRow
@@ -28,16 +31,18 @@ fun RootScreen(
             )
         },
         content = {
-            RootScreenContent(viewModel = viewModel)
+            RootScreenContent(viewModel = viewModel, viewState = viewState)
         },
     )
 }
 
 @Composable
 fun RootScreenContent(
-    viewModel: RootScreenVM
+    viewModel: RootScreenVM,
+    viewState: RootScreenState
 ) {
     Column {
+        PineAsyncImage(model = viewState.url)
         PineOptionRow(title = "Pick Up Image", onClick = viewModel::onImagePickUp)
         PineOptionRow(title = "Take Photo", onClick = viewModel::onTakePhoto)
         PineOptionRow(title = "Database Test", onClick = viewModel::onDbTest)

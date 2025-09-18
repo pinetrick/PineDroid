@@ -3,6 +3,7 @@ package com.pine.pindroidpp.root
 import androidx.lifecycle.viewModelScope
 import com.pine.pindroidpp.db.TableTest
 import com.pine.pinedroid.activity.image_pickup.ImagePickup
+import com.pine.pinedroid.activity.image_pickup.toLocalUrl
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import com.pine.pinedroid.ui.message_box.MessageBox
 import com.pine.pinedroid.utils.toast
@@ -12,8 +13,8 @@ import kotlinx.coroutines.launch
 class RootScreenVM : BaseViewModel<RootScreenState>(RootScreenState::class) {
 
 
-    fun onInit() {
-
+    fun onInit() = viewModelScope.launch {
+    
     }
 
     fun onTakePhoto() = viewModelScope.launch {

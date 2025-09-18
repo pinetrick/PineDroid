@@ -14,12 +14,16 @@ import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsChannel
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.util.cio.writeChannel
+import io.ktor.utils.io.copyAndClose
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -40,6 +44,26 @@ val ktor by lazy {
 
 var httpRootUrl = "";
 var uploadRootUrl = "";
+
+suspend fun httpDownload(imageUrl: String, outputFile: File): Boolean {
+    try {
+        val response: HttpResponse = ktor.get(imageUrl)
+
+        // 创建临时文件，下载完成后再重命名，避免下载中断导致文件损坏
+        val tempFile = File(outputFile.parent, "${outputFile.name}.tmp")
+
+        response.bodyAsChannel().copyAndClose(tempFile.writeChannel())
+
+        // 下载完成后重命名为目标文件
+        tempFile.renameTo(outputFile)
+
+        return true
+    } catch (e: Exception) {
+        loge("Fail to download: $imageUrl")
+        loge(e)
+        return false
+    }
+}
 
 suspend inline fun <reified T> httpGet(url: String): T? = withContext(Dispatchers.IO) {
     try {
