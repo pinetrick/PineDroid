@@ -21,7 +21,7 @@ import java.util.Locale
 object PineImageLocalCache {
     private val semaphore = Semaphore(10) // 限制同时最多10个下载
 
-    suspend fun fromJson(json: String) = coroutineScope {
+    suspend fun fromJson(json: String) = coroutineScope { //怎么等待所有下载都结束后返回
         withContext(Dispatchers.IO) {
             try {
                 val root = if (json.trim().startsWith("[")) {
@@ -29,29 +29,29 @@ object PineImageLocalCache {
                 } else {
                     JSONObject(json)
                 }
-                scanJson(root, this)
+                scanJson(root)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
-    private suspend fun scanJson(obj: Any?, scope: CoroutineScope) {
+    private suspend fun scanJson(obj: Any?): Unit = coroutineScope {
         when (obj) {
             is JSONObject -> {
                 for (key in obj.keys()) {
-                    scanJson(obj.get(key), scope)
+                    scanJson(obj.get(key))
                 }
             }
             is JSONArray -> {
                 for (i in 0 until obj.length()) {
-                    scanJson(obj.get(i), scope)
+                    scanJson(obj.get(i))
                 }
             }
             is String -> {
                 if (obj.lowercase().startsWith("https://")) {
 
-                    scope.launch(Dispatchers.IO) {
+                    launch(Dispatchers.IO) {
                         semaphore.acquire()
                         try {
                             fromUrl(obj)

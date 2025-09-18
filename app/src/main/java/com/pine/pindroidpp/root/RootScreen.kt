@@ -42,12 +42,13 @@ fun RootScreenContent(
     viewState: RootScreenState
 ) {
     Column {
-        PineAsyncImage(model = viewState.url)
+
         PineOptionRow(title = "Pick Up Image", onClick = viewModel::onImagePickUp)
         PineOptionRow(title = "Take Photo", onClick = viewModel::onTakePhoto)
         PineOptionRow(title = "Database Test", onClick = viewModel::onDbTest)
         PineOptionRow(title = "Messagebox Test", onClick = viewModel::onMessageBoxTest)
         PineOptionRow(title = "Demo Screen", onClick = { viewModel.navigateTo("demo") })
+        PineOptionRow(title = "Download Test Screen", onClick = { viewModel.navigateTo("download_test") })
         PineOptionRow(
             title = "Record location",
             onClick = { viewModel.navigateTo("location") }

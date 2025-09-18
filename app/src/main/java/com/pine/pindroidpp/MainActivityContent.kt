@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pine.pindroidpp.demo_screen.DemoScreen
+import com.pine.pindroidpp.download_test.DownloadTestScreen
 import com.pine.pindroidpp.empty_screen.EmptyScreen
 import com.pine.pindroidpp.empty_screen.EmptyScreenVM
 import com.pine.pindroidpp.location_screen.LocationScreen
@@ -40,7 +41,7 @@ fun GetRootContent(){
                 composable("location") { LocationScreen(navController) }
                 composable("empty") { EmptyScreen(navController) }
                 composable("permission_test") { PermissionTestScreen(navController) }
-
+                composable("download_test") { DownloadTestScreen(navController) }
 
 
             }
