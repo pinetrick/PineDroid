@@ -6,7 +6,12 @@ import androidx.core.net.toUri
 import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.md5
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
@@ -14,8 +19,9 @@ import java.io.File
 import java.util.Locale
 
 object PineImageLocalCache {
+    private val semaphore = Semaphore(10) // 限制同时最多10个下载
 
-    suspend fun fromJson(json: String) {
+    suspend fun fromJson(json: String) = coroutineScope {
         withContext(Dispatchers.IO) {
             try {
                 val root = if (json.trim().startsWith("[")) {
@@ -23,28 +29,36 @@ object PineImageLocalCache {
                 } else {
                     JSONObject(json)
                 }
-                scanJson(root)
+                scanJson(root, this)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
-    private suspend fun scanJson(obj: Any?) {
+    private suspend fun scanJson(obj: Any?, scope: CoroutineScope) {
         when (obj) {
             is JSONObject -> {
                 for (key in obj.keys()) {
-                    scanJson(obj.get(key))
+                    scanJson(obj.get(key), scope)
                 }
             }
             is JSONArray -> {
                 for (i in 0 until obj.length()) {
-                    scanJson(obj.get(i))
+                    scanJson(obj.get(i), scope)
                 }
             }
             is String -> {
                 if (obj.lowercase().startsWith("https://")) {
-                    fromUrl(obj) // 下载并缓存
+
+                    scope.launch(Dispatchers.IO) {
+                        semaphore.acquire()
+                        try {
+                            fromUrl(obj)
+                        } finally {
+                            semaphore.release()
+                        }
+                    }
                 }
             }
         }
@@ -75,7 +89,6 @@ object PineImageLocalCache {
             // 返回 LocalImage
            cachedFile
         }
-
 
     fun getFileExtensionFromUrl(url: String, defaultExtension: String = "jpg"): String {
         return try {
