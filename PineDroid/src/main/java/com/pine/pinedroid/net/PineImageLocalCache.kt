@@ -5,6 +5,7 @@ import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
 import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.utils.appContext
+import com.pine.pinedroid.utils.log.logi
 import com.pine.pinedroid.utils.md5
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -66,6 +67,7 @@ object PineImageLocalCache {
 
     suspend fun fromUrl(url: String) : File =
         withContext(Dispatchers.IO) {
+
             // 获取文件扩展名
             val extension = getFileExtensionFromUrl(url, "jpg")
 
@@ -83,6 +85,7 @@ object PineImageLocalCache {
 
             // 判断文件是否存在，不存在则下载
             if (!cachedFile.exists()) {
+                logi("Cache Image: $url")
                 httpDownload(url, cachedFile)
             }
 

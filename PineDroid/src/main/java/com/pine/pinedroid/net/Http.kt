@@ -24,7 +24,11 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyAndClose
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -64,11 +68,18 @@ suspend fun httpDownload(imageUrl: String, outputFile: File): Boolean {
         return false
     }
 }
+object BackgroundScope : CoroutineScope by CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-suspend inline fun <reified T> httpGet(url: String): T? = withContext(Dispatchers.IO) {
+suspend inline fun <reified T> httpGet(url: String, cacheImages: Boolean = false): T? = withContext(Dispatchers.IO) {
     try {
         val result: String = ktor.get(httpRootUrl + url).body()
         logv(result)
+        if (cacheImages) {
+            BackgroundScope.launch {
+                PineImageLocalCache.fromJson(result)
+            }
+        }
+
         val type = object : TypeToken<T>() {}.type
         gson.fromJson<T>(result, type)
     } catch (e: Exception) {
@@ -79,7 +90,8 @@ suspend inline fun <reified T> httpGet(url: String): T? = withContext(Dispatcher
 
 suspend inline fun <reified T> httpPostJson(
     url: String,
-    body: Any
+    body: Any,
+    cacheImages: Boolean = false
 ): T? = withContext(Dispatchers.IO) {
 
     var result: String = ""
@@ -91,6 +103,14 @@ suspend inline fun <reified T> httpPostJson(
             setBody(body) // 直接传对象，ktor 会转成 JSON
         }.body()
         logv(result)
+
+        if (cacheImages) {
+            BackgroundScope.launch {
+                PineImageLocalCache.fromJson(result)
+            }
+        }
+
+
         val type = object : TypeToken<T>() {}.type
         gson.fromJson<T>(result, type)
     } catch (e: Exception) {
