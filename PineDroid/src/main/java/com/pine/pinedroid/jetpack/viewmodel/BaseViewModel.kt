@@ -2,6 +2,7 @@ package com.pine.pinedroid.jetpack.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import com.pine.pinedroid.utils.reflect.createInstance
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,8 +47,7 @@ open class BaseViewModel<T: Any>(val clazz: KClass<T>): ViewModel() {
 
     fun navigateTo(route: String, isPopThis: Boolean = false) {
         viewModelScope.launch {
-            if (isPopThis) _navEvents.emit(NavEvent.NavigateBack)
-            _navEvents.emit(NavEvent.Navigate(route))
+            _navEvents.emit(NavEvent.Navigate(route, isPopThis))
         }
     }
 
@@ -56,6 +56,7 @@ open class BaseViewModel<T: Any>(val clazz: KClass<T>): ViewModel() {
             _navEvents.emit(NavEvent.NavigateWithArgs(route, args))
         }
     }
+
 
     open fun navigateBack() {
         viewModelScope.launch {

@@ -2,7 +2,7 @@ package com.pine.pindroidpp.root
 
 import androidx.lifecycle.viewModelScope
 import com.pine.pindroidpp.db.TableTest
-import com.pine.pinedroid.activity.image_pickup.ImagePickup
+import com.pine.pinedroid.activity.image_pickup.PineImagePickup
 import com.pine.pinedroid.activity.image_pickup.toLocalUrl
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import com.pine.pinedroid.ui.message_box.MessageBox
@@ -18,7 +18,7 @@ class RootScreenVM : BaseViewModel<RootScreenState>(RootScreenState::class) {
     }
 
     fun onTakePhoto() = viewModelScope.launch {
-        ImagePickup.takePhoto(
+        PineImagePickup.takePhoto(
             allowVideo = true,
             useSystemCamera = true,
         ) { oneImage ->
@@ -27,7 +27,7 @@ class RootScreenVM : BaseViewModel<RootScreenState>(RootScreenState::class) {
     }
 
     fun onImagePickUp() = viewModelScope.launch {
-        ImagePickup.pickImageFromGallery(
+        PineImagePickup.pickImageFromGallery(
             allowCamera = true,
             allowMultiple = true,
             allowVideo = true,

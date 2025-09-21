@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
 import com.pine.pinedroid.jetpack.ui.PineSyncSystemNavBarWithBottomBar
+import com.pine.pinedroid.utils.currentActivity
 
 @Composable
 fun <T: Any> HandleNavigation(
@@ -21,6 +22,9 @@ fun <T: Any> HandleNavigation(
         viewModel.navEvents.collect { event ->
             when (event) {
                 is NavEvent.Navigate -> {
+                    if (event.popUpThis) {
+                        navController?.popBackStack()
+                    }
                     navController?.navigate(event.route)
                 }
 
