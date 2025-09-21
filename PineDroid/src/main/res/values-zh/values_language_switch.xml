@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_language_save_confirm_title">您的语言设置已经修改，要保存吗？</string>
+    <string name="pine_language_save_confirm_btn1">保存</string>
+    <string name="pine_language_save_confirm_btn2">取消</string>
+    <string name="pine_language_page_title">语言选择</string>
+</resources>

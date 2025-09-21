@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_language_save_confirm_title">आपकी भाषा सेटिंग संशोधित की गई है, क्या सहेजनी है?</string>
+    <string name="pine_language_save_confirm_btn1">सहेजें</string>
+    <string name="pine_language_save_confirm_btn2">रद्द करें</string>
+    <string name="pine_language_page_title">भाषा चयन</string>
+</resources>

@@ -18,10 +18,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.pine.pinedroid.R
 import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
@@ -35,15 +37,19 @@ fun LanguageSwitchScreen(
     val viewState by viewModel.viewState.collectAsState()
 
     HandleNavigation(navController = navController, viewModel = viewModel) {
-        viewModel.onInit()
+
     }
 
     PineGeneralScreen(
         title = {
             PineTopAppBar(
-                title = "语言选择",
-                onReturn = viewModel::navigateBack
-            )
+                title = stringResource(R.string.pine_language_page_title),
+                onReturn = viewModel::navigateBack,
+                actionIcon = "\uf00c",
+                onAction = viewModel::saveLanguage,
+
+                )
+
         },
         content = {
             Content(viewModel, viewState)
@@ -61,11 +67,6 @@ fun Content(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = "123",
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
         LazyColumn {
             items(viewState.supportedLanguages) { language ->
                 LanguageItem(
@@ -94,7 +95,6 @@ fun LanguageItem(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            Text(text = language.displayName)
             Text(
                 text = language.nativeName,
                 modifier = Modifier.padding(top = 4.dp)

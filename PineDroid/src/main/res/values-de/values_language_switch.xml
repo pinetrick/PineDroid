@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_language_save_confirm_title">Ihre Spracheinstellungen wurden geändert. Sollen sie gespeichert werden?</string>
+    <string name="pine_language_save_confirm_btn1">Speichern</string>
+    <string name="pine_language_save_confirm_btn2">Abbrechen</string>
+    <string name="pine_language_page_title">Sprachauswahl</string>
+</resources>

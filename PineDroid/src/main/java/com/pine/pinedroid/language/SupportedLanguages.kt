@@ -301,33 +301,8 @@ sealed class SupportedLanguages : LanguageInfo("", Locale.getDefault(), "", "") 
             return SUPPORTED_LANGUAGES.map { it.code }
         }
 
-        /**
-         * 获取常用语言（可以根据需要调整）
-         */
-        fun getCommonLanguages(): List<SupportedLanguages> {
-            return SUPPORTED_LANGUAGES.filter {
-                it.code in listOf("system", "en", "zh", "hi", "es")
-            }
-        }
 
-        val APP_SUPPORTED_LANGUAGE: List<SupportedLanguages>
-            get() {
-                val locales = mutableListOf<SupportedLanguages>()
-                try {
-                    val method = AssetManager::class.java.getDeclaredMethod("getLocales")
-                    val result = method.invoke(appContext.assets) as Array<String>
-                    for (tag in result) {
-                        if (tag.isBlank()) continue
-                        val code = tag.replace("_", "-").lowercase()
-                        val lang = getLanguageInfo(code)
-                        if (lang != null && !locales.contains(lang)) {
-                            locales.add(lang)
-                        }
-                    }
-                } catch (_: Exception) {
-                }
-                return locales
-            }
+
 
     }
 }

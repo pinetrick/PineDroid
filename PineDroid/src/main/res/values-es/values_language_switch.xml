@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_language_save_confirm_title">Se han modificado sus ajustes de idioma. ¿Desea guardarlos?</string>
+    <string name="pine_language_save_confirm_btn1">Guardar</string>
+    <string name="pine_language_save_confirm_btn2">Cancelar</string>
+    <string name="pine_language_page_title">Selección de idioma</string>
+</resources>

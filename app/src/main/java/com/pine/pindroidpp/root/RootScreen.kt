@@ -49,6 +49,7 @@ fun RootScreenContent(
         PineOptionRow(title = "Messagebox Test", onClick = viewModel::onMessageBoxTest)
         PineOptionRow(title = "Demo Screen", onClick = { viewModel.navigateTo("demo") })
         PineOptionRow(title = "Download Test Screen", onClick = { viewModel.navigateTo("download_test") })
+        PineOptionRow(title = "Language", onClick = { viewModel.navigateTo("language_switch") })
         PineOptionRow(
             title = "Record location",
             onClick = { viewModel.navigateTo("location") }

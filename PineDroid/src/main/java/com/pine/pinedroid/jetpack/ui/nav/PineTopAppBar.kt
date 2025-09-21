@@ -38,6 +38,8 @@ import com.pine.pinedroid.utils.ui.spwh
 fun PineTopAppBar(
     title: String,
     onReturn: (() -> Unit)? = null,
+    actionIcon: String? = null,
+    onAction: (() -> Unit)? = null
 ) {
     PineTopAppBar(
         title = {
@@ -60,6 +62,20 @@ fun PineTopAppBar(
             }
 
         },
+        actions = {
+            actionIcon?.let { actionIcon ->
+                IconButton(onClick = { }) {
+                    PineIcon(
+                        text = actionIcon,
+                        fontSize = 24.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        onClick = onAction
+                    )
+                }
+
+            }
+
+        }
     )
 }
 

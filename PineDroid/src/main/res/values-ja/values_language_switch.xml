@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_language_save_confirm_title">言語設定が変更されました。保存しますか？</string>
+    <string name="pine_language_save_confirm_btn1">保存</string>
+    <string name="pine_language_save_confirm_btn2">キャンセル</string>
+    <string name="pine_language_page_title">言語選択</string>
+</resources>

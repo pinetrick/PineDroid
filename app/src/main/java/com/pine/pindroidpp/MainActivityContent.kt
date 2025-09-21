@@ -18,6 +18,7 @@ import com.pine.pindroidpp.permission_test.PermissionTestScreenVM
 import com.pine.pindroidpp.root.RootScreen
 import com.pine.pindroidpp.root.RootScreenVM
 import com.pine.pindroidpp.ui.theme.PinDroidppTheme
+import com.pine.pinedroid.language.language_switch_screen.LanguageSwitchScreen
 
 @Composable
 fun GetRootContent(){
@@ -42,6 +43,7 @@ fun GetRootContent(){
                 composable("empty") { EmptyScreen(navController) }
                 composable("permission_test") { PermissionTestScreen(navController) }
                 composable("download_test") { DownloadTestScreen(navController) }
+                composable("language_switch") { LanguageSwitchScreen(navController) }
 
 
             }
