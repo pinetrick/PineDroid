@@ -58,15 +58,20 @@ fun PineIcon(
     onTextLayout: ((TextLayoutResult) -> Unit)? = null,
     style: TextStyle = LocalTextStyle.current,
 ) {
+    val clickableModifier = if (onClick != null) {
+        modifier
+            .wrapContentHeight(align = Alignment.CenterVertically)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) { onClick() }
+    } else {
+        modifier.wrapContentHeight(align = Alignment.CenterVertically)
+    }
 
     Text(
         text = text,
-        modifier = modifier
-            .wrapContentHeight(align = Alignment.CenterVertically)
-            .clickable(
-                indication = null, // 去掉涟漪/背景变化
-                interactionSource = remember { MutableInteractionSource() }
-            ) { onClick?.invoke() },
+        modifier = clickableModifier,
         color = color,
         fontSize = fontSize,
         fontStyle = fontStyle,

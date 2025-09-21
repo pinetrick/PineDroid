@@ -83,7 +83,9 @@ fun NavItem(
             .clickable(
                 indication = null, // 去掉涟漪/背景变化
                 interactionSource = remember { MutableInteractionSource() }
-            ) { onClick(navItem) }
+            ) {
+                onClick(navItem)
+            }
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
