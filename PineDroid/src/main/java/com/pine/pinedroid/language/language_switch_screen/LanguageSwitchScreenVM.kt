@@ -6,20 +6,19 @@ import com.pine.pinedroid.language.LanguageInfo
 import com.pine.pinedroid.language.LanguageManager
 
 
-class LanguageSwitchScreenVM : BaseViewModel<LanguageSwitchScreenState>(LanguageSwitchScreenState::class) {
+class LanguageSwitchScreenVM :
+    BaseViewModel<LanguageSwitchScreenState>(LanguageSwitchScreenState::class) {
 
     fun onInit() {
-
-    }
-    fun getCurrentLanguageInfo(): LanguageInfo {
         setState {
             copy(
-                currentLanguage =
+                currentLanguage = LanguageManager.getSavedLanguage()
             )
         }
     }
 
-    fun onLanguageChoosed(language: LanguageInfo){
-        LanguageManager.saveLanguage(language.code)
+
+    fun languageChoice(language: LanguageInfo) {
+        LanguageManager.saveLanguage(language.toSupportedLanguages())
     }
 }

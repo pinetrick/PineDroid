@@ -18,18 +18,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.pine.pinedroid.R
 import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
-import com.pine.pinedroid.language.LanguageManager
-import com.pine.pinedroid.language.getCurrentLanguageInfo
+import com.pine.pinedroid.language.LanguageInfo
 
 @Composable
 fun LanguageSwitchScreen(
@@ -37,8 +33,6 @@ fun LanguageSwitchScreen(
     viewModel: LanguageSwitchScreenVM = viewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    val context = LocalContext.current
-    val currentLanguage = getCurrentLanguageInfo(context)
 
     HandleNavigation(navController = navController, viewModel = viewModel) {
         viewModel.onInit()
@@ -47,12 +41,12 @@ fun LanguageSwitchScreen(
     PineGeneralScreen(
         title = {
             PineTopAppBar(
-                title = stringResource(R.string.language_settings),
+                title = "语言选择",
                 onReturn = viewModel::navigateBack
             )
         },
         content = {
-            Content(viewModel, viewState, currentLanguage.code)
+            Content(viewModel, viewState)
         },
     )
 }
@@ -61,7 +55,6 @@ fun LanguageSwitchScreen(
 fun Content(
     viewModel: LanguageSwitchScreenVM,
     viewState: LanguageSwitchScreenState,
-    currentLanguageCode: String
 ) {
     Column(
         modifier = Modifier
@@ -69,7 +62,7 @@ fun Content(
             .padding(16.dp)
     ) {
         Text(
-            text = stringResource(R.string.select_language),
+            text = "123",
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
@@ -77,8 +70,8 @@ fun Content(
             items(viewState.supportedLanguages) { language ->
                 LanguageItem(
                     language = language,
-                    isSelected = language.code == currentLanguageCode,
-                    onLanguageSelected = { viewModel.onLanguageChoosed(language) }
+                    isSelected = language.code == viewState.currentLanguage.code,
+                    onLanguageSelected = { viewModel.languageChoice(language) }
                 )
                 Divider()
             }

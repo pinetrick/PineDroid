@@ -6,6 +6,6 @@ import com.pine.pinedroid.language.SupportedLanguages
 
 data class LanguageSwitchScreenState(
     var currentLanguage: LanguageInfo,
-    var supportedLanguages: List<LanguageInfo> = SupportedLanguages.getCommonLanguages()
+    var supportedLanguages: List<LanguageInfo> = SupportedLanguages.APP_SUPPORTED_LANGUAGE
 
 ){}

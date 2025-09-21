@@ -1,6 +1,5 @@
 package com.pine.pinedroid.language
 
-import android.app.Activity
 import android.content.res.AssetManager
 import android.content.res.Configuration
 import android.os.Build
@@ -12,58 +11,47 @@ import java.util.Locale
 object LanguageManager {
     private const val KEY_LANGUAGE = "selected_language"
 
-    val APP_SUPPORTED_LANGUAGE: List<Locale>
-        get() {
-            val locales = mutableListOf<Locale>()
-            try {
-                val method = AssetManager::class.java.getDeclaredMethod("getLocales")
-                val result = method.invoke(appContext.assets) as Array<String>
-                for (tag in result) {
-                    if (tag.isBlank()) continue
-                    try {
-                        locales.add(Locale.forLanguageTag(tag.replace("_", "-")))
-                    } catch (_: Exception) {
-                    }
-                }
-            } catch (_: Exception) {
-            }
-            return locales
-        }
-
-    fun getCurrentAppLocale(): Locale {
+    /**
+     * 获取当前 App 使用的语言（从配置里取）
+     */
+    fun getCurrentAppLanguage(): SupportedLanguages {
         val config: Configuration = appContext.resources.configuration
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            config.locales.get(0)
+        val locale: Locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            config.locales[0]
         } else {
             @Suppress("DEPRECATION")
             config.locale
         }
+        return SupportedLanguages.getLanguageInfo(locale.toLanguageTag())
+            ?: SupportedLanguages.System
     }
 
-    fun saveLanguage(code: String) {
-        // 存储小写
-        sp(KEY_LANGUAGE, code.lowercase())
-        applyLanguage(code)
+    /**
+     * 保存并应用语言
+     */
+    fun saveLanguage(lang: SupportedLanguages) {
+        sp(KEY_LANGUAGE, lang.code.lowercase())
+        applyLanguage(lang)
     }
 
-    fun applySavedLanguage(){
+    /**
+     * 应用保存的语言
+     */
+    fun applySavedLanguage() {
         applyLanguage(getSavedLanguage())
     }
 
-    fun applyLanguage(code: String) {
-        val locale = if (code.contains("-")) {
-            val parts = code.split("-")
-            Locale(parts[0], parts[1])
-        } else {
-            Locale(code)
-        }
-
+    /**
+     * 应用语言
+     */
+    fun applyLanguage(lang: SupportedLanguages) {
+        val locale = lang.locale
         Locale.setDefault(locale)
 
         val resources = activityContext.resources
         val config = Configuration(resources.configuration)
-
         config.setLocale(locale)
+
         activityContext.createConfigurationContext(config)
         appContext = appContext.createConfigurationContext(config)
 
@@ -71,17 +59,15 @@ object LanguageManager {
         _appLocaleResource.value = appContext.resources
     }
 
-
-    fun getSavedLanguage(): String {
-        val language: String? = sp(KEY_LANGUAGE)
-        if (language != null) return language
-
-        // 如果没有存储过，就返回 app 当前实际使用的语言
-        return getCurrentAppLocale().language
+    /**
+     * 获取保存的语言，没有就返回当前实际语言
+     */
+    fun getSavedLanguage(): SupportedLanguages {
+        val code: String? = sp(KEY_LANGUAGE)
+        return if (!code.isNullOrBlank()) {
+            SupportedLanguages.getLanguageInfo(code) ?: SupportedLanguages.System
+        } else {
+            getCurrentAppLanguage()
+        }
     }
-
-
-
-
-
 }
