@@ -148,8 +148,15 @@ class PineLocationForegroundService : Service() {
         }
     }
 
-    fun getCurrentLocation(): Location? {
-        return currentLocation
+    fun getCurrentLocation(): PineLatLng? {
+        return currentLocation?.let { currentLocation ->
+            PineLatLng(
+                currentLocation.latitude,
+                currentLocation.longitude,
+                currentLocation.altitude,
+                currentLocation.accuracy
+            )
+        }
     }
 
     override fun onDestroy() {

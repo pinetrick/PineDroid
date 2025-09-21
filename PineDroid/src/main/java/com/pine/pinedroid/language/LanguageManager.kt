@@ -1,6 +1,5 @@
 package com.pine.pinedroid.language
 
-import android.content.res.AssetManager
 import android.content.res.Configuration
 import android.os.Build
 import com.pine.pinedroid.utils.activityContext
@@ -15,13 +14,8 @@ object LanguageManager {
      * 获取当前 App 使用的语言（从配置里取）
      */
     fun getCurrentAppLanguage(): SupportedLanguages {
-        val config: Configuration = appContext.resources.configuration
-        val locale: Locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            config.locales[0]
-        } else {
-            @Suppress("DEPRECATION")
-            config.locale
-        }
+        val locale: Locale = appContext.resources.configuration.locales[0]
+
         return SupportedLanguages.getLanguageInfo(locale.toLanguageTag())
             ?: SupportedLanguages.System
     }
@@ -38,7 +32,7 @@ object LanguageManager {
      * 应用保存的语言
      */
     fun applySavedLanguage() {
-        applyLanguage(getSavedLanguage())
+        applyLanguage(getSavedLanguage(true))
     }
 
     /**
@@ -61,13 +55,21 @@ object LanguageManager {
 
     /**
      * 获取保存的语言，没有就返回当前实际语言
+     * allowReturnSystem: SupportedLanguages.System 是否允许，如果不允许 就会返回当前的语言
      */
-    fun getSavedLanguage(): SupportedLanguages {
+    fun getSavedLanguage(allowReturnSystem: Boolean = true): SupportedLanguages {
         val code: String? = sp(KEY_LANGUAGE)
-        return if (!code.isNullOrBlank()) {
+        var language = if (!code.isNullOrBlank()) {
             SupportedLanguages.getLanguageInfo(code) ?: SupportedLanguages.System
         } else {
             getCurrentAppLanguage()
         }
+        if ((!allowReturnSystem) && (language == SupportedLanguages.System)) {
+            language = SupportedLanguages.getLanguageInfo(appContext.resources.configuration.locales[0].toLanguageTag())!!
+        }
+
+        return language
     }
+
+
 }
