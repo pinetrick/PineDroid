@@ -12,7 +12,7 @@ import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionRe
 import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.currentActivity
 
-object ImagePickup {
+object PineImagePickup {
 
 
     suspend fun pickImageFromGallery(
