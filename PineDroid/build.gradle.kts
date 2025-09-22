@@ -75,7 +75,7 @@ dependencies {
     //Google play 好评api
     implementation("com.google.android.play:review-ktx:2.0.2")
     //定位服务 - 别忘了加 menifest
-    implementation ("com.google.android.gms:play-services-location:21.2.0")
+    implementation ("com.google.android.gms:play-services-location:21.3.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
