@@ -44,13 +44,12 @@ class FunctionWindowGridViewAdapter() : BaseAdapter() {
                 )
             )
             button.setBackgroundColor(Color.TRANSPARENT)
+            button.setTextColor(Color.WHITE)
 
-
-//            // 设置Button样式
-//            button.setPadding(20, 20, 20, 20)
-//            button.setTextSize(14f)
-//            button.setMinWidth(200)
-//            button.setMinHeight(120)
+            button.setPadding(20, 20, 20, 20)
+            button.textSize = 14f
+            button.minWidth = 200
+            button.minHeight = 120
         } else {
             button = convertView as Button
         }
