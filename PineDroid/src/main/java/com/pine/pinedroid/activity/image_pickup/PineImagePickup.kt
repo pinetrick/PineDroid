@@ -4,6 +4,7 @@ package com.pine.pinedroid.activity.image_pickup
 import android.content.Intent
 import com.pine.pinedroid.activity.image_pickup.camera.CameraScreenVM
 import com.pine.pinedroid.activity.image_pickup.pickup.ImagePickupScreenVM
+import com.pine.pinedroid.activity.image_pickup.preview.ImagePreviewScreenVM
 import com.pine.pinedroid.hardware.permission.PinePermissionUtils
 import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionCamera
 import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionReadExternalStorage
@@ -13,17 +14,24 @@ import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.currentActivity
 
 object PineImagePickup {
-
+    fun previewImage(images: List<OneImage>, index: Int = 0) {
+        ImagePreviewScreenVM.images = images
+        ImagePreviewScreenVM.index = index
+        val intent = Intent(currentActivity, ImagePickupActivity::class.java).apply {
+            putExtra("initScreen", "preview")
+        }
+        currentActivity.startActivity(intent)
+    }
 
     suspend fun pickImageFromGallery(
         allowCamera: Boolean = true,
-        allowMultiple: Boolean = true,
+        maxCount: Int = 9,
         allowVideo: Boolean = true,
         useSystemCamera: Boolean = true,
         callback: suspend (List<OneImage>) -> Unit
     ) {
         ImagePickupScreenVM.allowCamera = allowCamera
-        ImagePickupScreenVM.allowMultiple = allowMultiple
+        ImagePickupScreenVM.maxCount = maxCount
         ImagePickupScreenVM.allowVideo = allowVideo
         CameraScreenVM.useSystemCamera = useSystemCamera
 

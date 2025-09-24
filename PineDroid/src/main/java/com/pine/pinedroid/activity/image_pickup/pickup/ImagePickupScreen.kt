@@ -7,18 +7,14 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,7 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -51,7 +46,6 @@ import com.pine.pinedroid.jetpack.ui.list.vertical_grid.PineLazyVerticalGrid
 import com.pine.pinedroid.jetpack.ui.loading.PineLoading
 import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
-import com.pine.pinedroid.jetpack.ui.list.vertical_grid.pineScrollIndicator
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import com.pine.pinedroid.utils.ui.pct
 import com.pine.pinedroid.utils.ui.spwh
@@ -74,8 +68,9 @@ fun ImagePickupScreen(
             title = {
                 Title(
                     totalAccount = viewState.selectedImages.size,
+                    maxCount = viewState.maxCount,
                     onBack = viewModel::onReturnClick,
-                    viewModel::onComplete
+                    onConfirm = viewModel::onComplete
                 )
             },
             content = {
@@ -104,11 +99,9 @@ fun Content(
             .fillMaxSize()
     ) {
 
-        val scrollState = rememberLazyGridState()
-
         Box(modifier = Modifier.fillMaxSize()) {
             PineLazyVerticalGrid(
-                state = scrollState,
+                state = rememberLazyGridState(),
                 columns = GridCells.Adaptive(80.dp),
                 horizontalArrangement = Arrangement.spacedBy(2.dp),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
@@ -149,13 +142,14 @@ fun Content(
 @Composable
 fun Title(
     totalAccount: Int,
+    maxCount: Int,
     onBack: () -> Unit,
     onConfirm: () -> Unit
 ) {
     PineTopAppBar(
         title = {
             Text(
-                text = stringResource(R.string.pine_image_pickup_title) + if (totalAccount > 0) "(${totalAccount})" else "",
+                text = stringResource(R.string.pine_image_pickup_title) + " (${totalAccount}/${maxCount})",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.spwh
@@ -174,7 +168,7 @@ fun Title(
             PineButton(
                 text = stringResource(R.string.pine_confirm),
                 onClick = onConfirm,
-                enabled = totalAccount > 0,
+                enabled = totalAccount > 0 && totalAccount <= maxCount,
                 modifier = Modifier.padding(end = 3.pct)
             )
 

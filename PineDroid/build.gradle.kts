@@ -107,5 +107,14 @@ dependencies {
     implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
+    //------------------ 谷歌地图 ------------------
+    // KTX for the Maps SDK for Android library
+    implementation("com.google.maps.android:maps-compose:6.7.2")
+    // Optionally, you can include the Compose utils library for Clustering,
+    // Street View metadata checks, etc.
+    implementation("com.google.maps.android:maps-compose-utils:6.7.2")
+    // Optionally, you can include the widgets library for ScaleBar, etc.
+    implementation("com.google.maps.android:maps-compose-widgets:6.7.2")
+
 
 }

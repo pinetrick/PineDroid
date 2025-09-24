@@ -1,15 +1,11 @@
 package com.pine.pinedroid.net
 
-import android.net.Uri
 import android.webkit.MimeTypeMap
-import androidx.core.net.toUri
-import com.pine.pinedroid.activity.image_pickup.OneImage
+import com.pine.pinedroid.net.PineImageLocalCache.getFileExtensionFromUrl
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.log.logi
 import com.pine.pinedroid.utils.md5
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
@@ -44,18 +40,20 @@ object PineImageLocalCache {
                     scanJson(obj.get(key))
                 }
             }
+
             is JSONArray -> {
                 for (i in 0 until obj.length()) {
                     scanJson(obj.get(i))
                 }
             }
+
             is String -> {
                 if (obj.lowercase().startsWith("https://")) {
 
                     launch(Dispatchers.IO) {
                         semaphore.acquire()
                         try {
-                            fromUrl(obj)
+                            obj.downloadLocalFile()
                         } finally {
                             semaphore.release()
                         }
@@ -65,33 +63,6 @@ object PineImageLocalCache {
         }
     }
 
-    suspend fun fromUrl(url: String) : File =
-        withContext(Dispatchers.IO) {
-
-            // 获取文件扩展名
-            val extension = getFileExtensionFromUrl(url, "jpg")
-
-            // 生成 MD5 文件名
-            val filename = "${md5(url)}.$extension"
-
-            // 缓存目录
-            val cacheDir = File(appContext.cacheDir, "pine_image_cache")
-            if (!cacheDir.exists()) {
-                cacheDir.mkdirs()
-            }
-
-            // 目标文件
-            val cachedFile = File(cacheDir, filename)
-
-            // 判断文件是否存在，不存在则下载
-            if (!cachedFile.exists()) {
-                logi("Cache Image: $url")
-                httpDownload(url, cachedFile)
-            }
-
-            // 返回 LocalImage
-           cachedFile
-        }
 
     fun getFileExtensionFromUrl(url: String, defaultExtension: String = "jpg"): String {
         return try {
@@ -112,4 +83,56 @@ object PineImageLocalCache {
 }
 
 
+fun String?.findLocalFile(): File? = this?.let {
+    // 获取文件扩展名
+    val extension = getFileExtensionFromUrl(this, "jpg")
 
+    // 生成 MD5 文件名
+    val filename = "${md5(this)}.$extension"
+
+    // 缓存目录
+    val cacheDir = File(appContext.cacheDir, "pine_image_cache")
+    if (!cacheDir.exists()) {
+        cacheDir.mkdirs()
+    }
+
+    // 目标文件
+    val cachedFile = File(cacheDir, filename)
+
+    // 判断文件是否存在，不存在则下载
+    if (!cachedFile.exists()) {
+        return null
+    }
+    // 返回 LocalImage
+    return cachedFile
+}
+
+suspend fun String.downloadLocalFile(): File {
+    val httpsUrl = this
+    return withContext(Dispatchers.IO) {
+
+        // 获取文件扩展名
+        val extension = getFileExtensionFromUrl(httpsUrl, "jpg")
+
+        // 生成 MD5 文件名
+        val filename = "${md5(httpsUrl)}.$extension"
+
+        // 缓存目录
+        val cacheDir = File(appContext.cacheDir, "pine_image_cache")
+        if (!cacheDir.exists()) {
+            cacheDir.mkdirs()
+        }
+
+        // 目标文件
+        val cachedFile = File(cacheDir, filename)
+
+        // 判断文件是否存在，不存在则下载
+        if (!cachedFile.exists()) {
+            logi("Cache Image: $httpsUrl")
+            httpDownload(httpsUrl, cachedFile)
+        }
+
+        // 返回 LocalImage
+        cachedFile
+    }
+}

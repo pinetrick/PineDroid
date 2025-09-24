@@ -1,8 +1,10 @@
 package com.pine.pinedroid.jetpack.viewmodel
 
+import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.pine.pinedroid.jetpack.ui.PineSyncSystemNavBarWithBottomBar
 import com.pine.pinedroid.utils.currentActivity
@@ -13,6 +15,8 @@ fun <T: Any> HandleNavigation(
     viewModel: BaseViewModel<T>,
     runOnceBlock: (suspend () -> Unit)? = null,
 ) {
+    val context = LocalContext.current
+
     // 当有未保存的更改时拦截返回
     BackHandler(enabled = true) {
         viewModel.onReturnClick()
@@ -35,7 +39,10 @@ fun <T: Any> HandleNavigation(
                 }
 
                 is NavEvent.NavigateBack -> {
-                    navController?.popBackStack()
+                    if (navController?.popBackStack() == false) {
+                        // 没有更多可返回的，退出当前 Activity
+                        (context as? Activity)?.finish()
+                    }
                 }
 
                 is NavEvent.PopUpTo -> {

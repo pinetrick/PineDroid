@@ -28,7 +28,7 @@ class ImagePickupScreenVM : BaseViewModel<ImagePickupScreenState>(ImagePickupScr
             copy(
                 loading = false,
                 enabledCamera = allowCamera,
-                enabledMultiple = allowMultiple,
+                maxCount = ImagePickupScreenVM.maxCount,
                 imageUris = inputImages
             )
         }
@@ -97,9 +97,6 @@ class ImagePickupScreenVM : BaseViewModel<ImagePickupScreenState>(ImagePickupScr
 
     fun onSelectChange(oneImage: OneImage) {
         val selectedImages = _viewState.value.selectedImages.toMutableList()
-        if (!_viewState.value.enabledMultiple) { //单选
-            selectedImages.clear()
-        }
 
         if (selectedImages.contains(oneImage)) {
             selectedImages.remove(oneImage)
@@ -118,14 +115,14 @@ class ImagePickupScreenVM : BaseViewModel<ImagePickupScreenState>(ImagePickupScr
     companion object {
         var inputImages: List<OneImage> = emptyList()
         var allowCamera: Boolean = true
-        var allowMultiple: Boolean = true
+        var maxCount: Int = 9
         var allowVideo: Boolean = true
 
         var callback: (suspend (List<OneImage>) -> Unit)? = null
 
         fun cleanUp(){
             inputImages = emptyList()
-            allowMultiple = true
+            maxCount = 9
             allowCamera = true
             allowVideo = true
             callback = null

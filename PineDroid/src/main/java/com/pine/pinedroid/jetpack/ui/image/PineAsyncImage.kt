@@ -1,10 +1,13 @@
 package com.pine.pinedroid.jetpack.ui.image
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -42,13 +45,13 @@ fun PineAsyncImage(
     onSuccess: ((State.Success) -> Unit)? = null,
     onError: ((State.Error) -> Unit)? = null,
     alignment: Alignment = Alignment.Center,
-    contentScale: ContentScale = ContentScale.Fit,
+    contentScale: ContentScale = ContentScale.Crop,
     alpha: Float = DefaultAlpha,
     colorFilter: ColorFilter? = null,
     filterQuality: FilterQuality = DefaultFilterQuality,
     clipToBounds: Boolean = true,
     modelEqualityDelegate: EqualityDelegate = DefaultModelEqualityDelegate,
-
+    onClicked: ((Any?) -> Unit)? = null,
 ) {
 
 
@@ -69,10 +72,21 @@ fun PineAsyncImage(
         else -> model // 保持其他类型不变
     }
 
+    val clickableModifier = if (onClicked != null) {
+        modifier.clickable(
+            indication = null, // 去掉涟漪/背景变化
+            interactionSource = remember { MutableInteractionSource() }
+        ) {
+            onClicked(model)
+        }
+    } else {
+        modifier
+    }
+
     AsyncImage(
         model = processedModel,
         contentDescription = contentDescription,
-        modifier = modifier,
+        modifier = clickableModifier,
         placeholder = placeholder,
         error = error,
         fallback = fallback,
