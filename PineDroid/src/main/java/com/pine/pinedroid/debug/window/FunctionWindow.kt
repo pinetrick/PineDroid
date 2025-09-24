@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.GridView
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
@@ -21,11 +22,11 @@ class FunctionWindow @JvmOverloads constructor(
 
     var mainMessage: TextView
     var exitApp: Button
-
     var closeButton: Button
     var dataBaseButton: Button
     var uninstallButton: Button
 
+    var gridView: GridView
 
     init {
         // 加载 XML 布局
@@ -42,6 +43,8 @@ class FunctionWindow @JvmOverloads constructor(
         closeButton = findViewById<Button>(R.id.debug_runtime_ret_btn)
         dataBaseButton = findViewById<Button>(R.id.debug_runtime_database_btn)
         uninstallButton = findViewById<Button>(R.id.debug_runtime_uninstall_btn)
+        gridView = findViewById<GridView>(R.id.debug_runtime_func_list)
+        gridView.adapter = FunctionWindowGridViewAdapter()
 
     }
 

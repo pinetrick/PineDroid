@@ -10,6 +10,7 @@ import android.os.Bundle
 import com.pine.pinedroid.PineConfig
 import com.pine.pinedroid.debug.icon.SmallFloatIcon
 import com.pine.pinedroid.debug.window.FunctionWindowController
+import com.pine.pinedroid.debug.window.PineDebugWindow
 import com.pine.pinedroid.language.LanguageManager
 import com.pine.pinedroid.ui.float_window.FloatingWindowHelper
 import com.pine.pinedroid.utils.PineApp.isAppDebug
@@ -33,7 +34,7 @@ class PineContentProvider : ContentProvider() {
             if (isAppDebug()) {
                 printSignatures()
             }
-            if (PineConfig.getIsDebugWindowAlwaysOn()) {
+            if (PineDebugWindow.getIsDebugWindowAlwaysOn()) {
                 CoroutineScope(Dispatchers.Main).launch {
                     val view = SmallFloatIcon(appContext)
                     view.setOnClickListener(FunctionWindowController::onShowFunctionWindowClick)
