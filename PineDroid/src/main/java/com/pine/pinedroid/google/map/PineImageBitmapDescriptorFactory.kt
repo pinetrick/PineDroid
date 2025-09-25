@@ -9,7 +9,7 @@ import com.pine.pinedroid.utils.appContext
 
 class PineImageBitmapDescriptorFactory {
     private val reusableBitmap: Bitmap by lazy {
-        Bitmap.createBitmap(454, 512, Bitmap.Config.ARGB_8888)
+        Bitmap.createBitmap(182, 205, Bitmap.Config.ARGB_8888)
     }
 
     fun createMarkerBitmapDescriptor(
