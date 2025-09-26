@@ -29,7 +29,7 @@ class RootScreenVM : BaseViewModel<RootScreenState>(RootScreenState::class) {
     fun onImagePickUp() = viewModelScope.launch {
         PineImagePickup.pickImageFromGallery(
             allowCamera = true,
-            allowMultiple = true,
+            maxCount = 99,
             allowVideo = true,
             useSystemCamera = true,
         ) { oneImage ->
