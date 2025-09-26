@@ -41,6 +41,10 @@ class PineImageBitmapDescriptorFactory {
     fun createMarkerBitmapDescriptorWithCache(
         imageUrl: String?
     ): BitmapDescriptor {
+        if (imageUrl == null) {
+            return createMarkerBitmapDescriptor(null)
+        }
+
         return circularBitmapCache.get(imageUrl) ?: run {
             val circularBitmap = createMarkerBitmapDescriptor(imageUrl)
             circularBitmapCache.put(imageUrl, circularBitmap)
