@@ -53,7 +53,7 @@ object PineImageLocalCache {
                     launch(Dispatchers.IO) {
                         semaphore.acquire()
                         try {
-                            obj.downloadLocalFile()
+                            obj.httpDownloadToLocalFile()
                         } finally {
                             semaphore.release()
                         }
@@ -107,7 +107,7 @@ fun String?.findLocalFile(): File? = this?.let {
     return cachedFile
 }
 
-suspend fun String.downloadLocalFile(): File {
+suspend fun String.httpDownloadToLocalFile(): File {
     val httpsUrl = this
     return withContext(Dispatchers.IO) {
 

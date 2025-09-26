@@ -1,6 +1,7 @@
 package com.pine.pinedroid.google.map
 
 import android.graphics.*
+import android.util.LruCache
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.pine.pinedroid.R
@@ -8,13 +9,12 @@ import com.pine.pinedroid.net.findLocalFile
 import com.pine.pinedroid.utils.appContext
 
 class PineImageBitmapDescriptorFactory {
+    private val circularBitmapCache = LruCache<String, BitmapDescriptor>(100)
+
     private val reusableBitmap: Bitmap by lazy {
         Bitmap.createBitmap(182, 205, Bitmap.Config.ARGB_8888)
     }
-
-    fun createMarkerBitmapDescriptor(
-        imageUrl: String?
-    ): BitmapDescriptor {
+    private val reusableCanvas: Canvas by lazy {
         // 加载背景图片
         val backgroundBitmap = BitmapFactory.decodeResource(appContext.resources, R.drawable.pinedroid_map_mark)
         val scaledBackground = Bitmap.createScaledBitmap(backgroundBitmap, 182, 205, true)
@@ -24,6 +24,34 @@ class PineImageBitmapDescriptorFactory {
 
         // 绘制背景
         canvas.drawBitmap(scaledBackground, 0f, 0f, null)
+
+        // 回收背景位图
+        if (!scaledBackground.isRecycled && scaledBackground != backgroundBitmap) {
+            scaledBackground.recycle()
+        }
+
+        if (!backgroundBitmap.isRecycled) {
+            backgroundBitmap.recycle()
+        }
+        canvas
+    }
+
+
+
+    fun createMarkerBitmapDescriptorWithCache(
+        imageUrl: String?
+    ): BitmapDescriptor {
+        return circularBitmapCache.get(imageUrl) ?: run {
+            val circularBitmap = createMarkerBitmapDescriptor(imageUrl)
+            circularBitmapCache.put(imageUrl, circularBitmap)
+            circularBitmap
+        }
+
+    }
+
+    fun createMarkerBitmapDescriptor(
+        imageUrl: String?
+    ): BitmapDescriptor {
 
         // 加载并处理用户图片
         val file = imageUrl.findLocalFile()
@@ -35,20 +63,13 @@ class PineImageBitmapDescriptorFactory {
 
         if (imageBitmap != null) {
             // 绘制圆形图片到中间位置（您可以根据需要调整位置）
-            drawCircularImage(canvas, imageBitmap)
+            drawCircularImage(reusableCanvas, imageBitmap)
 
             if (!imageBitmap.isRecycled) {
                 imageBitmap.recycle()
             }
         }
 
-        // 回收背景位图
-        if (!scaledBackground.isRecycled && scaledBackground != backgroundBitmap) {
-            scaledBackground.recycle()
-        }
-        if (!backgroundBitmap.isRecycled) {
-            backgroundBitmap.recycle()
-        }
 
         return BitmapDescriptorFactory.fromBitmap(reusableBitmap)
     }

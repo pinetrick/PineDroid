@@ -1,19 +1,13 @@
 package com.pine.pinedroid.activity.image_pickup
 
-import com.pine.pinedroid.net.PineImageLocalCache
-import com.pine.pinedroid.net.downloadLocalFile
-import com.pine.pinedroid.net.httpDownload
-import com.pine.pinedroid.utils.appContext
-import com.pine.pinedroid.utils.md5
+import com.pine.pinedroid.net.httpDownloadToLocalFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.util.Locale
 
 
 suspend fun OneImage.HttpImage.toLocalImage(): OneImage.LocalImage =
     withContext(Dispatchers.IO) {
-        OneImage.LocalImage(url.downloadLocalFile().absolutePath)
+        OneImage.LocalImage(url.httpDownloadToLocalFile().absolutePath)
     }
 
 
