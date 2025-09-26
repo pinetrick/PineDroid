@@ -33,17 +33,17 @@ sealed class OneImage {
         }
     }
 
-    companion object {
-        fun fromString(string: String): OneImage {
-            return when {
-                string.startsWith("http", ignoreCase = true) -> OneImage.HttpImage(string)
-                string.startsWith("/") -> OneImage.LocalImage(string)
-                else -> OneImage.UriImage(string.toUri())
-            }
-        }
-    }
+
 }
 
+
+fun String.toOneImage(): OneImage{
+    return when {
+        this.startsWith("http", ignoreCase = true) -> OneImage.HttpImage(this)
+        this.startsWith("/") -> OneImage.LocalImage(this)
+        else -> OneImage.UriImage(this.toUri())
+    }
+}
 
 fun OneImage.toLocalUrl(): String? {
     return when (this) {

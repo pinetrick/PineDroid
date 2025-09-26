@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -26,7 +25,7 @@ import com.pine.pinedroid.utils.ui.spwh
 fun PineButton(
     text: String? = null,
     icon: String? = null,
-    onClick: () -> Unit = {},
+    onClick: (() -> Unit)? = null,
     fontSize: TextUnit = 18.spwh,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -47,13 +46,17 @@ fun PineButton(
         color = if (enabled) MaterialTheme.colorScheme.primary
         else MaterialTheme.colorScheme.primary.copy(alpha = 0.38f)
     ),
-    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    contentPadding: PaddingValues = if (border != null) {
+        ButtonDefaults.ContentPadding
+    } else {
+        PaddingValues(0.dp) // 更小的内边距
+    },
     interactionSource: MutableInteractionSource? = null,
 ) {
 
     // 打卡按钮
     Button(
-        onClick = onClick,
+        onClick = { onClick?.invoke() },
         enabled = enabled,
         modifier = modifier,
         shape = shape,
@@ -66,17 +69,18 @@ fun PineButton(
         icon?.let { icon ->
             PineIcon(
                 text = icon,
-                fontSize = 18.spwh,
+                fontSize = fontSize,
+                lineHeight = fontSize,
             )
 
         }
 
-        if (icon != null && text != null){
+        if (icon != null && text != null && text.isNotEmpty() && icon.isNotEmpty()) {
             Spacer(modifier = Modifier.width(8.dp))
         }
 
         text?.let { text ->
-            Text(text = text, fontSize = fontSize)
+            Text(text = text, fontSize = fontSize, lineHeight = fontSize)
         }
     }
 
@@ -90,5 +94,14 @@ fun Preview() {
     PineButton(
         "确定",
         icon = "\uf4fc",
+    )
+}
+
+@Preview
+@Composable
+fun Preview1() {
+    PineButton(
+        icon = "\uf4fc",
+        border = null,
     )
 }

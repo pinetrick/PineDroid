@@ -27,10 +27,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pine.pinedroid.jetpack.ui.button.PineButton
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
 import com.pine.pinedroid.utils.ui.pct
+import com.pine.pinedroid.utils.ui.pcth
 import com.pine.pinedroid.utils.ui.spwh
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,7 +49,9 @@ fun PineTopAppBar(
                 text = title,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                fontSize = 24.spwh
+                fontSize = 20.spwh,
+
+
             )
         },
         navigationIcon = {
@@ -55,7 +59,7 @@ fun PineTopAppBar(
                 IconButton(onClick = onReturn) {
                     PineIcon(
                         text = "\uf060",
-                        fontSize = 24.sp,
+                        fontSize = 20.spwh,
                         color = MaterialTheme.colorScheme.primary,
                     )
                 }
@@ -67,7 +71,7 @@ fun PineTopAppBar(
                 IconButton(onClick = { }) {
                     PineIcon(
                         text = actionIcon,
-                        fontSize = 24.sp,
+                        fontSize = 20.spwh,
                         color = MaterialTheme.colorScheme.primary,
                         onClick = onAction
                     )
@@ -86,7 +90,7 @@ fun PineTopAppBar(
     modifier: Modifier = Modifier,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
-    expandedHeight: Dp = TopAppBarDefaults.TopAppBarExpandedHeight,
+    expandedHeight: Dp = 12.pct,
     windowInsets: WindowInsets = WindowInsets(0, 0, 0, 0),
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.surface,
