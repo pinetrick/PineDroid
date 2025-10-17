@@ -42,7 +42,7 @@ fun PineSearchTextView(
 
     locationIcon: Boolean? = null,
     onLocationClicked: (() -> Unit)? = null,
-
+    onPhotoPickup: (() -> Unit)? = null,
     onTakePhoto: (() -> Unit)? = null,
 ) {
     Row(
@@ -125,6 +125,19 @@ fun PineSearchTextView(
                 color = MaterialTheme.colorScheme.onSurface.copy(
                     alpha = 0.5f
                 )
+            )
+        }
+
+        onPhotoPickup?.let {
+            PineIcon(
+                text = "\uf302",
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .clickable(
+                        indication = null, // 去掉涟漪/背景变化
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) { onPhotoPickup() },
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
             )
         }
 

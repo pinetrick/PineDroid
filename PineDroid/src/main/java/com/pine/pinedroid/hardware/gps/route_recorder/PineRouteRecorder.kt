@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
-open class PineRouteRecorder private constructor() {
+open class PineRouteRecorder internal constructor() {
 
     //必须有强引用，否则会被gc
     private val locationCallback: (PineLatLng) -> Unit = ::onLocationChanged
