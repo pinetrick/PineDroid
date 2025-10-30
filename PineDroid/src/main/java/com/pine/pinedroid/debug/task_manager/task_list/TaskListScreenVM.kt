@@ -3,6 +3,7 @@ package com.pine.pinedroid.debug.task_manager.task_list
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
+import com.pine.pinedroid.utils.adbShell
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,29 +24,13 @@ class TaskListScreenVM : BaseViewModel<TaskListScreenState>(TaskListScreenState:
     private suspend fun loadMemoryInfo() {
         runCatching {
             val result = withContext(Dispatchers.IO) {
-                executeMeminfoCommand()
+                adbShell("dumpsys meminfo")
             }
-            parseMeminfoOutput(result)
+            parseMeminfoOutput(result!!)
             setState { copy(isLoading = false) }
         }
     }
 
-    private fun executeMeminfoCommand(): String {
-        return try {
-            val process = Runtime.getRuntime().exec("dumpsys meminfo")
-            val reader = BufferedReader(InputStreamReader(process.inputStream))
-            val output = StringBuilder()
-            var line: String?
-            while (reader.readLine().also { line = it } != null) {
-                output.append(line).append("\n")
-            }
-            reader.close()
-            process.waitFor()
-            output.toString()
-        } catch (e: Exception) {
-            "Error executing command: ${e.message}"
-        }
-    }
 
     private fun parseMeminfoOutput(output: String) {
         val apps = ArrayList<AppInfos>()
