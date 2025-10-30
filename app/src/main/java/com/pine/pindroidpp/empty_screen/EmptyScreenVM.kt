@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 class EmptyScreenVM : BaseViewModel<EmptyScreenState>(EmptyScreenState::class) {
 
-    fun onInit() {
+    suspend fun onInit() {
 
     }
 }

@@ -37,6 +37,9 @@
         <activity
             android:name=".hardware.permission.location.PinePermissionActivity">
         </activity>
+        <activity
+            android:name=".debug.task_manager.TaskManagerActivity">
+        </activity>
         <!-- ContentProvider 用于在App启动时初始化悬浮窗 -->
         <provider
             android:name=".content_provider.PineContentProvider"
