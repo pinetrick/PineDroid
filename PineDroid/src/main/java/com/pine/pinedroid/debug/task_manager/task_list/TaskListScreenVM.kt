@@ -1,16 +1,33 @@
 package com.pine.pinedroid.debug.task_manager.task_list
 
+import android.app.ActivityManager
+import android.app.usage.StorageStatsManager
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Debug
+import android.os.StatFs
 import androidx.lifecycle.viewModelScope
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
-import com.pine.pinedroid.utils.adbShell
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.BufferedReader
-import java.io.InputStreamReader
+import java.io.File
+import java.util.*
 
 class TaskListScreenVM : BaseViewModel<TaskListScreenState>(TaskListScreenState::class) {
+
+    private lateinit var activityManager: ActivityManager
+    private lateinit var packageManager: PackageManager
+    private lateinit var storageStatsManager: StorageStatsManager
+
+    fun initialize(context: Context) {
+        activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        packageManager = context.packageManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            storageStatsManager = context.getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager
+        }
+    }
 
     suspend fun onInit() {
         loadMemoryInfo()
@@ -23,56 +40,72 @@ class TaskListScreenVM : BaseViewModel<TaskListScreenState>(TaskListScreenState:
 
     private suspend fun loadMemoryInfo() {
         runCatching {
-            val result = withContext(Dispatchers.IO) {
-                adbShell("dumpsys meminfo")
+            withContext(Dispatchers.IO) {
+                loadSystemMemoryInfo()
             }
-            parseMeminfoOutput(result!!)
+            setState { copy(isLoading = false) }
+        }.onFailure {
             setState { copy(isLoading = false) }
         }
     }
 
-
-    private fun parseMeminfoOutput(output: String) {
+    private fun loadSystemMemoryInfo() {
         val apps = ArrayList<AppInfos>()
         val memoryInfo = MemoryInfo()
 
-        val lines = output.split("\n")
-        var inProcessSection = false
-        var inMemorySummary = false
+        // 获取系统内存信息
+        val systemMemoryInfo = ActivityManager.MemoryInfo()
+        activityManager.getMemoryInfo(systemMemoryInfo)
 
-        for (line in lines) {
-            when {
-                // 解析进程信息
-                line.contains("Total PSS by process:") -> {
-                    inProcessSection = true
-                    continue
+        // 设置内存信息
+        memoryInfo.totalRAM = formatBytes(systemMemoryInfo.totalMem)
+        memoryInfo.freeRAM = formatBytes(systemMemoryInfo.availMem)
+        memoryInfo.usedRAM = formatBytes(systemMemoryInfo.totalMem - systemMemoryInfo.availMem)
+
+        // 计算阈值内存（当系统需要开始杀死进程时的内存）
+        memoryInfo.lostRAM = formatBytes(systemMemoryInfo.threshold)
+
+        // ZRAM 信息需要特殊处理，这里简化处理
+        memoryInfo.zramInfo = "N/A"
+
+        // 获取运行中的进程
+        val runningProcesses = activityManager.runningAppProcesses ?: emptyList()
+
+        for (processInfo in runningProcesses) {
+            try {
+                val processMemoryInfo = activityManager.getProcessMemoryInfo(intArrayOf(processInfo.pid))
+                if (processMemoryInfo.isNotEmpty()) {
+                    val memory = processMemoryInfo[0]
+                    val pssInKb = memory.totalPss // 获取 PSS 内存（以 KB 为单位）
+
+                    // 获取进程名称
+                    val processName = processInfo.processName
+                    val appName = getAppNameFromPackage(processName)
+
+                    // 判断进程类型
+                    val category = if (processName.contains(":")) {
+                        "Service"
+                    } else {
+                        "Activity"
+                    }
+
+                    apps.add(
+                        AppInfos(
+                            name = appName,
+                            pss = "${pssInKb}K",
+                            pid = processInfo.pid.toString(),
+                            category = category
+                        )
+                    )
                 }
-                line.contains("Total PSS by OOM adjustment:") -> {
-                    inProcessSection = false
-                    continue
-                }
-                inProcessSection && line.contains("K:") -> {
-                    parseProcessLine(line, apps)
-                }
-                // 解析内存汇总信息
-                line.contains("Total RAM:") -> {
-                    inMemorySummary = true
-                    parseMemoryInfo(line, memoryInfo)
-                }
-                line.contains("Free RAM:") && inMemorySummary -> {
-                    parseMemoryInfo(line, memoryInfo)
-                }
-                line.contains("Used RAM:") && inMemorySummary -> {
-                    parseMemoryInfo(line, memoryInfo)
-                }
-                line.contains("Lost RAM:") && inMemorySummary -> {
-                    parseMemoryInfo(line, memoryInfo)
-                }
-                line.contains("ZRAM:") && inMemorySummary -> {
-                    parseMemoryInfo(line, memoryInfo)
-                }
+            } catch (e: Exception) {
+                // 忽略无法获取内存信息的进程
+                continue
             }
         }
+
+        // 按内存使用量排序
+        apps.sortByDescending { it.pss.replace("K", "").toIntOrNull() ?: 0 }
 
         setState {
             copy(
@@ -83,44 +116,39 @@ class TaskListScreenVM : BaseViewModel<TaskListScreenState>(TaskListScreenState:
         }
     }
 
-    private fun parseProcessLine(line: String, apps: ArrayList<AppInfos>) {
-        try {
-            val parts = line.trim().split("K:")
-            if (parts.size == 2) {
-                val pss = parts[0].trim().replace(",", "") + "K"
-                val rest = parts[1].trim()
-
-                // 提取进程名和PID
-                val pidMatch = Regex("\\(pid (\\d+)").find(rest)
-                val pid = pidMatch?.groupValues?.get(1) ?: ""
-
-                val name = rest.substringBefore("(pid").trim()
-                val category = if (rest.contains("/ activities")) "Activity" else "Service"
-
-                apps.add(AppInfos(name = name, pss = pss, pid = pid, category = category))
-            }
-        } catch (e: Exception) {
-            // 忽略解析错误
+    private fun getAppNameFromPackage(packageName: String): String {
+        return try {
+            val applicationInfo = packageManager.getApplicationInfo(packageName, 0)
+            packageManager.getApplicationLabel(applicationInfo).toString()
+        } catch (e: PackageManager.NameNotFoundException) {
+            packageName
         }
     }
 
-    private fun parseMemoryInfo(line: String, memoryInfo: MemoryInfo) {
-        when {
-            line.contains("Total RAM:") -> {
-                memoryInfo.totalRAM = line.substringAfter("Total RAM:").trim()
-            }
-            line.contains("Free RAM:") -> {
-                memoryInfo.freeRAM = line.substringAfter("Free RAM:").trim()
-            }
-            line.contains("Used RAM:") -> {
-                memoryInfo.usedRAM = line.substringAfter("Used RAM:").trim()
-            }
-            line.contains("Lost RAM:") -> {
-                memoryInfo.lostRAM = line.substringAfter("Lost RAM:").trim()
-            }
-            line.contains("ZRAM:") -> {
-                memoryInfo.zramInfo = line.substringAfter("ZRAM:").trim()
-            }
+    private fun formatBytes(bytes: Long): String {
+        val units = arrayOf("B", "KB", "MB", "GB")
+        var size = bytes.toDouble()
+        var unitIndex = 0
+
+        while (size > 1024 && unitIndex < units.size - 1) {
+            size /= 1024
+            unitIndex++
         }
+
+        return "%.2f%s".format(size, units[unitIndex])
+    }
+}
+
+// 辅助扩展函数，用于格式化内存显示
+private fun Long.toFormattedMemoryString(): String {
+    val kb = this / 1024
+    val mb = kb / 1024
+    val gb = mb / 1024
+
+    return when {
+        gb > 0 -> "${gb}GB"
+        mb > 0 -> "${mb}MB"
+        kb > 0 -> "${kb}KB"
+        else -> "${this}B"
     }
 }
