@@ -7,6 +7,7 @@ import android.provider.Settings
 import android.view.View
 import androidx.core.net.toUri
 import com.pine.pinedroid.activity.PineDroidActivity
+import com.pine.pinedroid.debug.task_manager.TaskManagerActivity
 import com.pine.pinedroid.file.DataCleanManager
 import com.pine.pinedroid.ui.float_window.FloatingWindowHelper
 import com.pine.pinedroid.ui.message_box.MessageBox
@@ -16,6 +17,7 @@ import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.currentActivity
 import com.pine.pinedroid.utils.shortName
 import com.pine.pinedroid.utils.file.kbToDisplayFileSize
+import com.pine.pinedroid.utils.intent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,7 +44,16 @@ object FunctionWindowController {
                     }
                     closeButton.setOnClickListener(::closeFloatWindow)
                     uninstallButton.setOnClickListener (::onUninstallBtnClick)
-                    dataBaseButton.setOnClickListener (::openDbEditor)
+                    dataBaseButton.setOnClickListener {
+                        intent(PineDroidActivity::class)
+                        closeFloatWindow()
+                    }
+
+                   // PineDebugWindow.addButton("Files", "\uf15b", ::openDbEditor)
+                    PineDebugWindow.addButton("Task Manager", "\uf0ae") {
+                        intent(TaskManagerActivity::class)
+                        closeFloatWindow()
+                    }
                 }
             }
             functionWindow!!.mainMessage.text = appContext.packageName + ": " + getAppMemoryUsage().kbToDisplayFileSize()
@@ -50,10 +61,7 @@ object FunctionWindowController {
         }
     }
 
-    fun openDbEditor(view: View? = null){
-        activityContext.startActivity(Intent(activityContext, PineDroidActivity::class.java))
-        closeFloatWindow()
-    }
+
 
     fun closeFloatWindow(view: View? = null){
         FloatingWindowHelper.closeFloatingWindow(functionWindow!!)

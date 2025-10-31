@@ -7,11 +7,16 @@ import com.pine.pinedroid.utils.sp
 
 object PineDebugWindow {
     private var isDebugWindowAlwaysOn: Boolean? = null
-    var buttons: LinkedHashMap<String, () -> Unit> = linkedMapOf()
+    var buttons: ArrayList<DebugWindowGridViewBean> = ArrayList()
 
-
-    fun addButton(text: String, action: () -> Unit) {
-        buttons[text] = action
+    fun addButton(text: String, icon: String = "", action: () -> Unit = {}) {
+        // Check if a button with the same text already exists
+        val existingButton = buttons.find { it.text == text }
+        if (existingButton == null) {
+            // Create new button and add to list
+            val newButton = DebugWindowGridViewBean(text, icon, action)
+            buttons.add(newButton)
+        }
     }
 
     // --- 悬浮窗常显开关 ---
@@ -27,7 +32,7 @@ object PineDebugWindow {
         return isDebugWindowAlwaysOn!!
     }
 
-    private  fun  refresh(){
+    private fun refresh(){
 
         isDebugWindowAlwaysOn = true
         val spWindow: Boolean? = sp("DebugWindowAlwaysOn")
