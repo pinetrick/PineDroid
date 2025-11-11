@@ -8,6 +8,8 @@ import com.pine.pinedroid.net.http_queue.bean.PendingPostRequest
 import com.pine.pinedroid.utils.gson
 import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.loge
+import com.pine.pinedroid.utils.log.logi
+import com.pine.pinedroid.utils.toast
 import kotlinx.coroutines.*
 import java.util.Date
 import java.util.concurrent.atomic.AtomicBoolean
@@ -83,6 +85,7 @@ class HttpQueue private constructor() {
                     delay(60_000) // 出错时等待1分钟
                 }
             }
+            logi("上传队列处理结束")
         }
     }
 

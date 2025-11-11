@@ -99,7 +99,7 @@ suspend inline fun <reified T> httpPostJson(
 
     var result: String = ""
     try {
-        val body = gson.toJson(body)
+        val body = body as? String ?: gson.toJson(body)
         logv(body)
         result = ktor.post(httpRootUrl + url) {
             contentType(ContentType.Application.Json)
@@ -113,6 +113,9 @@ suspend inline fun <reified T> httpPostJson(
             }
         }
 
+        if (T::class == String::class) {
+            return@withContext result as T?
+        }
 
         val type = object : TypeToken<T>() {}.type
         gson.fromJson<T>(result, type)
