@@ -74,6 +74,15 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
         return this
     }
 
+    fun count(): Long {
+        return model.count()
+    }
+
+    fun truncate(){
+        return model.truncate()
+
+    }
+
 
     /**
      * 将 DbRecord 转换为指定类型 T

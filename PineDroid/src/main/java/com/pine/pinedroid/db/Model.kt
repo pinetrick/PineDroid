@@ -2,6 +2,9 @@ package com.pine.pinedroid.db
 
 import android.database.Cursor
 import com.pine.pinedroid.utils.camelToSnakeCase
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.reflect.KClass
 
 
@@ -38,7 +41,12 @@ open class Model(name: String, private val dbName: String? = null) {
 
     // 支持指定逻辑运算符的 where
     fun where(key: String, condition: String, value: Any?, operator: String): Model {
-        val tmpValue = if (value is Boolean) if (value) 1 else 0 else value
+        val tmpValue = when (value){
+            is Boolean -> if (value) 1 else 0
+            is Date -> value.time
+            else -> value
+        }
+
         whereConditions.add(WhereCondition("$key $condition ?", operator))
         whereArgs.add(tmpValue)
         return this
@@ -57,7 +65,12 @@ open class Model(name: String, private val dbName: String? = null) {
     fun whereOr(key: String, value: Any?): Model = whereOr(key, "=", value)
 
     fun whereOr(key: String, condition: String, value: Any?): Model {
-        val tmpValue = if (value is Boolean) if (value) 1 else 0 else value
+        val tmpValue = when (value){
+            is Boolean -> if (value) 1 else 0
+            is Date -> value.time
+            else -> value
+        }
+
         whereConditions.add(WhereCondition("$key $condition ?", "OR"))
         whereArgs.add(tmpValue)
         return this
@@ -135,6 +148,10 @@ open class Model(name: String, private val dbName: String? = null) {
         return whereBuilder.toString()
     }
 
+    fun execute(lastSql: String, args: Array<Any?>? = null) {
+        return dbConnection.execute(lastSql, args)
+    }
+
     fun rawQuery(lastSql: String, args: Array<Any?>? = null): Pair<List<DbRecord>, List<ColumnInfo>> {
         val queryResult = dbConnection.query(lastSql, args)
         val cursor = queryResult.first
@@ -170,6 +187,11 @@ open class Model(name: String, private val dbName: String? = null) {
         return record
     }
 
+    fun truncate(){
+        lastSql = "TRUNCATE TABLE $tableName"
+
+        return execute(lastSql)
+    }
 
 
 }

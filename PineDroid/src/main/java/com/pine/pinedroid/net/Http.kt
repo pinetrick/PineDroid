@@ -79,6 +79,9 @@ suspend inline fun <reified T> httpGet(url: String, cacheImages: Boolean = false
                 PineImageLocalCache.fromJson(result)
             }
         }
+        if (T::class == String::class) {
+            return@withContext result as T?
+        }
 
         val type = object : TypeToken<T>() {}.type
         gson.fromJson<T>(result, type)
