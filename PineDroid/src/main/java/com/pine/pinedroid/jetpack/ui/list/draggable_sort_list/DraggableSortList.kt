@@ -1,7 +1,6 @@
 package com.pine.pinedroid.jetpack.ui.list.draggable_sort_list
 
 import android.content.res.Configuration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +34,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun <T> DraggableSortList(
+fun <T> PineDraggableSortList(
     modifier: Modifier = Modifier,
     items: List<T>,
     onItemDragged: ((from: Int, to: Int) -> Unit)? = null,
@@ -354,7 +353,7 @@ fun <T> DraggableItemWithState(
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun DraggableSortListPreview() {
+fun PineDraggableSortListPreview() {
     MaterialTheme {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -365,7 +364,7 @@ fun DraggableSortListPreview() {
 
             val sampleItems = listOf("项目 1", "项目 2", "项目 3", "项目 4", "项目 5")
 
-            DraggableSortList(
+            PineDraggableSortList(
                 items = sampleItems,
                 onItemDragged = { from, to ->
                     println("项目从 $from 移动到 $to")
