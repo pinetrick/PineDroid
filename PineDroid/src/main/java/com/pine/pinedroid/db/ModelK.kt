@@ -1,7 +1,11 @@
 package com.pine.pinedroid.db
 
+import com.google.common.reflect.TypeToken
 import com.pine.pinedroid.db.bean.BaseDataTable
 import com.pine.pinedroid.utils.camelToSnakeCase
+import com.pine.pinedroid.utils.gson
+import com.pine.pinedroid.utils.log.logd
+import com.pine.pinedroid.utils.log.loge
 import com.pine.pinedroid.utils.log.logw
 import java.util.Date
 import kotlin.reflect.KClass
@@ -94,6 +98,7 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
                 val dbValue = findValueInRecord(dbRecord, paramName)
                 convertValue(dbValue, param.type)
             }
+            //logd("convertToType: ${kclass.simpleName}", args)
             constructor.callBy(args)
         } catch (e: Exception) {
             logw("(is Data class?)Error converting DbRecord to ${kclass.simpleName}: ${e.message}")
@@ -116,7 +121,7 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
      */
     private fun convertValue(value: Any?, targetType: KType): Any? {
         if (value == null) return null
-
+//        logd(targetType.classifier)
         return when (val classifier = targetType.classifier) {
             String::class -> value.toString()
             Int::class -> value.toString().toIntOrNull() ?: 0
@@ -130,6 +135,22 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
                 else -> value.toString().toBoolean()
             }
             Date::class -> Date(value.toString().toLongOrNull() ?: 0L)
+            Map::class -> {
+                try {
+                    gson.fromJson<Map<String, Any>>(value.toString(), object : TypeToken<Map<String, Any>>() {}.type)
+                } catch (e: Exception) {
+                    loge("Map conversion failed: ${e.message}")
+                    emptyMap<String, Any>()
+                }
+            }
+            List::class -> {
+                try {
+                    gson.fromJson<List<Any>>(value.toString(), object : TypeToken<List<Any>>() {}.type)
+                } catch (e: Exception) {
+                    loge("List conversion failed: ${e.message}")
+                    emptyList<Any>()
+                }
+            }
             else -> value
         }
     }

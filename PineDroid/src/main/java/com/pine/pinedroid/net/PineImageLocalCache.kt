@@ -3,6 +3,7 @@ package com.pine.pinedroid.net
 import android.webkit.MimeTypeMap
 import com.pine.pinedroid.net.PineImageLocalCache.getFileExtensionFromUrl
 import com.pine.pinedroid.utils.appContext
+import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.logi
 import com.pine.pinedroid.utils.md5
 import kotlinx.coroutines.Dispatchers
@@ -130,6 +131,9 @@ suspend fun String.httpDownloadToLocalFile(): File {
         if (!cachedFile.exists()) {
             logi("Cache Image: $httpsUrl")
             httpDownload(httpsUrl, cachedFile)
+        }
+        else {
+            logd("Cache Hit: $httpsUrl")
         }
 
         // 返回 LocalImage

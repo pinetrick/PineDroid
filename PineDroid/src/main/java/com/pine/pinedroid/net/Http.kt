@@ -2,6 +2,7 @@ package com.pine.pinedroid.net
 
 import com.google.gson.reflect.TypeToken
 import com.pine.pinedroid.utils.gson
+import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.loge
 import com.pine.pinedroid.utils.log.logv
 import io.ktor.client.HttpClient
@@ -9,6 +10,7 @@ import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
@@ -23,6 +25,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.cio.writeChannel
+import io.ktor.utils.io.InternalAPI
 import io.ktor.utils.io.copyAndClose
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +35,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.File
+import java.util.HashMap
 
 val ktor by lazy {
     HttpClient(OkHttp) {
@@ -72,10 +76,13 @@ object BackgroundScope : CoroutineScope by CoroutineScope(Dispatchers.IO + Super
 
 suspend inline fun <reified T> httpGet(url: String, cacheImages: Boolean = false): T? = withContext(Dispatchers.IO) {
     try {
+        logv("HTTP Get", url)
         val result: String = ktor.get(httpRootUrl + url).body()
-        logv(result)
+        logv("Get Result", result)
+
         if (cacheImages) {
             BackgroundScope.launch {
+                logd("Json Request Cache Image", url)
                 PineImageLocalCache.fromJson(result)
             }
         }
@@ -91,21 +98,61 @@ suspend inline fun <reified T> httpGet(url: String, cacheImages: Boolean = false
     }
 }
 
+@OptIn(InternalAPI::class)
 suspend inline fun <reified T> httpPostJson(
     url: String,
     body: Any,
+    files: Map<String, String> = HashMap(), // key 是字段名, value 是本地文件路径
     cacheImages: Boolean = false
 ): T? = withContext(Dispatchers.IO) {
 
     var result: String = ""
     try {
-        val body = body as? String ?: gson.toJson(body)
-        logv(body)
+        logv("Http To", url)
+        logv("Http Body", body)
+        if (files.isNotEmpty()) logv("Http files", files)
+
+
         result = ktor.post(httpRootUrl + url) {
-            contentType(ContentType.Application.Json)
-            setBody(body) // 直接传对象，ktor 会转成 JSON
+            // 使用 multipart 格式
+            setBody(MultiPartFormDataContent(formData {
+                // 添加普通字段
+                body.let {
+                    val bodyJson = gson.toJson(body)
+                    val bodyMap = gson.fromJson<Map<String, Any>>(
+                        bodyJson,
+                        object : TypeToken<Map<String, Any>>() {}.type
+                    )
+                    bodyMap.forEach { (key, value) ->
+                        append(key, value.toString())
+                    }
+                }
+
+                // 添加文件
+                files.forEach { (fieldName, filePath) ->
+                    logd("appendFile", filePath)
+
+                    val file = File(filePath)
+                    if (file.exists()) {
+                        append(
+                            fieldName,
+                            file.readBytes(),
+                            Headers.build {
+                                append(
+                                    HttpHeaders.ContentDisposition,
+                                    "form-data; name=\"$fieldName\"; filename=\"${file.name}\""
+                                )
+
+                            }
+                        )
+                    } else {
+                        loge("File not found: $filePath")
+                    }
+                }
+            }))
         }.body()
-        logv(result)
+
+        logv("http result", result)
 
         if (cacheImages) {
             BackgroundScope.launch {
@@ -125,6 +172,7 @@ suspend inline fun <reified T> httpPostJson(
         null
     }
 }
+
 
 
 suspend inline fun <reified T> httpUploadFile(

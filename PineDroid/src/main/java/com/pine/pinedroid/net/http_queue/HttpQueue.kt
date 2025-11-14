@@ -1,5 +1,6 @@
 package com.pine.pinedroid.net.http_queue
 
+import com.google.gson.reflect.TypeToken
 import com.pine.pinedroid.db.model
 import com.pine.pinedroid.db.table
 import com.pine.pinedroid.net.httpGet
@@ -12,6 +13,7 @@ import com.pine.pinedroid.utils.log.logi
 import com.pine.pinedroid.utils.toast
 import kotlinx.coroutines.*
 import java.util.Date
+import java.util.HashMap
 import java.util.concurrent.atomic.AtomicBoolean
 
 fun asyncHttpGet(url: String) {
@@ -23,11 +25,12 @@ fun asyncHttpGet(url: String) {
     HttpQueue.i.tryStartProcessing()
 }
 
-fun asyncHttpPost(url: String, data: Any? = null) {
+fun asyncHttpPost(url: String, data: Any? = null, files: Map<String, String> = HashMap()) {
     PendingPostRequest(
         url = url,
         data = gson.toJson(data),
         is_post = true,
+        local_files = files,
     ).save()
     HttpQueue.i.tryStartProcessing()
 }
@@ -121,7 +124,8 @@ class HttpQueue private constructor() {
     private suspend fun handlePendingPostRequest(pendingPostRequest: PendingPostRequest) {
         try {
             val success = if (pendingPostRequest.is_post) {
-                val resp = httpPostJson<String>(pendingPostRequest.url, pendingPostRequest.data)
+                val map: Map<String, String> = gson.fromJson(pendingPostRequest.data, object : TypeToken<Map<String, String>>() {}.type)
+                val resp = httpPostJson<String>(pendingPostRequest.url, map, pendingPostRequest.local_files)
                 resp != null
             } else {
                 val resp = httpGet<String>(pendingPostRequest.url)

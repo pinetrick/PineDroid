@@ -43,12 +43,6 @@ class DbRecord(public var tableName: String, public var dbName: String) {
     private fun saveNew() {
         if (tableName.isBlank()) throw IllegalStateException("tableName 未设置")
 
-        val cols = kvs.keys.joinToString(", ")
-        val placeholders = kvs.keys.joinToString(", ") { "?" }
-        val args = kvs.values.toTypedArray()
-
-
-
         val id = dbConnection.insert(tableName, null, kvs)
         this["id"] = id
     }

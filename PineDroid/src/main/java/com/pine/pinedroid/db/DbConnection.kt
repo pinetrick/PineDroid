@@ -4,6 +4,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.pine.pinedroid.db.bean.TableInfo
 import com.pine.pinedroid.utils.appContext
+import com.pine.pinedroid.utils.gson
 import com.pine.pinedroid.utils.log.logv
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -58,6 +59,8 @@ class DbConnection private constructor(public var dbName: String) {
             when (value) {
                 null -> "NULL"
                 is Boolean -> if (value) "1" else "0"
+                is List<*> -> gson.toJson(value)
+                is Map<*, *> -> gson.toJson(value)
                 else -> value.toString()
             }
         }.toTypedArray()
@@ -79,7 +82,7 @@ class DbConnection private constructor(public var dbName: String) {
                     is Byte -> put(k, v)
                     is Short -> put(k, v)
                     is ByteArray -> put(k, v)
-                    else -> put(k, v.toString())
+                    else -> put(k, gson.toJson(v))
                 }
             }
         }

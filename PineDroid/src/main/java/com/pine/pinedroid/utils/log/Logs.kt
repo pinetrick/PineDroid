@@ -17,9 +17,44 @@ fun <T> log(key: String, content: T?, level: Int = Log.DEBUG) {
             is String, is Number, is Boolean -> content.toString()
             is Exception -> (content.cause?.toString() ?: content.toString()).also { content.printStackTrace()  }
             is ByteArray -> content.ToString()
-            is List<*> -> content.ToString(30)
-            is Map<*, *> -> content.ToString(30)
-            else -> gson.toJson(content)
+            is List<*> -> content.joinToString(limit = 30) { item ->
+                when (item) {
+                    null -> "null"
+                    is String, is Number, is Boolean -> item.toString()
+                    is Map<*, *> -> "Map(size=${item.size})"
+                    is List<*> -> "List(size=${item.size})"
+                    is ByteArray -> "ByteArray(size=${item.size})"
+                    else -> item::class.java.simpleName
+                }
+            }
+            is Map<*, *> -> content.entries.joinToString(limit = 30) { (key, value) ->
+                val keyStr = when (key) {
+                    null -> "null"
+                    is String, is Number, is Boolean -> key.toString()
+                    else -> key::class.java.simpleName
+                }
+                val valueStr = when (value) {
+                    null -> "null"
+                    is String, is Number, is Boolean -> value.toString()
+                    is Map<*, *> -> "Map(size=${value.size})"
+                    is List<*> -> "List(size=${value.size})"
+                    is ByteArray -> "ByteArray(size=${value.size})"
+                    else -> value::class.java.simpleName
+                }
+                "$keyStr: $valueStr"
+            }
+            is Class<*> -> "Class(${content.name})" // 专门处理 Class 类型
+            else -> {
+                // 安全地序列化，避免 Class 类型
+                try {
+                    gson.toJson(content)
+                } catch (e: UnsupportedOperationException) {
+                    // 如果序列化失败，返回类型信息
+                    "${content::class.java.name}: ${content.toString().take(100)}"
+                } catch (e: Exception) {
+                    "Serialization error: ${e.message}"
+                }
+            }
         }
     } catch (e: Exception) {
         e.toString()
