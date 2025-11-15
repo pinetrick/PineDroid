@@ -112,6 +112,27 @@ fun PineTopAppBar(
         scrollBehavior = scrollBehavior
     )
 
+
+
+
+
+@Preview
+@Composable
+fun Preview1(){
+    PineTopAppBar(
+        title = "步道挑战",
+        onReturn = {  },
+        actionIcon = "\uf021",
+        onAction = {  },
+    )
+}
+
+
+
+
+
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable

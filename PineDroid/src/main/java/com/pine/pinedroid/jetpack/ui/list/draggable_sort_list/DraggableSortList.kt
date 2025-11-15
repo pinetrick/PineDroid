@@ -9,11 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -64,135 +60,122 @@ fun <T> PineDraggableSortList(
     var dragItemIndex by remember { mutableIntStateOf(0) }
 
 
-    Box {
 
-        Column(modifier = modifier) {
-            val density = LocalDensity.current
-            var accumulatedOffset by remember { mutableFloatStateOf(0f) }
 
-            afterReorderItems.forEachIndexed { index, item ->
+    Column(modifier = modifier) {
+        val density = LocalDensity.current
+        var accumulatedOffset by remember { mutableFloatStateOf(0f) }
 
-                Box(
-                    modifier = Modifier
-                        .onGloballyPositioned { layoutCoordinates ->
-                            // 测量实际高度
-                            val heightInPx = layoutCoordinates.size.height.toFloat()
-                            val heightInDp = with(density) { heightInPx.toDp() }
-                            item.heightDp = heightInDp
-                            item.heightFloat = heightInPx
-                        }
-                        .offset {
-                            when {
-                                dragItemIndex == -1 -> IntOffset(0, 0)
-                                //向上移动 accumulatedOffset = -2
-                                index < dragItemIndex && accumulatedOffset < 0 && -accumulatedOffset > item.accumulatorHeightFromChoiceItem -> {
-                                    IntOffset(
-                                        0,
-                                        afterReorderItems[dragItemIndex].heightFloat.toInt()
-                                    )
-                                }
+        afterReorderItems.forEachIndexed { index, item ->
 
-                                //向下移动 accumulatedOffset = 2
-                                index > dragItemIndex && accumulatedOffset > 0 && accumulatedOffset > item.accumulatorHeightFromChoiceItem -> {
-                                    IntOffset(
-                                        0,
-                                        -afterReorderItems[dragItemIndex].heightFloat.toInt()
-                                    )
-                                }
-
-                                index == dragItemIndex ->
-                                    IntOffset(0, accumulatedOffset.roundToInt())
-
-                                else -> IntOffset(0, 0)
+            Box(
+                modifier = Modifier
+                    .onGloballyPositioned { layoutCoordinates ->
+                        // 测量实际高度
+                        val heightInPx = layoutCoordinates.size.height.toFloat()
+                        val heightInDp = with(density) { heightInPx.toDp() }
+                        item.heightDp = heightInDp
+                        item.heightFloat = heightInPx
+                    }
+                    .offset {
+                        when {
+                            dragItemIndex == -1 -> IntOffset(0, 0)
+                            //向上移动 accumulatedOffset = -2
+                            index < dragItemIndex && accumulatedOffset < 0 && -accumulatedOffset > item.accumulatorHeightFromChoiceItem -> {
+                                IntOffset(
+                                    0,
+                                    afterReorderItems[dragItemIndex].heightFloat.toInt()
+                                )
                             }
-                        }
-                        .pointerInput(onItemDragged != null, index, items.size) {
-                            if (onItemDragged == null) return@pointerInput
 
-                            detectDragGesturesAfterLongPress(
-                                onDragStart = {
-                                    item.isDragging = true
-                                    dragItemIndex = index
-                                    accumulatedOffset = 0f
+                            //向下移动 accumulatedOffset = 2
+                            index > dragItemIndex && accumulatedOffset > 0 && accumulatedOffset > item.accumulatorHeightFromChoiceItem -> {
+                                IntOffset(
+                                    0,
+                                    -afterReorderItems[dragItemIndex].heightFloat.toInt()
+                                )
+                            }
 
-                                    var totalHeight = item.heightFloat * 0.6f
-                                    (index - 1 downTo 0).forEach {
-                                        afterReorderItems[it].accumulatorHeightFromChoiceItem =
-                                            totalHeight
-                                        totalHeight += afterReorderItems[it].heightFloat
-                                    }
+                            index == dragItemIndex ->
+                                IntOffset(0, accumulatedOffset.roundToInt())
 
-                                    totalHeight = item.heightFloat * 0.6f
-                                    (index + 1..<afterReorderItems.size).forEach {
-                                        afterReorderItems[it].accumulatorHeightFromChoiceItem =
-                                            totalHeight
-                                        totalHeight += afterReorderItems[it].heightFloat
-                                    }
-
-                                },
-                                onDrag = { change, dragAmount ->
-                                    change.consume()
-                                    // 更新拖拽偏移量
-                                    accumulatedOffset += dragAmount.y
-                                },
-                                onDragEnd = {
-                                    item.isDragging = false
-                                    var destLocation = dragItemIndex
-                                    if (accumulatedOffset < 0) {
-                                        (index - 1 downTo 0).forEach {
-                                            if (afterReorderItems[it].accumulatorHeightFromChoiceItem < -accumulatedOffset)
-                                                destLocation = it
-                                        }
-                                    }
-
-                                    if (accumulatedOffset > 0) {
-                                        (index + 1..<afterReorderItems.size).forEach {
-                                            if (afterReorderItems[it].accumulatorHeightFromChoiceItem < accumulatedOffset)
-                                                destLocation = it
-                                        }
-                                    }
-
-
-
-                                    onItemDragged(dragItemIndex, destLocation)
-                                    logd("$dragItemIndex, $destLocation")
-                                    dragItemIndex = -1
-
-                                }
-
-                            )
-                        }
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .alpha(if (item.isDragging) 0.5f else 1f)
-                    ) {
-                        content(item.itemT)
-
-                        // 拖拽手柄 - 添加右边距
-                        if (onItemDragged != null) {
-                            Icon(
-                                imageVector = Icons.Default.DragHandle,
-                                contentDescription = "拖拽排序",
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier
-                                    .align(Alignment.CenterEnd)
-                                    .padding(end = 16.dp)
-                                    .size(24.dp)
-                            )
+                            else -> IntOffset(0, 0)
                         }
                     }
+                    .pointerInput(onItemDragged != null, index, items.size) {
+                        if (onItemDragged == null) return@pointerInput
+
+                        detectDragGesturesAfterLongPress(
+                            onDragStart = {
+                                item.isDragging = true
+                                dragItemIndex = index
+                                accumulatedOffset = 0f
+
+                                var totalHeight = item.heightFloat * 0.6f
+                                (index - 1 downTo 0).forEach {
+                                    afterReorderItems[it].accumulatorHeightFromChoiceItem =
+                                        totalHeight
+                                    totalHeight += afterReorderItems[it].heightFloat
+                                }
+
+                                totalHeight = item.heightFloat * 0.6f
+                                (index + 1..<afterReorderItems.size).forEach {
+                                    afterReorderItems[it].accumulatorHeightFromChoiceItem =
+                                        totalHeight
+                                    totalHeight += afterReorderItems[it].heightFloat
+                                }
+
+                            },
+                            onDrag = { change, dragAmount ->
+                                change.consume()
+                                // 更新拖拽偏移量
+                                accumulatedOffset += dragAmount.y
+                            },
+                            onDragEnd = {
+                                item.isDragging = false
+                                var destLocation = dragItemIndex
+                                if (accumulatedOffset < 0) {
+                                    (index - 1 downTo 0).forEach {
+                                        if (afterReorderItems[it].accumulatorHeightFromChoiceItem < -accumulatedOffset)
+                                            destLocation = it
+                                    }
+                                }
+
+                                if (accumulatedOffset > 0) {
+                                    (index + 1..<afterReorderItems.size).forEach {
+                                        if (afterReorderItems[it].accumulatorHeightFromChoiceItem < accumulatedOffset)
+                                            destLocation = it
+                                    }
+                                }
+
+
+
+                                onItemDragged(dragItemIndex, destLocation)
+                                logd("$dragItemIndex, $destLocation")
+                                dragItemIndex = -1
+
+                            }
+
+                        )
+                    }
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .alpha(if (item.isDragging) 0.5f else 1f)
+                ) {
+                    content(item.itemT)
                 }
+            }
 
 
 
-                if (index < items.lastIndex) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
+            if (index < items.lastIndex) {
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
+
 }
 
 // Preview - 基础版本
