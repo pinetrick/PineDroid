@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -31,7 +32,17 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import kotlin.math.roundToInt
+
+data class DraggableSortListBean<T>(
+    var itemT: T,
+    var heightDp: Dp,
+    var heightFloat: Float,
+    var isDragging: Boolean = false,
+    var accumulatorHeightFromChoiceItem: Float = 0f,
+)
 
 @Composable
 fun <T> PineDraggableSortList(
@@ -40,307 +51,135 @@ fun <T> PineDraggableSortList(
     onItemDragged: ((from: Int, to: Int) -> Unit)? = null,
     content: @Composable (T) -> Unit
 ) {
-    var draggedIndex by remember { mutableIntStateOf(-1) }
+    var afterReorderItems by remember {
+        mutableStateOf(emptyList<DraggableSortListBean<T>>())
+    }
+
+
+
+    LaunchedEffect(items) {
+        afterReorderItems = items.map {
+            DraggableSortListBean(it, Dp(0f), 0f)
+        }
+    }
+    var dragItemIndex by remember { mutableIntStateOf(0) }
+
+
     var dragOffset by remember { mutableFloatStateOf(0f) }
-    var targetIndex by remember { mutableIntStateOf(-1) } // 目标位置
-    val itemHeights = remember { mutableMapOf<Int, Dp>() }
+
+
     var pendingMove: Pair<Int, Int>? by remember { mutableStateOf(null) } // 待处理的移动
 
-    Column(modifier = modifier) {
-        items.forEachIndexed { index, item ->
-            val isDragged = draggedIndex == index
-            val isTargetPosition = targetIndex == index && !isDragged
+    Box {
 
-            DraggableItem(
-                index = index,
-                total = items.size,
-                isDraggable = onItemDragged != null,
-                isDragged = isDragged,
-                isTargetPosition = isTargetPosition,
-                dragOffset = if (isDragged) dragOffset else 0f,
-                itemHeights = itemHeights,
-                onHeightMeasured = { height -> itemHeights[index] = height },
-                onDragStart = {
-                    draggedIndex = index
-                    targetIndex = -1
-                    dragOffset = 0f
-                    pendingMove = null
-                },
-                onDrag = { offset ->
-                    dragOffset = offset
-                },
-                onDragEnd = {
-                    // 拖拽结束时执行回调
-                    pendingMove?.let { (from, to) ->
-                        onItemDragged?.invoke(from, to)
-                    }
-                    draggedIndex = -1
-                    targetIndex = -1
-                    dragOffset = 0f
-                    pendingMove = null
-                },
-                onPositionChange = { from, to ->
-                    // 只在内部记录位置变化，不立即回调
-                    targetIndex = to
-                    pendingMove = from to to
-                }
-            ) {
+        Column(modifier = modifier) {
+            val density = LocalDensity.current
+            var accumulatedOffset by remember { mutableFloatStateOf(0f) }
+
+            afterReorderItems.forEachIndexed { index, item ->
+
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .alpha(if (isDragged) 0.5f else 1f)
-                ) {
-                    content(item)
+                        .onGloballyPositioned { layoutCoordinates ->
+                            // 测量实际高度
+                            val heightInPx = layoutCoordinates.size.height.toFloat()
+                            val heightInDp = with(density) { heightInPx.toDp() }
+                            item.heightDp = heightInDp
+                            item.heightFloat = heightInPx
+                        }
+                        .offset {
+                            when {
+                                //向上移动 accumulatedOffset = -2
+                                index < dragItemIndex && accumulatedOffset < 0 && -accumulatedOffset > item.accumulatorHeightFromChoiceItem -> {
+                                    IntOffset(
+                                        0,
+                                        afterReorderItems[dragItemIndex].heightFloat.toInt()
+                                    )
+                                }
 
-                    // 拖拽手柄 - 添加右边距
-                    if (onItemDragged != null) {
-                        Icon(
-                            imageVector = Icons.Default.DragHandle,
-                            contentDescription = "拖拽排序",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier
-                                .align(Alignment.CenterEnd)
-                                .padding(end = 16.dp)
-                                .size(24.dp)
-                        )
+                                //向下移动 accumulatedOffset = 2
+                                index > dragItemIndex && accumulatedOffset > 0 && accumulatedOffset > item.accumulatorHeightFromChoiceItem -> {
+                                    IntOffset(
+                                        0,
+                                        -afterReorderItems[dragItemIndex].heightFloat.toInt()
+                                    )
+                                }
+
+                                index == dragItemIndex ->
+                                    IntOffset(0, accumulatedOffset.roundToInt())
+
+                                else -> IntOffset(0, 0)
+                            }
+                        }
+                        .pointerInput(onItemDragged != null, index, items.size) {
+                            if (onItemDragged == null) return@pointerInput
+
+                            detectDragGesturesAfterLongPress(
+                                onDragStart = {
+                                    item.isDragging = true
+                                    dragItemIndex = index
+                                    accumulatedOffset = 0f
+
+                                    var totalHeight = item.heightFloat * 0.6f
+                                    (index - 1 downTo 0).forEach {
+                                        afterReorderItems[it].accumulatorHeightFromChoiceItem = totalHeight
+                                        totalHeight += afterReorderItems[it].heightFloat
+                                    }
+
+                                    totalHeight = item.heightFloat * 0.6f
+                                    (index + 1..< afterReorderItems.size).forEach {
+                                        afterReorderItems[it].accumulatorHeightFromChoiceItem = totalHeight
+                                        totalHeight += afterReorderItems[it].heightFloat
+                                    }
+
+                                },
+                                onDrag = { change, dragAmount ->
+                                    change.consume()
+                                    // 更新拖拽偏移量
+                                    accumulatedOffset += dragAmount.y
+                                },
+                                onDragEnd = {
+//                                    // 拖拽结束时执行回调
+//                                    pendingMove?.let { (from, to) ->
+//                                        onItemDragged.invoke(from, to)
+//                                    }
+//                                    draggedIndex = -1
+//                                    dragOffset = 0f
+//                                    pendingMove = null
+//                                    accumulatedOffset = 0f
+                                },
+
+                                )
+                        }
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .alpha(if (item.isDragging) 0.5f else 1f)
+                    ) {
+                        content(item.itemT)
+
+                        // 拖拽手柄 - 添加右边距
+                        if (onItemDragged != null) {
+                            Icon(
+                                imageVector = Icons.Default.DragHandle,
+                                contentDescription = "拖拽排序",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier
+                                    .align(Alignment.CenterEnd)
+                                    .padding(end = 16.dp)
+                                    .size(24.dp)
+                            )
+                        }
                     }
                 }
+
+
+
+                if (index < items.lastIndex) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
-
-            if (index < items.lastIndex) {
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-        }
-    }
-}
-
-@Composable
-fun DraggableItem(
-    index: Int,
-    total: Int,
-    isDraggable: Boolean,
-    isDragged: Boolean,
-    isTargetPosition: Boolean,
-    dragOffset: Float,
-    itemHeights: Map<Int, Dp>,
-    onHeightMeasured: (Dp) -> Unit,
-    onDragStart: (Int) -> Unit,
-    onDrag: (Float) -> Unit,
-    onDragEnd: () -> Unit,
-    onPositionChange: (from: Int, to: Int) -> Unit,
-    content: @Composable () -> Unit,
-) {
-    val density = LocalDensity.current
-    var accumulatedOffset by remember { mutableFloatStateOf(0f) }
-
-    Box(
-        modifier = Modifier
-            .onGloballyPositioned { layoutCoordinates ->
-                // 测量实际高度
-                val heightInPx = layoutCoordinates.size.height.toFloat()
-                val heightInDp = with(density) { heightInPx.toDp() }
-                onHeightMeasured(heightInDp)
-            }
-            .offset(y = with(density) { dragOffset.toDp() })
-            .pointerInput(isDraggable, itemHeights, index, total) {
-                if (!isDraggable) return@pointerInput
-
-                detectDragGesturesAfterLongPress(
-                    onDragStart = {
-                        onDragStart(index)
-                        accumulatedOffset = 0f
-                    },
-                    onDrag = { change, dragAmount ->
-                        change.consume()
-
-                        // 更新拖拽偏移量
-                        accumulatedOffset += dragAmount.y
-                        onDrag(accumulatedOffset)
-
-                        // 计算位置交换
-                        val currentOffsetPx = accumulatedOffset
-                        val direction = if (currentOffsetPx > 0) 1 else -1
-                        val absOffset = Math.abs(currentOffsetPx)
-
-                        // 获取当前item的高度
-                        val currentHeight = itemHeights[index] ?: return@detectDragGesturesAfterLongPress
-                        val currentHeightPx = with(density) { currentHeight.toPx() }
-
-                        // 计算需要移动的阈值（当前item高度的60%）
-                        val threshold = currentHeightPx * 0.6f
-
-                        if (absOffset > threshold) {
-                            val newIndex = (index + direction).coerceIn(0, total - 1)
-                            if (newIndex != index) {
-                                onPositionChange(index, newIndex)
-                                // 重置累积偏移量，因为位置已经交换
-                                accumulatedOffset = 0f
-                                onDrag(0f)
-                            }
-                        }
-                    },
-                    onDragEnd = {
-                        onDragEnd()
-                        accumulatedOffset = 0f
-                    },
-                    onDragCancel = {
-                        onDragEnd()
-                        accumulatedOffset = 0f
-                    }
-                )
-            }
-    ) {
-        content()
-    }
-}
-
-// 使用外部状态管理的版本 - 在拖拽过程中实时更新UI
-@Composable
-fun <T> DraggableSortListWithState(
-    modifier: Modifier = Modifier,
-    items: List<T>,
-    onItemsReorder: (List<T>) -> Unit,
-    content: @Composable (T) -> Unit
-) {
-    var draggedIndex by remember { mutableIntStateOf(-1) }
-    var dragOffset by remember { mutableFloatStateOf(0f) }
-    var currentItems by remember { mutableStateOf(items) }
-    val itemHeights = remember { mutableMapOf<Int, Dp>() }
-
-    Column(modifier = modifier) {
-        currentItems.forEachIndexed { index, item ->
-            val isDragged = draggedIndex == index
-
-            DraggableItemWithState(
-                index = index,
-                item = item,
-                total = currentItems.size,
-                isDragged = isDragged,
-                dragOffset = if (isDragged) dragOffset else 0f,
-                itemHeights = itemHeights,
-                onHeightMeasured = { height -> itemHeights[index] = height },
-                onDragStart = {
-                    draggedIndex = index
-                    dragOffset = 0f
-                },
-                onDrag = { offset ->
-                    dragOffset = offset
-                },
-                onDragEnd = {
-                    // 拖拽结束时执行回调
-                    onItemsReorder(currentItems)
-                    draggedIndex = -1
-                    dragOffset = 0f
-                },
-                onPositionChange = { from, to ->
-                    // 实时更新UI显示
-                    val newItems = currentItems.toMutableList()
-                    val movedItem = newItems.removeAt(from)
-                    newItems.add(to, movedItem)
-                    currentItems = newItems
-                    // 更新拖拽索引到新位置
-                    draggedIndex = to
-                },
-                content = content
-            )
-
-            if (index < currentItems.lastIndex) {
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-        }
-    }
-}
-
-@Composable
-fun <T> DraggableItemWithState(
-    index: Int,
-    item: T,
-    total: Int,
-    isDragged: Boolean,
-    dragOffset: Float,
-    itemHeights: Map<Int, Dp>,
-    onHeightMeasured: (Dp) -> Unit,
-    onDragStart: (Int) -> Unit,
-    onDrag: (Float) -> Unit,
-    onDragEnd: () -> Unit,
-    onPositionChange: (from: Int, to: Int) -> Unit,
-    content: @Composable (T) -> Unit,
-) {
-    val density = LocalDensity.current
-    var accumulatedOffset by remember { mutableFloatStateOf(0f) }
-
-    Box(
-        modifier = Modifier
-            .onGloballyPositioned { layoutCoordinates ->
-                // 测量实际高度
-                val heightInPx = layoutCoordinates.size.height.toFloat()
-                val heightInDp = with(density) { heightInPx.toDp() }
-                onHeightMeasured(heightInDp)
-            }
-            .offset(y = with(density) { dragOffset.toDp() })
-            .pointerInput(itemHeights, index, total) {
-                detectDragGesturesAfterLongPress(
-                    onDragStart = {
-                        onDragStart(index)
-                        accumulatedOffset = 0f
-                    },
-                    onDrag = { change, dragAmount ->
-                        change.consume()
-
-                        // 更新拖拽偏移量
-                        accumulatedOffset += dragAmount.y
-                        onDrag(accumulatedOffset)
-
-                        // 计算位置交换
-                        val currentOffsetPx = accumulatedOffset
-                        val direction = if (currentOffsetPx > 0) 1 else -1
-                        val absOffset = Math.abs(currentOffsetPx)
-
-                        // 获取当前item的高度
-                        val currentHeight = itemHeights[index] ?: return@detectDragGesturesAfterLongPress
-                        val currentHeightPx = with(density) { currentHeight.toPx() }
-
-                        // 计算需要移动的阈值
-                        val threshold = currentHeightPx * 0.6f
-
-                        if (absOffset > threshold) {
-                            val newIndex = (index + direction).coerceIn(0, total - 1)
-                            if (newIndex != index) {
-                                onPositionChange(index, newIndex)
-                                // 重置累积偏移量
-                                accumulatedOffset = 0f
-                                onDrag(0f)
-                            }
-                        }
-                    },
-                    onDragEnd = {
-                        onDragEnd()
-                        accumulatedOffset = 0f
-                    },
-                    onDragCancel = {
-                        onDragEnd()
-                        accumulatedOffset = 0f
-                    }
-                )
-            }
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .alpha(if (isDragged) 0.5f else 1f)
-        ) {
-            content(item)
-
-            // 拖拽手柄
-            Icon(
-                imageVector = Icons.Default.DragHandle,
-                contentDescription = "拖拽排序",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(end = 16.dp)
-                    .size(24.dp)
-            )
         }
     }
 }
@@ -388,57 +227,6 @@ fun PineDraggableSortListPreview() {
                     }
                 }
             }
-        }
-    }
-}
-
-// 使用外部状态管理的Preview - 推荐使用这种方式
-@Preview(
-    showBackground = true,
-    widthDp = 360,
-    heightDp = 800
-)
-@Composable
-fun DraggableSortListWithStatePreview() {
-    MaterialTheme {
-        var items by remember { mutableStateOf(listOf("第一项", "第二项", "第三项", "第四项", "第五项")) }
-
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "实时更新的拖拽排序",
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
-            DraggableSortListWithState(
-                items = items,
-                onItemsReorder = { newItems ->
-                    items = newItems
-                    println("新顺序: $newItems")
-                }
-            ) { item ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(70.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        contentAlignment = Alignment.CenterStart
-                    ) {
-                        Text(text = item)
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "当前顺序: ${items.joinToString()}",
-                style = MaterialTheme.typography.bodySmall
-            )
         }
     }
 }

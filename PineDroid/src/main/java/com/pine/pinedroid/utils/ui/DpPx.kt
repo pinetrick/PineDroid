@@ -8,4 +8,6 @@ fun Int.dp2Px(): Int = this.toFloat().dp2Px()
 
 fun Dp.dp2Px(): Int = this.value.dp2Px()
 
-fun Int.px2Dp(): Float = this / ScreenUtil.getDensity()
+fun Int.px2Dp(): Dp = Dp(this / ScreenUtil.getDensity())
+
+fun Float.px2Dp(): Dp = Dp(this / ScreenUtil.getDensity())

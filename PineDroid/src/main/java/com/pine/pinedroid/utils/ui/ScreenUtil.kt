@@ -51,7 +51,7 @@ object ScreenUtil {
     }
 
     fun getStatusBarHeightDp(): Float {
-        return getStatusBarHeightPx().px2Dp()
+        return getStatusBarHeightPx().px2Dp().value
     }
 
     fun getScreenWidthPx(): Int {
