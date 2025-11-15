@@ -19,6 +19,9 @@ class DbRecord(public var tableName: String, public var dbName: String) {
             if (value0 is Date) {
                 value0 = value.time
             }
+            else if (value0 is List<*> || value0 is Map<*, *>) {
+                value0 = gson.toJson(value0)
+            }
             kvs[column] = value0
             dirtyKeys.add(column) // 自动防重复
         }

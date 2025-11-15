@@ -5,12 +5,13 @@ import com.pine.pinedroid.db.model
 import com.pine.pinedroid.db.table
 import com.pine.pinedroid.net.httpGet
 import com.pine.pinedroid.net.httpPostJson
+import com.pine.pinedroid.net.http_queue.PineHttpQueue.Companion.autoUploadAfterAdd
 import com.pine.pinedroid.net.http_queue.bean.PendingPostRequest
+import com.pine.pinedroid.utils.debugToast
 import com.pine.pinedroid.utils.gson
 import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.loge
 import com.pine.pinedroid.utils.log.logi
-import com.pine.pinedroid.utils.toast
 import kotlinx.coroutines.*
 import java.util.Date
 import java.util.HashMap
@@ -19,23 +20,27 @@ import java.util.concurrent.atomic.AtomicBoolean
 fun asyncHttpGet(url: String) {
     PendingPostRequest(
         url = url,
-        data = "",
+        data = emptyMap(),
         is_post = false,
     ).save()
-    HttpQueue.i.tryStartProcessing()
+    if (autoUploadAfterAdd) {
+        PineHttpQueue.i.tryStartProcessing()
+    }
 }
 
-fun asyncHttpPost(url: String, data: Any? = null, files: Map<String, String> = HashMap()) {
+fun asyncHttpPost(url: String, data: Map<String, String> = HashMap(), files: Map<String, String> = HashMap()) {
     PendingPostRequest(
         url = url,
-        data = gson.toJson(data),
+        data = data,
         is_post = true,
         local_files = files,
     ).save()
-    HttpQueue.i.tryStartProcessing()
+    if (autoUploadAfterAdd) {
+        PineHttpQueue.i.tryStartProcessing()
+    }
 }
 
-class HttpQueue private constructor() {
+class PineHttpQueue private constructor() {
 
     private var processingJob: Job? = null
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -49,7 +54,7 @@ class HttpQueue private constructor() {
     /**
      * 尝试启动队列处理（按需启动）
      */
-    internal fun tryStartProcessing() {
+    fun tryStartProcessing() {
         synchronized(processingLock) {
             if (isProcessing.get() && processingJob?.isActive == true) {
                 return
@@ -88,7 +93,11 @@ class HttpQueue private constructor() {
                     delay(60_000) // 出错时等待1分钟
                 }
             }
+
+
             logi("上传队列处理结束")
+
+            debugToast("队列处理成功")
 
 
         }
@@ -123,11 +132,10 @@ class HttpQueue private constructor() {
         } while (true)
     }
 
-    private suspend fun handlePendingPostRequest(pendingPostRequest: PendingPostRequest) {
+    suspend fun handlePendingPostRequest(pendingPostRequest: PendingPostRequest) {
         try {
             val success = if (pendingPostRequest.is_post) {
-                val map: Map<String, String> = gson.fromJson(pendingPostRequest.data, object : TypeToken<Map<String, String>>() {}.type)
-                val resp = httpPostJson<String>(pendingPostRequest.url, map, pendingPostRequest.local_files)
+                val resp = httpPostJson<String>(pendingPostRequest.url, pendingPostRequest.data, pendingPostRequest.local_files)
                 resp != null
             } else {
                 val resp = httpGet<String>(pendingPostRequest.url)
@@ -271,7 +279,7 @@ class HttpQueue private constructor() {
 
     companion object {
         private const val MAX_RETRY_COUNT = 10 // 最大重试次数
-
-        val i by lazy { HttpQueue() }
+        var autoUploadAfterAdd = true // 是否自动上传
+        val i by lazy { PineHttpQueue() }
     }
 }

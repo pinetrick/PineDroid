@@ -7,6 +7,7 @@ import android.provider.Settings
 import android.view.View
 import androidx.core.net.toUri
 import com.pine.pinedroid.activity.PineDroidActivity
+import com.pine.pinedroid.debug.http_queue.UploadQueueActivity
 import com.pine.pinedroid.debug.task_manager.TaskManagerActivity
 import com.pine.pinedroid.file.DataCleanManager
 import com.pine.pinedroid.ui.float_window.FloatingWindowHelper
@@ -52,6 +53,11 @@ object FunctionWindowController {
                    // PineDebugWindow.addButton("Files", "\uf15b", ::openDbEditor)
                     PineDebugWindow.addButton("Task Manager", "\uf0ae") {
                         intent(TaskManagerActivity::class)
+                        closeFloatWindow()
+                    }
+
+                    PineDebugWindow.addButton("Upload Queue", "\uf0ee") {
+                        intent(UploadQueueActivity::class)
                         closeFloatWindow()
                     }
                 }

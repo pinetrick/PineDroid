@@ -6,7 +6,7 @@ import java.util.Date
 data class PendingPostRequest (
     override var id: Long? = null,
     var url: String,
-    var data: String,
+    var data: Map<String, Any> = HashMap(),
     var is_post: Boolean = false,
     var next_time: Date = Date(),
     var local_files: Map<String, String> = HashMap(),

@@ -99,7 +99,8 @@ class PineLocationForegroundService : Service() {
                 10000L // 间隔时间10秒
             ).apply {
                 setMinUpdateIntervalMillis(5000L) // 最快间隔5秒
-                setMinUpdateDistanceMeters(1f) // 即使没动也触发
+                setMinUpdateDistanceMeters(0f) // 即使没动也触发
+                //setMinUpdateDistanceMeters(1f)
             }.build()
         } else {
             // 兼容旧版本的方式

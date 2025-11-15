@@ -139,7 +139,8 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
                 try {
                     gson.fromJson<Map<String, Any>>(value.toString(), object : TypeToken<Map<String, Any>>() {}.type)
                 } catch (e: Exception) {
-                    loge("Map conversion failed: ${e.message}")
+                    loge("DatabaseConvert1", value)
+                    loge("DatabaseConvert1", "Map conversion failed: ${e.message}")
                     emptyMap<String, Any>()
                 }
             }
@@ -147,7 +148,7 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
                 try {
                     gson.fromJson<List<Any>>(value.toString(), object : TypeToken<List<Any>>() {}.type)
                 } catch (e: Exception) {
-                    loge("List conversion failed: ${e.message}")
+                    loge("DatabaseConvert2", "List conversion failed: ${e.message}")
                     emptyList<Any>()
                 }
             }

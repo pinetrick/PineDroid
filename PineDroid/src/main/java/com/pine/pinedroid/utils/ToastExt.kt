@@ -3,6 +3,13 @@ package com.pine.pinedroid.utils
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import com.pine.pinedroid.PineConfig
+
+fun debugToast(message: String) {
+    if (PineConfig.getIsDebug()) {
+        toast(message)
+    }
+}
 
 fun toast(message: String) {
     if (Looper.myLooper() == Looper.getMainLooper()) {
