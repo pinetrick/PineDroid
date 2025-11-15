@@ -54,14 +54,15 @@ class PineHttpQueue private constructor() {
     /**
      * 尝试启动队列处理（按需启动）
      */
-    fun tryStartProcessing() {
+    fun tryStartProcessing(): Boolean {
         synchronized(processingLock) {
             if (isProcessing.get() && processingJob?.isActive == true) {
-                return
+                return false
             }
 
             isProcessing.set(true)
             startQueueProcessing()
+            return true
         }
     }
 
