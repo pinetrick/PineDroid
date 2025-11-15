@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.pine.pinedroid.utils.log.logd
 import kotlin.math.roundToInt
 
 data class DraggableSortListBean<T>(
@@ -55,8 +56,6 @@ fun <T> PineDraggableSortList(
         mutableStateOf(emptyList<DraggableSortListBean<T>>())
     }
 
-
-
     LaunchedEffect(items) {
         afterReorderItems = items.map {
             DraggableSortListBean(it, Dp(0f), 0f)
@@ -64,11 +63,6 @@ fun <T> PineDraggableSortList(
     }
     var dragItemIndex by remember { mutableIntStateOf(0) }
 
-
-    var dragOffset by remember { mutableFloatStateOf(0f) }
-
-
-    var pendingMove: Pair<Int, Int>? by remember { mutableStateOf(null) } // 待处理的移动
 
     Box {
 
@@ -89,6 +83,7 @@ fun <T> PineDraggableSortList(
                         }
                         .offset {
                             when {
+                                dragItemIndex == -1 -> IntOffset(0, 0)
                                 //向上移动 accumulatedOffset = -2
                                 index < dragItemIndex && accumulatedOffset < 0 && -accumulatedOffset > item.accumulatorHeightFromChoiceItem -> {
                                     IntOffset(
@@ -122,13 +117,15 @@ fun <T> PineDraggableSortList(
 
                                     var totalHeight = item.heightFloat * 0.6f
                                     (index - 1 downTo 0).forEach {
-                                        afterReorderItems[it].accumulatorHeightFromChoiceItem = totalHeight
+                                        afterReorderItems[it].accumulatorHeightFromChoiceItem =
+                                            totalHeight
                                         totalHeight += afterReorderItems[it].heightFloat
                                     }
 
                                     totalHeight = item.heightFloat * 0.6f
-                                    (index + 1..< afterReorderItems.size).forEach {
-                                        afterReorderItems[it].accumulatorHeightFromChoiceItem = totalHeight
+                                    (index + 1..<afterReorderItems.size).forEach {
+                                        afterReorderItems[it].accumulatorHeightFromChoiceItem =
+                                            totalHeight
                                         totalHeight += afterReorderItems[it].heightFloat
                                     }
 
@@ -139,17 +136,31 @@ fun <T> PineDraggableSortList(
                                     accumulatedOffset += dragAmount.y
                                 },
                                 onDragEnd = {
-//                                    // 拖拽结束时执行回调
-//                                    pendingMove?.let { (from, to) ->
-//                                        onItemDragged.invoke(from, to)
-//                                    }
-//                                    draggedIndex = -1
-//                                    dragOffset = 0f
-//                                    pendingMove = null
-//                                    accumulatedOffset = 0f
-                                },
+                                    item.isDragging = false
+                                    var destLocation = dragItemIndex
+                                    if (accumulatedOffset < 0) {
+                                        (index - 1 downTo 0).forEach {
+                                            if (afterReorderItems[it].accumulatorHeightFromChoiceItem < -accumulatedOffset)
+                                                destLocation = it
+                                        }
+                                    }
 
-                                )
+                                    if (accumulatedOffset > 0) {
+                                        (index + 1..<afterReorderItems.size).forEach {
+                                            if (afterReorderItems[it].accumulatorHeightFromChoiceItem < accumulatedOffset)
+                                                destLocation = it
+                                        }
+                                    }
+
+
+
+                                    onItemDragged(dragItemIndex, destLocation)
+                                    logd("$dragItemIndex, $destLocation")
+                                    dragItemIndex = -1
+
+                                }
+
+                            )
                         }
                 ) {
                     Box(
