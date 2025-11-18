@@ -1,6 +1,5 @@
 package com.pine.pinedroid.net.http_queue
 
-import com.google.gson.reflect.TypeToken
 import com.pine.pinedroid.db.model
 import com.pine.pinedroid.db.table
 import com.pine.pinedroid.net.httpGet
@@ -8,7 +7,6 @@ import com.pine.pinedroid.net.httpPostJson
 import com.pine.pinedroid.net.http_queue.PineHttpQueue.Companion.autoUploadAfterAdd
 import com.pine.pinedroid.net.http_queue.bean.PendingPostRequest
 import com.pine.pinedroid.utils.debugToast
-import com.pine.pinedroid.utils.gson
 import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.loge
 import com.pine.pinedroid.utils.log.logi
@@ -18,6 +16,7 @@ import java.util.HashMap
 import java.util.concurrent.atomic.AtomicBoolean
 
 fun asyncHttpGet(url: String) {
+    logi("http", "异步GET请求添加：$url")
     PendingPostRequest(
         url = url,
         data = emptyMap(),
@@ -29,6 +28,7 @@ fun asyncHttpGet(url: String) {
 }
 
 fun asyncHttpPost(url: String, data: Map<String, String> = HashMap(), files: Map<String, String> = HashMap()) {
+    logi("http", "异步POST请求添加：$url")
     PendingPostRequest(
         url = url,
         data = data,
@@ -96,7 +96,7 @@ class PineHttpQueue private constructor() {
             }
 
 
-            logi("上传队列处理结束")
+            logi("queue", "上传队列处理结束")
 
             debugToast("队列处理成功")
 
@@ -124,7 +124,7 @@ class PineHttpQueue private constructor() {
                 return hasMore
             }
 
-            handlePendingPostRequest(pendingPostRequest)
+            handlePendingRequest(pendingPostRequest)
             hasMore = true
 
             // 短暂延迟，避免过于密集的处理
@@ -133,17 +133,19 @@ class PineHttpQueue private constructor() {
         } while (true)
     }
 
-    suspend fun handlePendingPostRequest(pendingPostRequest: PendingPostRequest) {
+    suspend fun handlePendingRequest(pendingPostRequest: PendingPostRequest) {
         try {
-            val success = if (pendingPostRequest.is_post) {
-                val resp = httpPostJson<String>(pendingPostRequest.url, pendingPostRequest.data, pendingPostRequest.local_files)
-                resp != null
+            logi("http", "异步请求 ${pendingPostRequest.url}")
+
+            val resp = if (pendingPostRequest.is_post) {
+                httpPostJson<String>(pendingPostRequest.url, pendingPostRequest.data, pendingPostRequest.local_files)
             } else {
-                val resp = httpGet<String>(pendingPostRequest.url)
-                resp != null
+                httpGet<String>(pendingPostRequest.url)
             }
 
-            if (success) {
+            logi("http", resp)
+
+            if (resp != null) {
                 pendingPostRequest.delete()
                 logd("Successfully processed request for URL: ${pendingPostRequest.url}")
             } else {

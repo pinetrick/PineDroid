@@ -133,7 +133,7 @@ suspend fun String.httpDownloadToLocalFile(): File {
             httpDownload(httpsUrl, cachedFile)
         }
         else {
-            logd("Cache Hit: $httpsUrl")
+            //logd("Cache Hit: $httpsUrl")
         }
 
         // 返回 LocalImage

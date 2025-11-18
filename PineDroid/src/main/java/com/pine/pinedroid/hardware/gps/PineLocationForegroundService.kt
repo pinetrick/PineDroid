@@ -201,5 +201,13 @@ class PineLocationForegroundService : Service() {
             callbackFunctionList.add(WeakReference(onSuccess))
             startService()
         }
+
+        /**
+         * 请注意 这个是弱引用，需要一个强引用这个函数确认生命周期
+         */
+        fun unsubscribe(onSuccess: (PineLatLng) -> Unit) {
+            callbackFunctionList.remove(WeakReference(onSuccess))
+            startService()
+        }
     }
 }

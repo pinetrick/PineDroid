@@ -37,7 +37,7 @@ class UploadQueueVM : BaseViewModel<UploadQueueState>(UploadQueueState::class) {
     }
 
     fun uploadRequest(request: PendingPostRequest) = viewModelScope.launch {
-        PineHttpQueue.i.handlePendingPostRequest(request)
+        PineHttpQueue.i.handlePendingRequest(request)
         onInit()
     }
 }
