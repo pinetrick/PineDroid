@@ -2,6 +2,8 @@ package com.pine.pinedroid.hardware.gps.route_recorder
 
 import com.pine.pinedroid.db.bean.BaseDataTable
 import com.pine.pinedroid.hardware.gps.PineLatLng
+import com.pine.pinedroid.utils.pineToString
+import com.pine.pinedroid.utils.sp
 import java.util.Date
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -15,9 +17,10 @@ data class PineRecorderLatLngBean(
     var lng: Double,
     var altitude: Double,
     var accuracy: Float,
+    var speed: Float, //m/s
     var datetime: Date,
 ) : BaseDataTable() {
-    fun toPineLatLng(): PineLatLng = PineLatLng(lat, lng, altitude, accuracy)
+    fun toPineLatLng(): PineLatLng = PineLatLng(lat, lng, altitude, accuracy, speedMeterPerSec = speed, datetime.time)
     /**
      * 计算当前点到另一个 PineLatLng 的距离（单位：米）
      */
@@ -45,5 +48,5 @@ data class PineRecorderLatLngBean(
 }
 
 fun PineLatLng.toRecorderLatLngBean(): PineRecorderLatLngBean {
-    return PineRecorderLatLngBean(null, lat, lng, altitude, accuracy, Date())
+    return PineRecorderLatLngBean(null, lat, lng, altitude, accuracy, speedMeterPerSec, Date(dateTime))
 }

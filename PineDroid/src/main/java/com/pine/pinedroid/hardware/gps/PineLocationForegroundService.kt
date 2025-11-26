@@ -24,8 +24,10 @@ import com.pine.pinedroid.BuildConfig
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.logi
+import com.pine.pinedroid.utils.pineToString
 import com.pine.pinedroid.utils.toast
 import java.lang.ref.WeakReference
+import java.util.Date
 
 class PineLocationForegroundService : Service() {
 
@@ -35,6 +37,8 @@ class PineLocationForegroundService : Service() {
 
     private val binder = LocalBinder()
     private var currentLocation: Location? = null
+    private var lastValidAltitude: Double? = null
+
 
     inner class LocalBinder : Binder() {
         fun getService(): PineLocationForegroundService = this@PineLocationForegroundService
@@ -126,12 +130,24 @@ class PineLocationForegroundService : Service() {
                 locationResult.lastLocation?.let { location ->
                     currentLocation = location
 
+                    val altitude = if (location.hasAltitude()) {
+                        lastValidAltitude = location.altitude
+                        location.altitude
+                    } else {
+                        lastValidAltitude ?: 0.0
+                    }
+
+
                     val latLng = PineLatLng(
                         location.latitude,
                         location.longitude,
-                        location.altitude,
-                        location.accuracy
+                        altitude,
+                        location.accuracy,
+                        location.speed,
+                        dateTime = location.time
+
                     )
+
                     callbackFunctionList.removeAll { it.get() == null }
                     callbackFunctionList.forEach { it.get()?.invoke(latLng) }
 
@@ -160,7 +176,9 @@ class PineLocationForegroundService : Service() {
                 currentLocation.latitude,
                 currentLocation.longitude,
                 currentLocation.altitude,
-                currentLocation.accuracy
+                currentLocation.accuracy,
+                currentLocation.speed,
+                currentLocation.time
             )
         }
     }

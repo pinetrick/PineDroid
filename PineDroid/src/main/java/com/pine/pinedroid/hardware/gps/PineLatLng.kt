@@ -1,7 +1,5 @@
 package com.pine.pinedroid.hardware.gps
 
-import com.pine.pinedroid.utils.log.logd
-import java.util.Date
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.pow
@@ -12,7 +10,9 @@ data class PineLatLng(
     var lat: Double,
     var lng: Double,
     var altitude: Double = 0.0,
-    var accuracy: Float = 0.0f
+    var accuracy: Float = 0.0f,
+    var speedMeterPerSec: Float = 0.0f,
+    var dateTime: Long = 0L,
 ) {
     /**
      * 计算当前点到另一个 PineLatLng 的距离（单位：米）
