@@ -4,12 +4,35 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+fun String.pineToDate(): Date {
+    val formats = listOf(
+        "yyyy-MM-dd HH:mm:ss",
+        "yyyy-MM-dd",
+        "HH:mm:ss",
+        "yyyy/MM/dd HH:mm:ss",
+        "yyyy/MM/dd",
+        "yyyy.MM.dd HH:mm:ss",
+        "yyyy.MM.dd"
+    )
+
+    for (format in formats) {
+        try {
+            val sdf = SimpleDateFormat(format, Locale.getDefault())
+            sdf.isLenient = false
+            return sdf.parse(this) ?: continue
+        } catch (e: Exception) {
+            // 尝试下一种格式
+            continue
+        }
+    }
+
+    throw IllegalArgumentException("无法解析日期字符串: $this")
+}
+
 fun Date.pineToString(format: String = "yyyy-MM-dd HH:mm:ss"): String {
     val sdf = SimpleDateFormat(format, Locale.getDefault())
     return sdf.format(this)
 }
-
-
 
 fun Long.secondsToTime(format: String = "HH:mm:ss"): String {
     if (this < 0) return "00:00" // 处理负数情况
