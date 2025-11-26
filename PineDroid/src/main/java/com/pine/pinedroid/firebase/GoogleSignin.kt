@@ -56,7 +56,7 @@ object GoogleSignIn{
             handleSignIn(result)
             // 登录成功
         } catch (e: Exception) {
-            loge(e)
+            loge("signin", e)
             null
         }
     }

@@ -20,6 +20,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.pine.pinedroid.BuildConfig
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.logi
@@ -99,8 +100,12 @@ class PineLocationForegroundService : Service() {
                 10000L // 间隔时间10秒
             ).apply {
                 setMinUpdateIntervalMillis(5000L) // 最快间隔5秒
-                setMinUpdateDistanceMeters(0f) // 即使没动也触发
-                //setMinUpdateDistanceMeters(1f)
+                if (BuildConfig.DEBUG) {
+                    setMinUpdateDistanceMeters(0f) // 即使没动也触发
+                }
+                else {
+                    setMinUpdateDistanceMeters(2f)
+                }
             }.build()
         } else {
             // 兼容旧版本的方式

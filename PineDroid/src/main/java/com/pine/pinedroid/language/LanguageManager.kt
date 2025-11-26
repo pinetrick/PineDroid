@@ -65,7 +65,7 @@ object LanguageManager {
             getCurrentAppLanguage()
         }
         if ((!allowReturnSystem) && (language == SupportedLanguages.System)) {
-            language = SupportedLanguages.getLanguageInfo(appContext.resources.configuration.locales[0].toLanguageTag())!!
+            language = SupportedLanguages.getLanguageInfo(appContext.resources.configuration.locales[0].toLanguageTag()) ?: SupportedLanguages.English.NewZealand
         }
 
         return language
