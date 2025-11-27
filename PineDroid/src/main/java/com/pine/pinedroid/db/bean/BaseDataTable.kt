@@ -10,13 +10,22 @@ abstract class BaseDataTable {
     //防止gson 不知道映射哪个字段
     @Transient  // Gson 默认就会排除 transient 字段
     open var id: Long? = null
-    open var _dbName: String = DbConnection.DEFAULT_DB_NAME
-    open val _tableName: String by lazy {
-        val className = this::class.simpleName ?: "UnknownTable"
-        className.camelToSnakeCase()
-    }
 
-    fun save(): BaseDataTable {
+    @Transient  //如果是true 就执行更新
+    open var isExistedRecord: Boolean? = null
+
+    open val _dbName: String
+        get() {
+            return DbConnection.DEFAULT_DB_NAME
+        }
+
+    open val _tableName: String
+        get() {
+            val className = this::class.simpleName ?: "UnknownTable"
+            return className.camelToSnakeCase()
+        }
+
+    fun save(forceCreateNewRecord: Boolean = false): BaseDataTable {
         val dbRecord = DbRecord(_tableName, _dbName)
 
         // 获取当前对象的所有属性
@@ -39,10 +48,24 @@ abstract class BaseDataTable {
                 println("Warning: Could not get value for property $fieldName: ${e.message}")
             }
         }
+        if (forceCreateNewRecord) {
+            dbRecord.saveNew()
+        }
+        else {
+            dbRecord.save()
+        }
 
-        dbRecord.save()
         this.id = dbRecord["id"] as Long
         return this
+    }
+
+    //先做搜索，确认ID是否存在，如果存在更新，不存在创建
+    fun createOrUpdate(): BaseDataTable{
+        if (this.id == null) return save()
+
+        val exist = model(_tableName, _dbName).find(id) != null
+
+        return save(!exist)
     }
 
     fun delete() {

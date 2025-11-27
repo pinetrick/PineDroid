@@ -157,7 +157,7 @@ class DbConnection private constructor(public var dbName: String) {
         }
 
         val formattedSql = formatSqlString(tempSql)
-        //logv("SQL", formattedSql)
+        logv("SQL", formattedSql)
     }
 
     private fun formatSqlString(sql: String): String {

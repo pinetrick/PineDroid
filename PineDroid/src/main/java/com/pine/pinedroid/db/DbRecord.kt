@@ -43,7 +43,7 @@ class DbRecord(public var tableName: String, public var dbName: String) {
     }
 
     /** 插入新记录 */
-    private fun saveNew() {
+    fun saveNew() {
         if (tableName.isBlank()) throw IllegalStateException("tableName 未设置")
 
         val id = dbConnection.insert(tableName, null, kvs)
