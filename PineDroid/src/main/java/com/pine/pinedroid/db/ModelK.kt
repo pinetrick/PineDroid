@@ -7,6 +7,7 @@ import com.pine.pinedroid.utils.gson
 import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.loge
 import com.pine.pinedroid.utils.log.logw
+import java.lang.reflect.InvocationTargetException
 import java.util.Date
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
@@ -93,15 +94,30 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
      */
     private fun convertToType(dbRecord: DbRecord): T? {
         return try {
-            val args = parameters.associateWith { param ->
+            val args = parameters.associate { param ->
                 val paramName = param.name ?: ""
                 val dbValue = findValueInRecord(dbRecord, paramName)
-                convertValue(dbValue, param.type)
+                val convertedValue = convertValue(dbValue, param.type)
+                //logd("Db", "$paramName: $dbValue ${param.type} -> $convertedValue")
+                param to convertedValue
             }
             //logd("convertToType: ${kclass.simpleName}", args)
-            constructor.callBy(args)
+            try {
+                constructor.callBy(args)
+            } catch (e: InvocationTargetException) {
+                loge("DB", "序列化失败，A field should not be null, but null gave for ${kclass.simpleName}")
+                parameters.forEach { param ->
+                    val paramName = param.name ?: ""
+                    val dbValue = findValueInRecord(dbRecord, paramName)
+                    val convertedValue = convertValue(dbValue, param.type)
+                    loge("Db", "$paramName: $dbValue ${param.type} -> $convertedValue")
+                }
+                null
+            }
+
         } catch (e: Exception) {
-            logw("(is Data class?)Error converting DbRecord to ${kclass.simpleName}: ${e.message}")
+            logw("DB", "(is Data class?)Error converting DbRecord to ${kclass.simpleName}: ${e.message}")
+            e.printStackTrace()
             null
         }
     }
