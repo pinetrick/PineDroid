@@ -14,6 +14,10 @@ import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.currentActivity
 
 object PineImagePickup {
+    fun previewImage(image: OneImage) {
+        previewImage(listOf(image))
+    }
+
     fun previewImage(images: List<OneImage>, index: Int = 0) {
         ImagePreviewScreenVM.images = images
         ImagePreviewScreenVM.index = index
