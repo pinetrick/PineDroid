@@ -1,6 +1,5 @@
 package com.pine.pinedroid.db
 
-import com.google.common.reflect.TypeToken
 import com.pine.pinedroid.db.bean.BaseDataTable
 import com.pine.pinedroid.utils.camelToSnakeCase
 import com.pine.pinedroid.utils.gson
@@ -11,6 +10,7 @@ import java.lang.reflect.InvocationTargetException
 import java.util.Date
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
+import kotlin.reflect.jvm.javaType
 
 inline fun <reified T : Any> model(db: String? = null): ModelK<T> = ModelK(T::class, db)
 
@@ -137,7 +137,7 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
      */
     private fun convertValue(value: Any?, targetType: KType): Any? {
         if (value == null) return null
-//        logd(targetType.classifier)
+        //logd(targetType.classifier)
         return when (val classifier = targetType.classifier) {
             String::class -> value.toString()
             Int::class -> value.toString().toIntOrNull() ?: 0
@@ -153,16 +153,16 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
             Date::class -> Date(value.toString().toLongOrNull() ?: 0L)
             Map::class -> {
                 try {
-                    gson.fromJson<Map<String, Any>>(value.toString(), object : TypeToken<Map<String, Any>>() {}.type)
+                    gson.fromJson<Map<*, *>>(value.toString(), targetType.javaType)
                 } catch (e: Exception) {
-                    loge("DatabaseConvert1", value)
+                    loge("DatabaseConvert1", "value: $value")
                     loge("DatabaseConvert1", "Map conversion failed: ${e.message}")
                     emptyMap<String, Any>()
                 }
             }
             List::class -> {
                 try {
-                    gson.fromJson<List<Any>>(value.toString(), object : TypeToken<List<Any>>() {}.type)
+                    gson.fromJson<List<*>>(value.toString(), targetType.javaType)
                 } catch (e: Exception) {
                     loge("DatabaseConvert2", "List conversion failed: ${e.message}")
                     emptyList<Any>()
@@ -171,4 +171,5 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
             else -> value
         }
     }
+
 }
