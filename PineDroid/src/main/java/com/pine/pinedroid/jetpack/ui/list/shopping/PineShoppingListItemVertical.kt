@@ -68,8 +68,8 @@ fun PineShoppingListItemVertical(
             ) {
                 PineAsyncImage(
                     model = shoppingItemBean.image,
-                    modifier = Modifier
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxWidth()
+                        .aspectRatio(1f),
                     contentScale = ContentScale.Crop
                 )
                 shoppingItemBean.textOnImage?.let { textOnImage ->

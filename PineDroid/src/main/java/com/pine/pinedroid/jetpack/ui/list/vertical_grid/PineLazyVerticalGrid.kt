@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 * ScoreBar must make sure every element has same high */
 @Composable
 fun PineLazyVerticalGrid(
-    columns: GridCells,
     modifier: Modifier = Modifier,
+    columns: GridCells = GridCells.Adaptive(150.dp),
     state: LazyGridState = rememberLazyGridState(),
     contentPadding: PaddingValues = PaddingValues(0.dp),
     reverseLayout: Boolean = false,

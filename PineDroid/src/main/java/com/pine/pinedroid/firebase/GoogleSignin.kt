@@ -25,6 +25,7 @@ object GoogleSignIn{
 
     fun getSignedInUser(): FirebaseUser? = sp("FirebaseUser")
 
+    fun isSignIn(): Boolean = sp<FirebaseUser>("FirebaseUser") != null
 
     suspend fun signIn(): FirebaseUser? {
         val user: FirebaseUser? = getSignedInUser()
