@@ -4,12 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import com.pine.pinedroid.utils.reflect.createInstance
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.reflect.KClass
 
 // 简化的 ViewModel 基类
@@ -42,6 +44,14 @@ open class BaseViewModel<T: Any>(val clazz: KClass<T>): ViewModel() {
     fun setState(block: T.() -> T){
         _viewState.update { currentState ->
             currentState.block()
+        }
+    }
+
+    suspend fun uiSetState(block: T.() -> T) {
+        withContext(Dispatchers.Main) {
+            _viewState.update { currentState ->
+                currentState.block()
+            }
         }
     }
 

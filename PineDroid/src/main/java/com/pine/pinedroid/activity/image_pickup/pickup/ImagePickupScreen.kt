@@ -61,9 +61,7 @@ fun ImagePickupScreen(
         viewModel.onInit()
     }
 
-    if (viewState.loading) {
-        PineLoading(stringResource(R.string.pine_image_pickup_processing))
-    } else {
+    PineLoading(viewState.loading, stringResource(R.string.pine_image_pickup_processing)) {
         PineGeneralScreen(
             title = {
                 Title(

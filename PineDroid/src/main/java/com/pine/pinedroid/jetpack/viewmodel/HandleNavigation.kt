@@ -8,6 +8,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.pine.pinedroid.jetpack.ui.PineSyncSystemNavBarWithBottomBar
 import com.pine.pinedroid.utils.currentActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 @Composable
 fun <T: Any> HandleNavigation(
@@ -55,10 +58,11 @@ fun <T: Any> HandleNavigation(
     LaunchedEffect(Unit) {
         runOnceBlock?.let { runOnceBlock ->
             viewModel.runOnce {
-                runOnceBlock()
+                withContext(Dispatchers.IO) {
+                    runOnceBlock()
+                }
             }
         }
-
     }
 
     PineSyncSystemNavBarWithBottomBar()
