@@ -4,9 +4,10 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import com.pine.pinedroid.PineConfig
+import com.pine.pinedroid.isDebug
 
 fun debugToast(message: String) {
-    if (PineConfig.getIsDebug()) {
+    if (isDebug) {
         toast(message)
     }
 }

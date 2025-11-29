@@ -34,7 +34,7 @@ class PineContentProvider : ContentProvider() {
             if (isAppDebug()) {
                 printSignatures()
             }
-            if (PineDebugWindow.getIsDebugWindowAlwaysOn()) {
+            if (PineDebugWindow.isDebugEnabled) {
                 CoroutineScope(Dispatchers.Main).launch {
                     val view = SmallFloatIcon(appContext)
                     view.setOnClickListener(FunctionWindowController::onShowFunctionWindowClick)

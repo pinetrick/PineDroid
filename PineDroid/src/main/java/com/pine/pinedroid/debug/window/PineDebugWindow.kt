@@ -1,12 +1,15 @@
 package com.pine.pinedroid.debug.window
 
-import androidx.compose.ui.graphics.Paint
-import com.pine.pinedroid.PineConfig
 import com.pine.pinedroid.utils.PineApp
 import com.pine.pinedroid.utils.sp
 
 object PineDebugWindow {
-    private var isDebugWindowAlwaysOn: Boolean? = null
+    val isDebugEnabled: Boolean
+        get() {
+            if (PineApp.isAppDebug()) return true
+            return sp<Boolean>("DebugWindowAlwaysOn") ?: false
+        }
+
     var buttons: ArrayList<DebugWindowGridViewBean> = ArrayList()
 
     fun addButton(text: String, icon: String = "", action: () -> Unit = {}) {
@@ -22,22 +25,7 @@ object PineDebugWindow {
     // --- 悬浮窗常显开关 ---
     fun setIsDebugWindowAlwaysOn(alwaysOn: Boolean) {
         sp("DebugWindowAlwaysOn", alwaysOn)
-        refresh()
     }
 
-    fun getIsDebugWindowAlwaysOn(): Boolean {
-        if (isDebugWindowAlwaysOn == null) {
-            refresh()
-        }
-        return isDebugWindowAlwaysOn!!
-    }
-
-    private fun refresh(){
-
-        isDebugWindowAlwaysOn = true
-        val spWindow: Boolean? = sp("DebugWindowAlwaysOn")
-        if (spWindow != null) isDebugWindowAlwaysOn = spWindow
-        else if (!PineApp.isAppDebug()) isDebugWindowAlwaysOn = false
-    }
 
 }

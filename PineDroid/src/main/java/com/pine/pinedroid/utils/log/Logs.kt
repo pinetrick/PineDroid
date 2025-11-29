@@ -2,12 +2,13 @@ package com.pine.pinedroid.utils.log
 
 import android.util.Log
 import com.pine.pinedroid.PineConfig
+import com.pine.pinedroid.isDebug
 import com.pine.pinedroid.utils.ToString
 import com.pine.pinedroid.utils.gson
 
 fun <T> log(content: T?) = logd(content)
 fun <T> log(key: String, content: T?, level: Int = Log.DEBUG) {
-    if (!PineConfig.getIsDebug()) {
+    if (!isDebug) {
         if (level <= Log.DEBUG) return
     }
 
