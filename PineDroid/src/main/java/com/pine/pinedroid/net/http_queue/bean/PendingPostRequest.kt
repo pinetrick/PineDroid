@@ -11,6 +11,8 @@ data class PendingPostRequest (
     var next_time: Date = Date(),
     var local_files: Map<String, String> = HashMap(),
     var retry_count: Int = 0,
+    var callback_function: String? = null,
+    var args: List<String?> = listOf(),
 ): BaseDataTable() {
 
 }

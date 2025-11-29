@@ -10,30 +10,53 @@ import com.pine.pinedroid.utils.debugToast
 import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.loge
 import com.pine.pinedroid.utils.log.logi
-import kotlinx.coroutines.*
+import com.pine.pinedroid.utils.reflect.invokeStaticFunction
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Date
-import java.util.HashMap
 import java.util.concurrent.atomic.AtomicBoolean
 
-fun asyncHttpGet(url: String) {
+fun asyncHttpGet(
+    url: String,
+    function: String? = null, //e.g. "com.example.Callbacks.onUserLoaded"
+    args: List<String?> = emptyList()
+) {
     logi("http", "异步GET请求添加：$url")
     PendingPostRequest(
         url = url,
         data = emptyMap(),
         is_post = false,
+        callback_function = function,
+        args = args
     ).save()
     if (autoUploadAfterAdd) {
         PineHttpQueue.i.tryStartProcessing()
     }
 }
 
-fun asyncHttpPost(url: String, data: Map<String, String> = HashMap(), files: Map<String, String> = HashMap()) {
+fun asyncHttpPost(
+    url: String,
+    data: Map<String, String> = HashMap(),
+    files: Map<String, String> = HashMap(),
+    function: String? = null, //e.g. "com.example.Callbacks.onUserLoaded"
+    args: List<String?> = emptyList()
+) {
     logi("http", "异步POST请求添加：$url")
     PendingPostRequest(
         url = url,
         data = data,
         is_post = true,
         local_files = files,
+        callback_function = function,
+        args = args
     ).save()
     if (autoUploadAfterAdd) {
         PineHttpQueue.i.tryStartProcessing()
@@ -138,12 +161,23 @@ class PineHttpQueue private constructor() {
             logi("http", "异步请求 ${pendingPostRequest.url}")
 
             val resp = if (pendingPostRequest.is_post) {
-                httpPostJson<String>(pendingPostRequest.url, pendingPostRequest.data, pendingPostRequest.local_files)
+                httpPostJson<String>(
+                    pendingPostRequest.url,
+                    pendingPostRequest.data,
+                    pendingPostRequest.local_files
+                )
             } else {
                 httpGet<String>(pendingPostRequest.url)
             }
 
             logi("http", resp)
+
+            if (pendingPostRequest.callback_function != null) {
+                val args = mutableListOf<Any?>(resp)
+                args.addAll(pendingPostRequest.args)
+                pendingPostRequest.callback_function!!.invokeStaticFunction(*args.toTypedArray())
+            }
+
 
             if (resp != null) {
                 pendingPostRequest.delete()
@@ -156,6 +190,7 @@ class PineHttpQueue private constructor() {
             handleFailedRequest(pendingPostRequest)
         }
     }
+
 
     private suspend fun handleFailedRequest(pendingPostRequest: PendingPostRequest) {
         val retryCount = pendingPostRequest.retry_count.plus(1)
