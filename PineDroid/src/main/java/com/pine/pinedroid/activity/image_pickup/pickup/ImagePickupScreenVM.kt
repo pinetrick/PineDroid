@@ -24,7 +24,7 @@ class ImagePickupScreenVM : BaseViewModel<ImagePickupScreenState>(ImagePickupScr
         }
 
 
-        setState {
+        setStateSync {
             copy(
                 loading = false,
                 enabledCamera = allowCamera,

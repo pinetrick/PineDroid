@@ -36,7 +36,7 @@ class LanguageSwitchScreenVM :
 
 
     fun languageChoice(language: LanguageInfo) {
-        setState {
+        setStateSync {
             copy(currentLanguage = language)
         }
     }

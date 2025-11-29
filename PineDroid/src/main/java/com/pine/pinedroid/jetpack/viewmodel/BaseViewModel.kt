@@ -41,17 +41,17 @@ open class BaseViewModel<T: Any>(val clazz: KClass<T>): ViewModel() {
         navigateBack()
     }
 
-    fun setState(block: T.() -> T){
-        _viewState.update { currentState ->
-            currentState.block()
-        }
-    }
-
-    suspend fun uiSetState(block: T.() -> T) {
+    suspend fun setState(block: T.() -> T){
         withContext(Dispatchers.Main) {
             _viewState.update { currentState ->
                 currentState.block()
             }
+        }
+    }
+
+    fun setStateSync(block: T.() -> T) {
+        _viewState.update { currentState ->
+            currentState.block()
         }
     }
 

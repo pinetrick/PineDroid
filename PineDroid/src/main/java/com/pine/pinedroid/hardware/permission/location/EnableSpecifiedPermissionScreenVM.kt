@@ -21,7 +21,7 @@ class EnableSpecifiedPermissionScreenVM :
 
     fun onInit() {
 
-        setState {
+        setStateSync {
             copy(
                 permission = PinePermissionActivity.state.permission,
                 icon = PinePermissionActivity.state.icon,
@@ -34,7 +34,7 @@ class EnableSpecifiedPermissionScreenVM :
     }
 
     fun onPermissionResult(isGranted: Boolean) {
-        setState {
+        setStateSync {
             copy(
                 isPermissionPermanentlyDenied = PinePermissionActivity.state.isPermissionPermanentlyDenied()
             )

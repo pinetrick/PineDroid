@@ -107,7 +107,7 @@ class TaskListScreenVM : BaseViewModel<TaskListScreenState>(TaskListScreenState:
         // 按内存使用量排序
         apps.sortByDescending { it.pss.replace("K", "").toIntOrNull() ?: 0 }
 
-        setState {
+        setStateSync {
             copy(
                 apps = apps,
                 memoryInfo = memoryInfo,
