@@ -170,7 +170,7 @@ class PineHttpQueue private constructor() {
                 httpGet<String>(pendingPostRequest.url)
             }
 
-            logi("http", resp)
+            logi("http", "HttpResponse: $resp")
 
             if (pendingPostRequest.callback_function != null) {
                 val args = mutableListOf<Any?>(resp)
@@ -179,7 +179,7 @@ class PineHttpQueue private constructor() {
             }
 
 
-            if (resp != null) {
+            if (resp != null && resp != "") {
                 pendingPostRequest.delete()
                 logd("Successfully processed request for URL: ${pendingPostRequest.url}")
             } else {
