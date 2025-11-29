@@ -46,6 +46,7 @@ object FunctionWindowController {
                     closeButton.setOnClickListener(::closeFloatWindow)
                     uninstallButton.setOnClickListener (::onUninstallBtnClick)
                     dataBaseButton.setOnClickListener {
+                        PineDroidActivity.startFrom = "file"
                         intent(PineDroidActivity::class)
                         closeFloatWindow()
                     }
@@ -53,6 +54,12 @@ object FunctionWindowController {
                    // PineDebugWindow.addButton("Files", "\uf15b", ::openDbEditor)
                     PineDebugWindow.addButton("Task Manager", "\uf0ae") {
                         intent(TaskManagerActivity::class)
+                        closeFloatWindow()
+                    }
+
+                    PineDebugWindow.addButton("Database Manager", "\uf1c0") {
+                        PineDroidActivity.startFrom = "db"
+                        intent(PineDroidActivity::class)
                         closeFloatWindow()
                     }
 

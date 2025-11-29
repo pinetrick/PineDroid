@@ -26,15 +26,17 @@ class TableK<T : Any>(private var kclass: KClass<T>) {
             if (field.name.startsWith("_")) return@forEach
 
             val name = field.name
-            val type = when (field.returnType) {
-                Int::class.java, java.lang.Integer::class.java -> "INTEGER"
-                Long::class.java, java.lang.Long::class.java -> "BIGINT"
-                String::class.java -> "TEXT"
-                Boolean::class.java, java.lang.Boolean::class.java -> "INTEGER"
-                Date::class.java -> "INTEGER"
-                Double::class.java, java.lang.Double::class.java -> "REAL"
-                Float::class.java, java.lang.Float::class.java -> "REAL"
-                else -> "TEXT" //序列化存储
+            val classifier = field.returnType.classifier
+
+            val type = when (classifier) {
+                Int::class     -> "INTEGER"
+                Long::class    -> "BIGINT"
+                String::class  -> "TEXT"
+                Boolean::class -> "INTEGER"
+                Double::class  -> "REAL"
+                Float::class   -> "REAL"
+                Date::class    -> "INTEGER"
+                else -> "TEXT"
             }
 
             table.column(name, type)

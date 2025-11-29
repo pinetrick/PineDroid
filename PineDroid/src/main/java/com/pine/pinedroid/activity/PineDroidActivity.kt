@@ -47,7 +47,7 @@ class PineDroidActivity : ComponentActivity() {
             // 3. NavHost 管理不同 Composable 页面
             NavHost(
                 navController = navController,
-                startDestination = "file",
+                startDestination = startFrom,
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable("file") { FileExplorer(navController) }
@@ -69,4 +69,9 @@ class PineDroidActivity : ComponentActivity() {
             }
         }
     }
+
+    companion object {
+        var startFrom: String = "file"
+    }
 }
+

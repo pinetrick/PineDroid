@@ -43,11 +43,14 @@ data class DraggableSortListBean<T>(
 
 @Composable
 fun <T> PineDraggableSortList(
+    enabledDrag: Boolean = true,
     modifier: Modifier = Modifier,
     items: List<T>,
     onItemDragged: ((from: Int, to: Int) -> Unit)? = null,
     content: @Composable (T) -> Unit
 ) {
+
+
     var afterReorderItems by remember {
         mutableStateOf(emptyList<DraggableSortListBean<T>>())
     }
@@ -107,6 +110,8 @@ fun <T> PineDraggableSortList(
 
                         detectDragGesturesAfterLongPress(
                             onDragStart = {
+                                if (!enabledDrag) return@detectDragGesturesAfterLongPress
+
                                 item.isDragging = true
                                 dragItemIndex = index
                                 accumulatedOffset = 0f
@@ -127,11 +132,15 @@ fun <T> PineDraggableSortList(
 
                             },
                             onDrag = { change, dragAmount ->
+                                if (!enabledDrag) return@detectDragGesturesAfterLongPress
+
                                 change.consume()
                                 // 更新拖拽偏移量
                                 accumulatedOffset += dragAmount.y
                             },
                             onDragEnd = {
+                                if (!enabledDrag) return@detectDragGesturesAfterLongPress
+
                                 item.isDragging = false
                                 var destLocation = dragItemIndex
                                 if (accumulatedOffset < 0) {
