@@ -35,7 +35,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -53,7 +57,8 @@ fun PineWechatMoments(
     nickname: String,
     rightIcon: String? = "",
     rightText: String? = "",
-    feedback: String? = null,
+    content: String? = null,
+    likePeople: List<String> = emptyList(),
     images: List<OneImage> = emptyList(),
     datetime: Date? = null,
     onImageClick: ((List<OneImage>, Int) -> Unit)? = null,
@@ -92,7 +97,7 @@ fun PineWechatMoments(
             Spacer(modifier = Modifier.padding(top = 4.dp))
 
             // 朋友圈内容
-            RightLineFeedback(feedback = feedback)
+            RightLineFeedback(feedback = content)
 
             Spacer(modifier = Modifier.padding(top = 8.dp))
 
@@ -103,6 +108,16 @@ fun PineWechatMoments(
             )
 
             Spacer(modifier = Modifier.padding(top = 8.dp))
+
+            // 点赞和评论区域
+            if (likePeople.isNotEmpty()) {
+                LikePeopleSection(
+                    likePeople = likePeople,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
+                )
+            }
 
             // 最后一行：时间和操作菜单
             RightLastLine(
@@ -124,6 +139,67 @@ fun PineWechatMoments(
             .height(1.dp)
             .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
     )
+}
+
+@Composable
+fun LikePeopleSection(
+    likePeople: List<String>,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                shape = RoundedCornerShape(4.dp)
+            )
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // 点赞图标
+            PineIcon(
+                text = "\uf004", // 使用心形图标，您可以根据需要调整
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
+                modifier = Modifier.padding(end = 8.dp)
+            )
+
+            // 点赞用户列表
+            if (likePeople.isNotEmpty()) {
+                val displayText = buildAnnotatedString {
+                    likePeople.forEachIndexed { index, name ->
+                        if (index > 0) {
+                            append("、")
+                        }
+                        // 为每个用户名添加可点击样式
+                        withStyle(
+                            style = SpanStyle(
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Medium
+                            )
+                        ) {
+                            append(name)
+                        }
+                    }
+                }
+
+                Text(
+                    text = displayText,
+                    fontSize = 14.sp,
+                    lineHeight = 18.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable {
+                            // 点击点赞列表的回调，可以在这里处理
+                            println("点击了点赞列表")
+                        }
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -248,7 +324,7 @@ fun RightLastLine(
                                 },
                                 onClick = {
                                     showMenu = false
-                                    onDelete?.invoke()
+                                    onDelete.invoke()
                                 }
                             )
                         }
@@ -377,7 +453,8 @@ fun PreviewDark() {
                 nickname = "微信用户",
                 rightIcon = "\uf005",
                 rightText = "4.5",
-                feedback = "这是朋友圈的内容示例，可以显示多行文本。今天天气真好，适合出去散步！",
+                content = "这是朋友圈的内容示例，可以显示多行文本。今天天气真好，适合出去散步！",
+                likePeople = listOf("张三", "李四", "王五", "赵六", "钱七", "孙八"),
                 images = listOf(
                     OneImage.HttpImage("https://picsum.photos/200/300"),
                     OneImage.HttpImage("https://picsum.photos/201/301"),
@@ -392,14 +469,28 @@ fun PreviewDark() {
                 allowDelete = true
             )
 
-
-            // 第二个示例：单张图片
+            // 第二个示例：少量点赞
             PineWechatMoments(
                 icon = "https://picsum.photos/101",
                 nickname = "另一个用户",
-                feedback = "单张图片的示例",
+                content = "单张图片的示例",
+                likePeople = listOf("小明", "小红"),
                 images = listOf(
                     OneImage.HttpImage("https://picsum.photos/300/400")
+                ),
+                datetime = Date(),
+                allowDelete = false
+            )
+
+            // 第三个示例：无点赞
+            PineWechatMoments(
+                icon = "https://picsum.photos/102",
+                nickname = "测试用户",
+                content = "没有点赞的示例",
+                likePeople = emptyList(),
+                images = listOf(
+                    OneImage.HttpImage("https://picsum.photos/301/401"),
+                    OneImage.HttpImage("https://picsum.photos/302/402")
                 ),
                 datetime = Date(),
                 allowDelete = false
@@ -427,7 +518,8 @@ fun PreviewLight() {
                 nickname = "微信用户",
                 rightIcon = "\uf005",
                 rightText = "4.5",
-                feedback = "这是朋友圈的内容示例",
+                content = "这是朋友圈的内容示例",
+                likePeople = listOf("张三", "李四", "王五"),
                 images = listOf(
                     OneImage.HttpImage("https://picsum.photos/200/300"),
                     OneImage.HttpImage("https://picsum.photos/201/301"),
