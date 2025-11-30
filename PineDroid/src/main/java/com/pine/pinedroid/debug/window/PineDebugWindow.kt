@@ -18,7 +18,7 @@ object PineDebugWindow {
         if (existingButton == null) {
             // Create new button and add to list
             val newButton = DebugWindowGridViewBean(text, icon, action)
-            buttons.add(newButton)
+            buttons.add(0, newButton)
         }
     }
 
