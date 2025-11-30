@@ -158,28 +158,33 @@ class PineHttpQueue private constructor() {
 
     suspend fun handlePendingRequest(pendingPostRequest: PendingPostRequest) {
         try {
-            logi("http", "异步请求 ${pendingPostRequest.url}")
+
 
             val resp = if (pendingPostRequest.is_post) {
+                logi("http","异步POST请求: ${pendingPostRequest.url}")
                 httpPostJson<String>(
                     pendingPostRequest.url,
                     pendingPostRequest.data,
                     pendingPostRequest.local_files
                 )
             } else {
+                logi("http","异步GET请求: ${pendingPostRequest.url}")
                 httpGet<String>(pendingPostRequest.url)
             }
 
             logi("http", "HttpResponse: $resp")
 
+            var canDelete: Boolean = true
             if (pendingPostRequest.callback_function != null) {
                 val args = mutableListOf<Any?>(resp)
                 args.addAll(pendingPostRequest.args)
-                pendingPostRequest.callback_function!!.invokeStaticFunction(*args.toTypedArray())
+                val invokeResult = pendingPostRequest.callback_function!!.invokeStaticFunction(*args.toTypedArray())
+                if (invokeResult == null) canDelete = false
+                if (invokeResult is Boolean && !invokeResult) canDelete = false
             }
 
 
-            if (resp != null && resp != "") {
+            if (resp != null && resp != "" && canDelete) {
                 pendingPostRequest.delete()
                 logd("Successfully processed request for URL: ${pendingPostRequest.url}")
             } else {

@@ -40,8 +40,8 @@ fun<T : Any> createInstance(clazz: KClass<T>): T {
  * 2. 支持 Kotlin object 的 静态方法
  * 3. 参数类型必须与方法签名一致
  */
-fun String.invokeStaticFunction(vararg args: Any?) {
-    if (this.isEmpty()) return
+fun String.invokeStaticFunction(vararg args: Any?): Any? {
+    if (this.isEmpty()) return null
 
     try {
         // 拆分类名和方法名
@@ -68,10 +68,11 @@ fun String.invokeStaticFunction(vararg args: Any?) {
             ?: throw NoSuchMethodException("Method $methodName not found in $className")
 
         // 转成数组调用
-        method.invoke(instance, *args)
+        return method.invoke(instance, *args)
     } catch (e: Exception) {
         e.printStackTrace()
     }
 
+    return null
 
 }

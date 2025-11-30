@@ -145,8 +145,8 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
             Double::class -> value.toString().toDoubleOrNull() ?: 0.0
             Float::class -> value.toString().toFloatOrNull() ?: 0f
             Boolean::class -> when (value) {
-                "0", 0, false -> false
-                "1", 1, true -> true
+                "0", 0, 0L, false -> false
+                "1", 1, 1L, true -> true
                 is String -> value.toBooleanStrictOrNull() ?: false
                 else -> value.toString().toBoolean()
             }
