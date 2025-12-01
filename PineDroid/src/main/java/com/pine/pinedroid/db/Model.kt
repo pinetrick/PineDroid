@@ -1,7 +1,9 @@
 package com.pine.pinedroid.db
 
 import android.database.Cursor
+import android.database.sqlite.SQLiteException
 import com.pine.pinedroid.utils.camelToSnakeCase
+import com.pine.pinedroid.utils.log.loge
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -115,17 +117,26 @@ open class Model(name: String, private val dbName: String? = null) {
 
 
     fun select(columns: String = "*"): List<DbRecord> {
-        val whereSql = buildWhereClause()
+        try {
+            val whereSql = buildWhereClause()
 
-        val limitSql = when {
-            limitCount != null && offsetCount != null -> " LIMIT $limitCount OFFSET $offsetCount"
-            limitCount != null -> " LIMIT $limitCount"
-            else -> ""
+            val limitSql = when {
+                limitCount != null && offsetCount != null -> " LIMIT $limitCount OFFSET $offsetCount"
+                limitCount != null -> " LIMIT $limitCount"
+                else -> ""
+            }
+
+            lastSql = "SELECT $columns FROM $tableName $whereSql $orderBy $limitSql"
+
+            return rawQuery(lastSql, whereArgs.toTypedArray()).first
+        } catch (exception: SQLiteException) {
+            if (exception.message?.contains("no such table", ignoreCase = true) == true) {
+                loge("SQL", "No Such Table, Creating table: $tableName")
+                table(tableName, dbName).createTable()
+                return emptyList()
+            }
+            throw exception
         }
-
-        lastSql = "SELECT $columns FROM $tableName $whereSql $orderBy $limitSql"
-
-        return rawQuery(lastSql, whereArgs.toTypedArray()).first
 
     }
 
@@ -193,6 +204,10 @@ open class Model(name: String, private val dbName: String? = null) {
         return execute(lastSql)
     }
 
+    fun drop(){
+        lastSql = "DROP TABLE $tableName"
 
+        return execute(lastSql)
+    }
 }
 

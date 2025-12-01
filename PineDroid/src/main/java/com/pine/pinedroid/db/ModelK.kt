@@ -83,6 +83,10 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
         return model.count()
     }
 
+    fun drop(){
+        return model.drop()
+    }
+
     fun truncate(){
         return model.truncate()
 
