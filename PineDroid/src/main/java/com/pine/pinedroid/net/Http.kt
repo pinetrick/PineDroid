@@ -108,7 +108,7 @@ suspend inline fun <reified T> httpPostJson(
 
     var result: String = ""
     try {
-        logv("Http To", url)
+        logd("HTTP POST", url)
         logv("Http Body", body)
         if (files.isNotEmpty()) logv("Http files", files)
 
@@ -153,7 +153,7 @@ suspend inline fun <reified T> httpPostJson(
             }))
         }.body()
 
-        logv("http result", result)
+        logv("Response", result)
 
         if (cacheImages) {
             BackgroundScope.launch {

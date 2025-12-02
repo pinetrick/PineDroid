@@ -126,7 +126,7 @@ class PineLocationForegroundService : Service() {
     private fun createLocationCallback() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                logd("onLocationChanged: $locationResult")
+                logd("onLocationChanged", locationResult)
                 locationResult.lastLocation?.let { location ->
                     currentLocation = location
 

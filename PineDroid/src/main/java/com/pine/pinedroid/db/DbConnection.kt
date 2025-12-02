@@ -52,7 +52,7 @@ class DbConnection private constructor(public var dbName: String) {
         // 构建 SQL 日志
         val columns = kvs.keys.joinToString(", ")
         val placeholders = kvs.keys.joinToString(", ") { "?" }
-        val sql = "INSERT INTO $tableName \n ($columns) \n VALUES \n ($placeholders)"
+        val sql = "INSERT INTO $tableName \n  ($columns)  VALUES \n  ($placeholders)"
 
         // 构建参数数组用于日志
         val args = kvs.values.map { value ->
@@ -161,32 +161,32 @@ class DbConnection private constructor(public var dbName: String) {
     }
 
     private fun formatSqlString(sql: String): String {
-        // 使用正则表达式确保只匹配完整的关键词，避免部分匹配
         val formattedSql = sql
             // 先处理复合关键词
-            .replace(Regex("\\bORDER\\s+BY\\b", RegexOption.IGNORE_CASE), "\nORDER BY ")
-            .replace(Regex("\\bGROUP\\s+BY\\b", RegexOption.IGNORE_CASE), "\nGROUP BY ")
-            .replace(Regex("\\bLEFT\\s+JOIN\\b", RegexOption.IGNORE_CASE), "\nLEFT JOIN ")
-            .replace(Regex("\\bRIGHT\\s+JOIN\\b", RegexOption.IGNORE_CASE), "\nRIGHT JOIN ")
-            .replace(Regex("\\bINNER\\s+JOIN\\b", RegexOption.IGNORE_CASE), "\nINNER JOIN ")
+            .replace(Regex("\\bORDER\\s+BY\\b", RegexOption.IGNORE_CASE), "\n  ORDER BY ")
+            .replace(Regex("\\bGROUP\\s+BY\\b", RegexOption.IGNORE_CASE), "\n  GROUP BY ")
+            .replace(Regex("\\bLEFT\\s+JOIN\\b", RegexOption.IGNORE_CASE), "\n  LEFT JOIN ")
+            .replace(Regex("\\bRIGHT\\s+JOIN\\b", RegexOption.IGNORE_CASE), "\n  RIGHT JOIN ")
+            .replace(Regex("\\bINNER\\s+JOIN\\b", RegexOption.IGNORE_CASE), "\n  INNER JOIN ")
             .replace(Regex("\\bINSERT\\s+INTO\\b", RegexOption.IGNORE_CASE), "INSERT INTO ")
             .replace(Regex("\\bDELETE\\s+FROM\\b", RegexOption.IGNORE_CASE), "DELETE FROM ")
 
             // 再处理单个关键词
             .replace(Regex("\\bSELECT\\b", RegexOption.IGNORE_CASE), "SELECT ")
-            .replace(Regex("\\bFROM\\b", RegexOption.IGNORE_CASE), "\nFROM ")
-            .replace(Regex("\\bWHERE\\b", RegexOption.IGNORE_CASE), "\nWHERE ")
-            .replace(Regex("\\bAND\\b", RegexOption.IGNORE_CASE), "\nAND ")
-            .replace(Regex("\\bOR\\b", RegexOption.IGNORE_CASE), "\nOR ")
-            .replace(Regex("\\bHAVING\\b", RegexOption.IGNORE_CASE), "\nHAVING ")
-            .replace(Regex("\\bVALUES\\b", RegexOption.IGNORE_CASE), "\nVALUES ")
+            .replace(Regex("\\bFROM\\b", RegexOption.IGNORE_CASE), "\n  FROM ")
+            .replace(Regex("\\bWHERE\\b", RegexOption.IGNORE_CASE), "\n  WHERE ")
+            .replace(Regex("\\bAND\\b", RegexOption.IGNORE_CASE), "\n  AND ")
+            .replace(Regex("\\bOR\\b", RegexOption.IGNORE_CASE), "\n  OR ")
+            .replace(Regex("\\bHAVING\\b", RegexOption.IGNORE_CASE), "\n  HAVING ")
+            .replace(Regex("\\bVALUES\\b", RegexOption.IGNORE_CASE), "\n  VALUES ")
             .replace(Regex("\\bUPDATE\\b", RegexOption.IGNORE_CASE), "UPDATE ")
-            .replace(Regex("\\bSET\\b", RegexOption.IGNORE_CASE), "\nSET ")
-            .replace(Regex("\\bJOIN\\b", RegexOption.IGNORE_CASE), "\nJOIN ")
-            .replace(Regex("\\bON\\b", RegexOption.IGNORE_CASE), "\nON ")
-            .replace(Regex("\\bLIMIT\\b", RegexOption.IGNORE_CASE), "\nLIMIT ")
-            .replace(Regex("\\bOFFSET\\b", RegexOption.IGNORE_CASE), "\nOFFSET ")
+            .replace(Regex("\\bSET\\b", RegexOption.IGNORE_CASE), "\n  SET ")
+            .replace(Regex("\\bJOIN\\b", RegexOption.IGNORE_CASE), "\n  JOIN ")
+            .replace(Regex("\\bON\\b", RegexOption.IGNORE_CASE), "\n  ON ")
+            .replace(Regex("\\bLIMIT\\b", RegexOption.IGNORE_CASE), "\n  LIMIT ")
+            .replace(Regex("\\bOFFSET\\b", RegexOption.IGNORE_CASE), "\n  OFFSET ")
             .replace("\n\n", "\n")
+        // 使用正则表达式确保只匹配完整的关键词，避免部分匹配
 
         return formattedSql.trim()
     }

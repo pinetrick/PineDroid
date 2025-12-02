@@ -79,26 +79,40 @@ fun <T> logw(content: T?) = log("null", content, Log.WARN)
 fun <T> logv(content: T?) = log("null", content, Log.VERBOSE)
 
 
-
 private fun _log(tag: String, content: String, level: Int = Log.DEBUG) {
-    var finalTag = tag.ifEmpty {
-        // 获取调用者的类名
-        Thread.currentThread().stackTrace
-            .firstOrNull { !it.className.contains("Log") && !it.className.contains("_log") }
-            ?.className
-            ?.substringAfterLast('.')
-            ?: "UnknownClass"
-    }
-    finalTag = "Pine_$finalTag"
 
+    val finalKey = if (tag == "null") "" else tag
+
+    val finalTag = "PineDebugLog"
+
+    val formattedContent = if (finalKey.isEmpty()) {
+        content
+    } else {
+        // 计算对齐的长度：取实际tag长度和MAX_LOG_TAG_LENGTH的较大值
+        val alignmentLength = maxOf(finalKey.length + 1, MAX_LOG_TAG_LENGTH)
+
+        val alignedKey = finalKey.padEnd(alignmentLength).take(alignmentLength)
+
+        if (content.contains('\n')) {
+            val lines = content.split('\n')
+            // 第一行使用对齐的key
+            val firstLine = "$alignedKey${lines[0]}"
+            val indent = " ".repeat(alignmentLength)
+            val otherLines = lines.drop(1).joinToString("\n") { "$indent$it" }
+            "$firstLine\n$otherLines"
+        } else {
+            "$alignedKey$content"
+        }
+    }
 
     when (level) {
-        Log.VERBOSE -> Log.v(finalTag, content)
-        Log.DEBUG   -> Log.d(finalTag, content)
-        Log.INFO    -> Log.i(finalTag, content)
-        Log.WARN    -> Log.w(finalTag, content)
-        Log.ERROR   -> Log.e(finalTag, content)
-        else       -> Log.d(finalTag, content)  // 默认使用 DEBUG
+        Log.VERBOSE -> Log.v(finalTag, formattedContent)
+        Log.DEBUG   -> Log.d(finalTag, formattedContent)
+        Log.INFO    -> Log.i(finalTag, formattedContent)
+        Log.WARN    -> Log.w(finalTag, formattedContent)
+        Log.ERROR   -> Log.e(finalTag, formattedContent)
+        else        -> Log.d(finalTag, formattedContent)  // 默认使用 DEBUG
     }
 }
 
+val MAX_LOG_TAG_LENGTH = 10
