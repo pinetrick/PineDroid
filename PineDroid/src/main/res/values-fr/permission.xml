@@ -34,6 +34,8 @@
     <string name="pine_permission_write_external_storage_text">Autorisation de stockage requise pour enregistrer des fichiers</string>
     <string name="pine_permission_write_external_storage_description">Cette autorisation est utilisée pour enregistrer du contenu comme des photos et des fichiers sur l\'appareil.</string>
 
+    <string name="pine_permission_activity_recognition_text">Autorisation de reconnaissance d\'activité nécessaire pour compter les pas</string>
+    <string name="pine_permission_activity_recognition_description">Cette autorisation est utilisée pour lire les données du capteur de mouvement de l\'appareil, compter vos pas quotidiens, suivre la distance d\'exercice et d\'autres informations de santé.</string>
 
     <string name="pine_permission_title">Demande d\'autorisation</string>
     <string name="pine_permission_redirect_to_setting">Aller aux paramètres de l\'application pour autoriser</string>

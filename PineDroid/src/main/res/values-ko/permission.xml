@@ -34,7 +34,10 @@
     <string name="pine_permission_write_external_storage_text">파일을 저장하려면 저장소 권한이 필요합니다</string>
     <string name="pine_permission_write_external_storage_description">이 권한은 사진, 파일 등 콘텐츠를 디바이스에 저장하는 데 사용됩니다.</string>
 
+    <string name="pine_permission_activity_recognition_text">걸음 수 측정을 위한 활동 인식 권한 필요</string>
+    <string name="pine_permission_activity_recognition_description">이 권한은 장치의 모션 센서 데이터를 읽고, 일일 걸음 수를 계산하며, 운동 거리를 추적하고, 기타 건강 정보를 확인하는 데 사용됩니다.</string>
 
+    
     <string name="pine_permission_title">권한 요청</string>
     <string name="pine_permission_redirect_to_setting">앱 설정으로 이동하여 권한 부여</string>
     <string name="pine_permission_auth_now">지금 권한 부여</string>

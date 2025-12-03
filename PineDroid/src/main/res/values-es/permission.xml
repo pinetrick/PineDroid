@@ -34,6 +34,8 @@
     <string name="pine_permission_write_external_storage_text">Se requiere permiso de almacenamiento para guardar archivos</string>
     <string name="pine_permission_write_external_storage_description">Este permiso se utiliza para guardar contenido como fotos y archivos en el dispositivo.</string>
 
+    <string name="pine_permission_activity_recognition_text">Permiso de reconocimiento de actividad necesario para contar pasos</string>
+    <string name="pine_permission_activity_recognition_description">Este permiso se utiliza para leer datos del sensor de movimiento del dispositivo, contar sus pasos diarios, rastrear la distancia de ejercicio y otra información de salud.</string>
 
     <string name="pine_permission_title">Solicitud de permiso</string>
     <string name="pine_permission_redirect_to_setting">Ir a la configuración de la aplicación para autorizar</string>

@@ -34,6 +34,9 @@
     <string name="pine_permission_write_external_storage_text">फ़ाइलें सहेजने के लिए संग्रहण अनुमति आवश्यक है</string>
     <string name="pine_permission_write_external_storage_description">यह अनुमति फोटो, फ़ाइलों आदि सामग्री को डिवाइस पर सहेजने के लिए उपयोग की जाती है।</string>
 
+    <string name="pine_permission_activity_recognition_text">कदम गिनने के लिए गतिविधि पहचान अनुमति आवश्यक</string>
+    <string name="pine_permission_activity_recognition_description">यह अनुमति डिवाइस मोशन सेंसर डेटा पढ़ने, आपके दैनिक कदम गिनने, व्यायाम दूरी ट्रैक करने और अन्य स्वास्थ्य जानकारी के लिए उपयोग की जाती है।</string>
+
 
     <string name="pine_permission_title">अनुमति अनुरोध</string>
     <string name="pine_permission_redirect_to_setting">अधिकृत करने के लिए ऐप सेटिंग्स पर जाएं</string>

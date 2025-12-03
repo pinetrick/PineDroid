@@ -34,6 +34,8 @@
     <string name="pine_permission_write_external_storage_text">Storage permission required to save files</string>
     <string name="pine_permission_write_external_storage_description">This permission is used to save content such as photos and files to the device.</string>
 
+    <string name="pine_permission_activity_recognition_text">Activity recognition permission required for step counting</string>
+    <string name="pine_permission_activity_recognition_description">This permission is used to read device motion sensor data, count your daily steps, track exercise distance, and other health information.</string>
 
     <string name="pine_permission_title">Permission Request</string>
     <string name="pine_permission_redirect_to_setting">Go to app settings to authorize</string>

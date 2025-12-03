@@ -34,6 +34,8 @@
     <string name="pine_permission_write_external_storage_text">ファイルを保存するにはストレージ権限が必要です</string>
     <string name="pine_permission_write_external_storage_description">この権限は、写真、ファイルなどのコンテンツをデバイスに保存するために使用されます。</string>
 
+    <string name="pine_permission_activity_recognition_text">歩数計測に必要な活動認識権限</string>
+    <string name="pine_permission_activity_recognition_description">この権限は、デバイスのモーションセンサーデータを読み取り、毎日の歩数をカウントし、運動距離を追跡し、その他の健康情報を取得するために使用されます。</string>
 
     <string name="pine_permission_title">権限リクエスト</string>
     <string name="pine_permission_redirect_to_setting">アプリ設定に移動して承認</string>

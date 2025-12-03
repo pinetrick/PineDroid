@@ -34,6 +34,8 @@
     <string name="pine_permission_write_external_storage_text">需要存储权限以保存文件</string>
     <string name="pine_permission_write_external_storage_description">此权限用于将照片、文件等内容保存至设备</string>
 
+    <string name="pine_permission_activity_recognition_text">运动识别权限用于统计步数</string>
+    <string name="pine_permission_activity_recognition_description">此权限用于读取设备运动传感器数据，统计您的每日步数、运动距离等健康信息。</string>
 
     <string name="pine_permission_title">权限请求</string>
     <string name="pine_permission_redirect_to_setting">去应用设置授权</string>

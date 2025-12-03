@@ -34,6 +34,8 @@
     <string name="pine_permission_write_external_storage_text">Speicherberechtigung erforderlich, um Dateien zu speichern</string>
     <string name="pine_permission_write_external_storage_description">Diese Berechtigung wird verwendet, um Inhalte wie Fotos und Dateien auf dem Gerät zu speichern.</string>
 
+    <string name="pine_permission_activity_recognition_text">Aktivitätserkennungsberechtigung für Schrittzählung erforderlich</string>
+    <string name="pine_permission_activity_recognition_description">Diese Berechtigung wird verwendet, um Bewegungssensordaten des Geräts zu lesen, tägliche Schritte zu zählen, Bewegungsdistanz zu verfolgen und andere Gesundheitsinformationen.</string>
 
     <string name="pine_permission_title">Berechtigungsanfrage</string>
     <string name="pine_permission_redirect_to_setting">Zu den App-Einstellungen gehen, um zu autorisieren</string>
