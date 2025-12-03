@@ -1,6 +1,8 @@
 package com.pine.pinedroid.hardware.permission.location
 
+import com.pine.pinedroid.utils.shrinker_keep.Keep
 
+@Keep
 data class EnableSpecifiedPermissionScreenState(
     val permission: String = "",
     val icon: String = "\uf3c5",

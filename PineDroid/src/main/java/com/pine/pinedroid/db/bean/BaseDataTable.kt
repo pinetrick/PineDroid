@@ -4,8 +4,10 @@ import com.pine.pinedroid.db.DbConnection
 import com.pine.pinedroid.db.DbRecord
 import com.pine.pinedroid.db.model
 import com.pine.pinedroid.utils.camelToSnakeCase
+import com.pine.pinedroid.utils.shrinker_keep.Keep
 import kotlin.reflect.full.memberProperties
 
+@Keep
 abstract class BaseDataTable {
     //防止gson 不知道映射哪个字段
     @Transient  // Gson 默认就会排除 transient 字段

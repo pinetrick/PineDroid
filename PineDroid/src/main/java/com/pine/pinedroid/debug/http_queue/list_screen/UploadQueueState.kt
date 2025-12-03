@@ -1,9 +1,10 @@
 package com.pine.pinedroid.debug.http_queue.list_screen
 
 import com.pine.pinedroid.net.http_queue.bean.PendingPostRequest
+import com.pine.pinedroid.utils.shrinker_keep.Keep
 import java.util.Date
 
-
+@Keep
 data class UploadQueueState(
     var queues: List<PendingPostRequest> = sampleRequests
 

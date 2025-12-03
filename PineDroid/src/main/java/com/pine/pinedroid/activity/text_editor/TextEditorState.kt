@@ -1,6 +1,9 @@
 package com.pine.pinedroid.activity.text_editor
 
-// TextEditorState.kt
+import com.pine.pinedroid.utils.shrinker_keep.Keep
+
+
+@Keep
 data class TextEditorState(
     val filePath: String = "",
     val fileName: String = "",

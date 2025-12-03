@@ -2,8 +2,9 @@ package com.pine.pinedroid.activity.image_pickup.camera
 
 import androidx.camera.core.ImageCapture.FLASH_MODE_AUTO
 import com.pine.pinedroid.activity.image_pickup.OneImage
+import com.pine.pinedroid.utils.shrinker_keep.Keep
 
-// 更新 State 类
+@Keep
 data class CameraScreenState(
     val allowFlash: Boolean = false,
     val flashMode: Int = FLASH_MODE_AUTO,

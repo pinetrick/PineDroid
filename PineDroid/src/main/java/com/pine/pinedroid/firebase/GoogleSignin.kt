@@ -12,6 +12,7 @@ import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.loge
+import com.pine.pinedroid.utils.log.logv
 import com.pine.pinedroid.utils.sp
 
 //https://github.com/firebase/snippets-android/blob/391c1646eacf44d2aab3f76bcfa60dfc6c14acf1/auth/app/src/main/java/com/google/firebase/quickstart/auth/kotlin/GoogleSignInActivity.kt#L131-L145
@@ -25,13 +26,15 @@ object GoogleSignIn{
 
     fun getSignedInUser(): FirebaseUser? = sp("FirebaseUser")
 
-    fun isSignIn(): Boolean = sp<FirebaseUser>("FirebaseUser") != null
+    fun isSignIn(): Boolean = (sp<FirebaseUser>("FirebaseUser") != null).also { logv("Google SignIn Statue", it) }
 
     suspend fun signIn(): FirebaseUser? {
+        logv("Trigger Google Sign in")
         val user: FirebaseUser? = getSignedInUser()
         if (user != null) return user
 
         // Instantiate a Google sign-in request
+        logv("Start Google Sign in")
         val googleIdOption = GetGoogleIdOption.Builder()
             // Your server's client ID, not your Android client ID.
             .setServerClientId(clientId)

@@ -42,7 +42,7 @@ class PermissionTestScreenVM :
     }
 
     fun onPermissionStateChanged(isMatchRequirement: Boolean) {
-        setState {
+        setStateSync {
             copy(
                 isLoading = false,
                 hasPermission = isMatchRequirement

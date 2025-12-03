@@ -24,6 +24,7 @@ import com.pine.pinedroid.BuildConfig
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.logi
+import com.pine.pinedroid.utils.log.logv
 import com.pine.pinedroid.utils.pineToString
 import com.pine.pinedroid.utils.toast
 import java.lang.ref.WeakReference
@@ -126,7 +127,7 @@ class PineLocationForegroundService : Service() {
     private fun createLocationCallback() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                logd("onLocationChanged", locationResult)
+                logv("onLocationChanged", locationResult)
                 locationResult.lastLocation?.let { location ->
                     currentLocation = location
 

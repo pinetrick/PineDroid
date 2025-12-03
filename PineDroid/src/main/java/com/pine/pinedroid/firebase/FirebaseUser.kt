@@ -1,5 +1,8 @@
 package com.pine.pinedroid.firebase
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class FirebaseUser(
     val email: String,
     val displayName: String? = null,
