@@ -20,8 +20,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,102 +33,117 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
 import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
+import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.pineToString
 import com.pine.pinedroid.utils.ui.pct
-import java.util.Date
+import kotlin.math.abs
 
 @Composable
 fun PineWechatMoments(
-    icon: String,
-    nickname: String,
-    rightIcon: String? = "",
-    rightText: String? = "",
-    content: String? = null,
-    likePeople: List<String> = emptyList(),
-    images: List<OneImage> = emptyList(),
-    datetime: Date? = null,
+    data: PineWechatMomentState,
     onImageClick: ((List<OneImage>, Int) -> Unit)? = null,
     onLike: (() -> Unit)? = null,
     onComment: (() -> Unit)? = null,
     onShare: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null,
-    allowDelete: Boolean = false // 是否是自己的朋友圈，用于显示删除选项
 ) {
+    // 使用状态来存储 TimeAndMenuLine 的位置信息
+    var timeLineBottom by remember { mutableStateOf(0.dp) }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp)
-    ) {
-        // 用户头像
-        PineAsyncImage(
-            model = OneImage.HttpImage(icon),
+
+    Box() {
+        Row(
             modifier = Modifier
-                .size(44.dp)
-                .clip(CircleShape)
-        )
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Column(
-            modifier = Modifier.weight(1f)
+                .fillMaxWidth()
+                .padding(top = 8.dp)
         ) {
-            // 第一行：昵称和右侧信息
-            RightLine1(
-                nickname = nickname,
-                rightIcon = rightIcon,
-                rightText = rightText
+            // 用户头像
+            PineAsyncImage(
+                model = OneImage.HttpImage(data.icon),
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(CircleShape)
             )
 
-            Spacer(modifier = Modifier.padding(top = 4.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
-            // 朋友圈内容
-            RightLineFeedback(feedback = content)
-
-            Spacer(modifier = Modifier.padding(top = 8.dp))
-
-            // 图片区域
-            RightLineImage(
-                images = images,
-                onImageClick = onImageClick
-            )
-
-            Spacer(modifier = Modifier.padding(top = 8.dp))
-
-            // 点赞和评论区域
-            if (likePeople.isNotEmpty()) {
-                LikePeopleSection(
-                    likePeople = likePeople,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp)
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                // 第一行：昵称和右侧信息
+                RightLine1(
+                    nickname = data.nickname,
+                    rightIcon = data.rightIcon,
+                    rightText = data.rightText
                 )
+
+                Spacer(modifier = Modifier.padding(top = 4.dp))
+
+                // 朋友圈内容
+                RightLineFeedback(feedback = data.content)
+
+                Spacer(modifier = Modifier.padding(top = 8.dp))
+
+                // 图片区域
+                RightLineImage(
+                    images = data.images,
+                    onImageClick = onImageClick
+                )
+
+                // 最后一行：时间和操作菜单
+                TimeAndMenuLine(
+                    data = data,
+                    onPositionChanged = { bottom ->
+                        timeLineBottom = bottom
+                    }
+                )
+
+                Spacer(modifier = Modifier.padding(top = 8.dp))
+
+                // 点赞和评论区域
+                if (data.likePeople.isNotEmpty()) {
+                    LikePeopleSection(
+                        likePeople = data.likePeople,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                                shape = RoundedCornerShape(4.dp)
+                            )
+                            .padding(horizontal = 12.dp, vertical = 8.dp)
+                    )
+                }
+
+
             }
-
-            // 最后一行：时间和操作菜单
-            RightLastLine(
-                datetime = datetime,
-                onLike = onLike,
-                onComment = onComment,
-                onShare = onShare,
-                onDelete = onDelete,
-                isOwnMoment = allowDelete
-            )
         }
-    }
 
+        PopUpSection(
+            data = data,
+            onLike = onLike,
+            onComment = onComment,
+            onShare = onShare,
+            onDelete = onDelete,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = timeLineBottom) // 调整偏移量
+        )
+    }
     // 添加横线
     Spacer(modifier = Modifier.padding(top = 8.dp))
     Box(
@@ -139,6 +152,182 @@ fun PineWechatMoments(
             .height(1.dp)
             .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
     )
+
+}
+
+@Composable
+fun PopUpSection(
+    data: PineWechatMomentState,
+    onLike: (() -> Unit)? = null,
+    onComment: (() -> Unit)? = null,
+    onShare: (() -> Unit)? = null,
+    onDelete: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
+) {
+
+    // 操作按钮（更多图标）
+    Box(modifier = modifier) {
+        // 微信风格的横向操作栏
+        if (data.isMenuOpened) {
+            Row(
+                modifier = Modifier
+                    .padding(end = 32.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .border(
+                        width = 0.5.dp,
+                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .align(Alignment.CenterEnd),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // 点赞按钮
+                onLike?.let {
+                    IconButton(
+                        onClick = {
+                            data.isMenuOpened = false
+                            onLike.invoke()
+                        },
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            PineIcon(
+                                text = "\uf164", // FontAwesome 的 thumbs-up 图标
+                                fontSize = 16.sp,
+                                color = if (data.isLiked) Color.Blue else MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Text(
+                                text = if (data.isLiked) "取消" else "点赞",
+                                fontSize = 10.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 2.dp)
+                            )
+                        }
+                    }
+                    // 添加分隔线
+                    if (onComment != null || onShare != null || (data.allowDelete && onDelete != null)) {
+                        Box(
+                            modifier = Modifier
+                                .width(1.dp)
+                                .height(20.dp)
+                                .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+                        )
+                    }
+                }
+
+                // 评论按钮
+                onComment?.let {
+                    IconButton(
+                        onClick = {
+                            data.isMenuOpened = false
+                            onComment.invoke()
+                        },
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            PineIcon(
+                                text = "\uf075", // FontAwesome 的 comment 图标
+                                fontSize = 16.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Text(
+                                text = "评论",
+                                fontSize = 10.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 2.dp)
+                            )
+                        }
+                    }
+                    // 添加分隔线
+                    if (onShare != null || (data.allowDelete && onDelete != null)) {
+                        Box(
+                            modifier = Modifier
+                                .width(1.dp)
+                                .height(20.dp)
+                                .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+                        )
+                    }
+                }
+
+                // 分享按钮
+                onShare?.let {
+                    IconButton(
+                        onClick = {
+                            data.isMenuOpened = false
+                            onShare.invoke()
+                        },
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            PineIcon(
+                                text = "\uf064", // FontAwesome 的 share 图标
+                                fontSize = 16.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Text(
+                                text = "分享",
+                                fontSize = 10.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 2.dp)
+                            )
+                        }
+                    }
+                    // 添加分隔线
+                    if (data.allowDelete && onDelete != null) {
+                        Box(
+                            modifier = Modifier
+                                .width(1.dp)
+                                .height(20.dp)
+                                .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+                        )
+                    }
+                }
+
+                // 如果是自己的朋友圈，显示删除按钮
+                if (data.allowDelete) {
+                    onDelete?.let {
+                        IconButton(
+                            onClick = {
+                                data.isMenuOpened = false
+                                onDelete.invoke()
+                            },
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                PineIcon(
+                                    text = "\uf1f8", // FontAwesome 的 trash 图标
+                                    fontSize = 16.sp,
+                                    color = Color.Red, //在白色背景上对，但是深色背景上颜色异常
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Text(
+                                    text = "删除",
+                                    fontSize = 10.sp,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.padding(top = 2.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
 }
 
 @Composable
@@ -146,195 +335,112 @@ fun LikePeopleSection(
     likePeople: List<String>,
     modifier: Modifier = Modifier
 ) {
-    Box(
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .background(
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                shape = RoundedCornerShape(4.dp)
-            )
-            .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // 点赞图标
-            PineIcon(
-                text = "\uf004", // 使用心形图标，您可以根据需要调整
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
-                modifier = Modifier.padding(end = 8.dp)
-            )
+        // 点赞图标
+        PineIcon(
+            text = "\uf004", // 使用心形图标，您可以根据需要调整
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
+            modifier = Modifier.padding(end = 8.dp)
+        )
 
-            // 点赞用户列表
-            if (likePeople.isNotEmpty()) {
-                val displayText = buildAnnotatedString {
-                    likePeople.forEachIndexed { index, name ->
-                        if (index > 0) {
-                            append("、")
-                        }
-                        // 为每个用户名添加可点击样式
-                        withStyle(
-                            style = SpanStyle(
-                                color = MaterialTheme.colorScheme.primary,
-                                fontWeight = FontWeight.Medium
-                            )
-                        ) {
-                            append(name)
-                        }
+        // 点赞用户列表
+        if (likePeople.isNotEmpty()) {
+            val displayText = buildAnnotatedString {
+                likePeople.forEachIndexed { index, name ->
+                    if (index > 0) {
+                        append("、")
+                    }
+                    // 为每个用户名添加可点击样式
+                    withStyle(
+                        style = SpanStyle(
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Medium
+                        )
+                    ) {
+                        append(name)
                     }
                 }
+            }
 
+            Text(
+                text = displayText,
+                fontSize = 12.sp,
+                lineHeight = 16.sp,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                        // 点击点赞列表的回调，可以在这里处理
+                        println("点击了点赞列表")
+                    }
+            )
+        }
+    }
+}
+
+
+@Composable
+fun TimeAndMenuLine(
+    data: PineWechatMomentState,
+    onPositionChanged: (bottom: Dp) -> Unit = { _ -> }
+) {
+    val density = LocalDensity.current
+
+    // 操作按钮（更多图标）
+    Box(
+        modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
+            val bottom = with(density) {
+                abs(
+                    (layoutCoordinates.parentLayoutCoordinates?.size?.height
+                        ?: 0) - layoutCoordinates.positionInParent().y - layoutCoordinates.size.height
+                ).toDp()
+            }
+            onPositionChanged(bottom)
+        }
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // 时间显示
+            data.datetime?.let { create_time ->
                 Text(
-                    text = displayText,
-                    fontSize = 14.sp,
-                    lineHeight = 18.sp,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable {
-                            // 点击点赞列表的回调，可以在这里处理
-                            println("点击了点赞列表")
-                        }
+                    text = create_time.pineToString("yyyy-MM-dd HH:mm"),
+                    fontSize = 10.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                )
+            }
+
+
+            // 更多操作图标（始终显示）
+            IconButton(
+                onClick = { data.isMenuOpened = !data.isMenuOpened },
+                modifier = Modifier
+                    .size(32.dp)
+                    .background(
+                        Color.Transparent,
+                        CircleShape
+                    )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = "更多操作",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                    modifier = Modifier.size(18.dp)
                 )
             }
         }
+
+
     }
 }
 
-@Composable
-fun RightLastLine(
-    datetime: Date?,
-    onLike: (() -> Unit)? = null,
-    onComment: (() -> Unit)? = null,
-    onShare: (() -> Unit)? = null,
-    onDelete: (() -> Unit)? = null,
-    isOwnMoment: Boolean = false
-) {
-    var showMenu by remember { mutableStateOf(false) }
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // 时间显示
-        datetime?.let { create_time ->
-            Text(
-                text = create_time.pineToString("yyyy-MM-dd HH:mm"),
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-            )
-        }
-        var enabledCount = if (onLike != null) 1 else 0
-        if (onComment != null) enabledCount++
-        if (onShare != null) enabledCount++
-        if (isOwnMoment && onDelete != null) enabledCount++
-
-        if (enabledCount > 0) {
-            // 更多操作菜单
-            Box {
-                IconButton(
-                    onClick = { showMenu = true },
-                    modifier = Modifier.size(24.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.MoreVert,
-                        contentDescription = "更多操作",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
-
-                // 下拉菜单
-                DropdownMenu(
-                    expanded = showMenu,
-                    onDismissRequest = { showMenu = false },
-                    offset = DpOffset(x = (-16).dp, y = (-8).dp),
-                    modifier = Modifier
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceVariant,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                ) {
-                    // 点赞选项
-                    onLike?.let {
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    text = "点赞",
-                                    fontSize = 14.sp,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            },
-                            onClick = {
-                                showMenu = false
-                                onLike.invoke()
-                            }
-                        )
-                    }
-
-
-                    // 评论选项
-                    onComment?.let {
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    text = "评论",
-                                    fontSize = 14.sp,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            },
-                            onClick = {
-                                showMenu = false
-                                onComment.invoke()
-                            }
-                        )
-                    }
-
-
-                    // 分享选项
-                    onShare?.let {
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    text = "分享",
-                                    fontSize = 14.sp,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            },
-                            onClick = {
-                                showMenu = false
-                                onShare.invoke()
-                            }
-                        )
-                    }
-
-
-                    // 如果是自己的朋友圈，显示删除选项
-                    if (isOwnMoment) {
-                        onDelete?.let {
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        text = "删除",
-                                        fontSize = 14.sp,
-                                        color = Color.Red
-                                    )
-                                },
-                                onClick = {
-                                    showMenu = false
-                                    onDelete.invoke()
-                                }
-                            )
-                        }
-
-                    }
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun RightLineImage(images: List<OneImage>, onImageClick: ((List<OneImage>, Int) -> Unit)?) {
@@ -388,9 +494,9 @@ fun RightLineFeedback(feedback: String?) {
     if (!feedback.isNullOrEmpty()) {
         Text(
             text = feedback,
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onBackground,
-            lineHeight = 22.sp,
+            lineHeight = 20.sp,
             modifier = Modifier.padding(vertical = 2.dp)
         )
     }
@@ -404,7 +510,7 @@ fun RightLine1(nickname: String, rightIcon: String?, rightText: String?) {
     ) {
         Text(
             text = nickname,
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             maxLines = 1,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.primary,
@@ -417,7 +523,7 @@ fun RightLine1(nickname: String, rightIcon: String?, rightText: String?) {
             rightIcon?.let { right ->
                 PineIcon(
                     text = right,
-                    fontSize = 14.sp,
+                    fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
                     modifier = Modifier.padding(horizontal = 4.dp)
                 )
@@ -425,7 +531,7 @@ fun RightLine1(nickname: String, rightIcon: String?, rightText: String?) {
             rightText?.let { right ->
                 Text(
                     text = right,
-                    fontSize = 14.sp,
+                    fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
                     fontWeight = FontWeight.Medium
                 )
@@ -449,51 +555,24 @@ fun PreviewDark() {
                 .padding(16.dp)
         ) {
             PineWechatMoments(
-                icon = "https://picsum.photos/100",
-                nickname = "微信用户",
-                rightIcon = "\uf005",
-                rightText = "4.5",
-                content = "这是朋友圈的内容示例，可以显示多行文本。今天天气真好，适合出去散步！",
-                likePeople = listOf("张三", "李四", "王五", "赵六", "钱七", "孙八"),
-                images = listOf(
-                    OneImage.HttpImage("https://picsum.photos/200/300"),
-                    OneImage.HttpImage("https://picsum.photos/201/301"),
-                    OneImage.HttpImage("https://picsum.photos/202/302"),
-                    OneImage.HttpImage("https://picsum.photos/200/300"),
-                ),
-                datetime = Date(),
+                data = DEMO_PINE_WECHAT_MOMENT_STATE_1,
                 onLike = { println("点赞点击") },
                 onComment = { println("评论点击") },
                 onShare = { println("分享点击") },
                 onDelete = { println("删除点击") },
-                allowDelete = true
             )
 
-            // 第二个示例：少量点赞
             PineWechatMoments(
-                icon = "https://picsum.photos/101",
-                nickname = "另一个用户",
-                content = "单张图片的示例",
-                likePeople = listOf("小明", "小红"),
-                images = listOf(
-                    OneImage.HttpImage("https://picsum.photos/300/400")
-                ),
-                datetime = Date(),
-                allowDelete = false
+                data = DEMO_PINE_WECHAT_MOMENT_STATE_2,
+                onLike = { println("点赞点击") },
+                onComment = { println("评论点击") },
+                onShare = { println("分享点击") },
+                onDelete = { println("删除点击") },
             )
 
             // 第三个示例：无点赞
             PineWechatMoments(
-                icon = "https://picsum.photos/102",
-                nickname = "测试用户",
-                content = "没有点赞的示例",
-                likePeople = emptyList(),
-                images = listOf(
-                    OneImage.HttpImage("https://picsum.photos/301/401"),
-                    OneImage.HttpImage("https://picsum.photos/302/402")
-                ),
-                datetime = Date(),
-                allowDelete = false
+                data = DEMO_PINE_WECHAT_MOMENT_STATE_3,
             )
         }
     }
@@ -514,18 +593,7 @@ fun PreviewLight() {
                 .padding(16.dp)
         ) {
             PineWechatMoments(
-                icon = "https://picsum.photos/100",
-                nickname = "微信用户",
-                rightIcon = "\uf005",
-                rightText = "4.5",
-                content = "这是朋友圈的内容示例",
-                likePeople = listOf("张三", "李四", "王五"),
-                images = listOf(
-                    OneImage.HttpImage("https://picsum.photos/200/300"),
-                    OneImage.HttpImage("https://picsum.photos/201/301"),
-                ),
-                datetime = Date(),
-                allowDelete = true
+                data = DEMO_PINE_WECHAT_MOMENT_STATE_4
             )
         }
     }

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,6 +35,7 @@ import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
 @Composable
 fun PineHorizontalImageView(
     images: List<OneImage>,
+    showPageCount: Boolean = true,
     modifier: Modifier = Modifier,
     onClick: (OneImage, Int) -> Unit = { _, _ -> },
     onPageChange: (Int) -> Unit = {}
@@ -81,21 +81,23 @@ fun PineHorizontalImageView(
         }
 
         // 顶部操作栏
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            // 图片数量指示器
-            if (images.size > 1) {
-                Text(
-                    text = "${currentPage + 1}/${images.size}",
-                    color = Color.White,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .background(Color.Black.copy(alpha = 0.4f), RoundedCornerShape(16.dp))
-                        .padding(horizontal = 12.dp, vertical = 6.dp)
-                )
+        if (showPageCount) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                // 图片数量指示器
+                if (images.size > 1) {
+                    Text(
+                        text = "${currentPage + 1}/${images.size}",
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .background(Color.Black.copy(alpha = 0.4f), RoundedCornerShape(16.dp))
+                            .padding(horizontal = 12.dp, vertical = 6.dp)
+                    )
+                }
             }
         }
 
