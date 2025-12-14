@@ -19,12 +19,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,14 +36,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,8 +58,12 @@ import androidx.compose.ui.unit.sp
 import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
 import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
+import com.pine.pinedroid.ui.bottom_input.PineBottomEditText
 import com.pine.pinedroid.utils.pineToString
 import com.pine.pinedroid.utils.ui.pct
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 @Composable
@@ -59,7 +71,7 @@ fun PineWechatMoments(
     data: PineWechatMomentState,
     onImageClick: ((List<OneImage>, Int) -> Unit)? = null,
     onLike: (() -> Unit)? = null,
-    onComment: (() -> Unit)? = null,
+    onComment: ((reply: String) -> Unit)? = null,
     onShare: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null,
 ) {
@@ -124,33 +136,39 @@ fun PineWechatMoments(
                 Spacer(modifier = Modifier.padding(top = 8.dp))
 
                 // 点赞和评论区域
-                Column(
-                    Modifier
-                        .fillMaxWidth()
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                            shape = RoundedCornerShape(4.dp)
-                        )
-                        .padding(horizontal = 8.dp, vertical = 6.dp)
-                ) {
-                    if (data.likePeople.isNotEmpty()) {
-                        LikePeopleSection(
-                            likePeople = data.likePeople,
-                        )
+                if (data.likePeople.isNotEmpty() && data.feedbacks.isNotEmpty()) {
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                                shape = RoundedCornerShape(4.dp)
+                            )
+                            .padding(horizontal = 8.dp, vertical = 6.dp)
+                    ) {
+                        if (data.likePeople.isNotEmpty()) {
+                            LikePeopleSection(
+                                likePeople = data.likePeople,
+                            )
+                            if (data.feedbacks.isNotEmpty()) {
+                                Spacer(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 4.dp)
+                                        .height(1.dp)
+                                        .background(
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                                                alpha = 0.3f
+                                            )
+                                        )
+                                )
+                            }
+                        }
                         if (data.feedbacks.isNotEmpty()) {
-                            Spacer(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 4.dp)
-                                    .height(1.dp)
-                                    .background(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
+                            FeedbackSection(
+                                feedbacks = data.feedbacks,
                             )
                         }
-                    }
-                    if (data.feedbacks.isNotEmpty()) {
-                        FeedbackSection(
-                            feedbacks = data.feedbacks,
-                        )
                     }
                 }
 
@@ -184,7 +202,7 @@ fun PineWechatMoments(
 fun PopUpSection(
     data: PineWechatMomentState,
     onLike: (() -> Unit)? = null,
-    onComment: (() -> Unit)? = null,
+    onComment: ((reply: String) -> Unit)? = null,
     onShare: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
@@ -251,7 +269,20 @@ fun PopUpSection(
                     IconButton(
                         onClick = {
                             data.isMenuOpened = false
-                            onComment.invoke()
+                            // 创建协程作用域来调用挂起函数
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val result = PineBottomEditText.show(
+                                    placeholder = "爱回复的都是帅哥美女",
+                                    textButton = "回复"
+                                )
+
+                                // 确保 result 不为 null 且不为空
+                                result?.let { inputText ->
+                                    if (inputText.isNotBlank()) {
+                                        onComment.invoke(inputText)
+                                    }
+                                }
+                            }
                         },
                     ) {
                         Column(
@@ -351,7 +382,88 @@ fun PopUpSection(
                 }
             }
         }
+    }
 
+
+}
+
+// 新增的评论输入框组件
+@Composable
+fun CommentInputBar(
+    text: String,
+    onTextChange: (String) -> Unit,
+    onSendClick: () -> Unit,
+    onDismiss: () -> Unit,
+    focusRequester: FocusRequester,
+    modifier: Modifier = Modifier
+) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+            )
+            .border(
+                width = 0.5.dp,
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+            )
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            // 输入框
+            TextField(
+                value = text,
+                onValueChange = onTextChange,
+                modifier = Modifier
+                    .weight(1f)
+                    .height(48.dp)
+                    .focusRequester(focusRequester)
+                    .onFocusChanged {
+                        if (!it.isFocused && text.isEmpty()) {
+                            onDismiss()
+                        }
+                    },
+                placeholder = {
+                    Text(
+                        text = "评论...",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    )
+                },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+                keyboardActions = androidx.compose.foundation.text.KeyboardActions(
+                    onSend = {
+                        if (text.isNotBlank()) {
+                            onSendClick()
+                            keyboardController?.hide()
+                        }
+                    }
+                )
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            // 发送按钮
+            TextButton(
+                onClick = {
+                    if (text.isNotBlank()) {
+                        onSendClick()
+                        keyboardController?.hide()
+                    }
+                },
+                enabled = text.isNotBlank(),
+                modifier = Modifier.height(48.dp)
+            ) {
+                Text("发送")
+            }
+        }
     }
 }
 
@@ -369,8 +481,8 @@ fun FeedbackSection(
             feedbacks.forEach { feedback ->
                 Text(
                     text = feedback,
-                    fontSize = 13.sp,
-                    lineHeight = 18.sp,
+                    fontSize = 14.sp,
+                    lineHeight = 22.sp,
                     maxLines = 2,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
                     overflow = TextOverflow.Ellipsis,
@@ -420,7 +532,7 @@ fun LikePeopleSection(
 
             Text(
                 text = displayText,
-                fontSize = 13.sp,
+                fontSize = 14.sp,
                 lineHeight = 16.sp,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,

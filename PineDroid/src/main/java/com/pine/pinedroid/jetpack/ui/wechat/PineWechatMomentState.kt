@@ -15,15 +15,18 @@ data class PineWechatMomentState(
     val allowDelete: Boolean = false,
     val id: String = "",             // 添加唯一标识符
     val isLiked: Boolean = false,    // 当前用户是否已点赞
-    val isMenuOpenedState: MutableState<Boolean> = mutableStateOf(false),
     val likePeople: List<String> = emptyList(),
     val images: List<OneImage> = emptyList(),
     val feedbacks: List<String> = emptyList(),
+
+
+    val isMenuOpenedState: MutableState<Boolean> = mutableStateOf(false),
+
 ) {
-    // 为了方便访问，提供一个属性委托
     var isMenuOpened: Boolean
         get() = isMenuOpenedState.value
         set(value) { isMenuOpenedState.value = value }
+
 }
 
 val DEMO_PINE_WECHAT_MOMENT_STATE_1 = PineWechatMomentState(

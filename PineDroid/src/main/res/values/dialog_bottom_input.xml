@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BottomInputDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowAnimationStyle">@style/BottomInputAnimation</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="BottomInputAnimation">
+        <item name="android:windowEnterAnimation">@anim/pinedroid_bottom_edittext_slide_in_top</item>
+        <item name="android:windowExitAnimation">@anim/pinedroid_bottom_edittext_slide_out_top</item>
+    </style>
+
+
+</resources>
+
