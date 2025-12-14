@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
@@ -48,7 +50,6 @@ import androidx.compose.ui.unit.sp
 import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
 import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
-import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.pineToString
 import com.pine.pinedroid.utils.ui.pct
 import kotlin.math.abs
@@ -65,12 +66,19 @@ fun PineWechatMoments(
     // 使用状态来存储 TimeAndMenuLine 的位置信息
     var timeLineBottom by remember { mutableStateOf(0.dp) }
 
-
-    Box() {
+    Box(
+        modifier = Modifier.pointerInput(Unit) {
+            detectTapGestures(
+                onPress = {
+                    data.isMenuOpened = false
+                }
+            )
+        }
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp)
+                .padding(top = 6.dp)
         ) {
             // 用户头像
             PineAsyncImage(
@@ -116,17 +124,34 @@ fun PineWechatMoments(
                 Spacer(modifier = Modifier.padding(top = 8.dp))
 
                 // 点赞和评论区域
-                if (data.likePeople.isNotEmpty()) {
-                    LikePeopleSection(
-                        likePeople = data.likePeople,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                                shape = RoundedCornerShape(4.dp)
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .padding(horizontal = 8.dp, vertical = 6.dp)
+                ) {
+                    if (data.likePeople.isNotEmpty()) {
+                        LikePeopleSection(
+                            likePeople = data.likePeople,
+                        )
+                        if (data.feedbacks.isNotEmpty()) {
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 4.dp)
+                                    .height(1.dp)
+                                    .background(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
                             )
-                            .padding(horizontal = 12.dp, vertical = 8.dp)
-                    )
+                        }
+                    }
+                    if (data.feedbacks.isNotEmpty()) {
+                        FeedbackSection(
+                            feedbacks = data.feedbacks,
+                        )
+                    }
                 }
 
 
@@ -331,6 +356,33 @@ fun PopUpSection(
 }
 
 @Composable
+fun FeedbackSection(
+    feedbacks: List<String>,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+    ) {
+
+        // 点赞用户列表
+        if (feedbacks.isNotEmpty()) {
+            feedbacks.forEach { feedback ->
+                Text(
+                    text = feedback,
+                    fontSize = 13.sp,
+                    lineHeight = 18.sp,
+                    maxLines = 2,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+
+
+        }
+    }
+}
+
+@Composable
 fun LikePeopleSection(
     likePeople: List<String>,
     modifier: Modifier = Modifier
@@ -342,7 +394,7 @@ fun LikePeopleSection(
         // 点赞图标
         PineIcon(
             text = "\uf004", // 使用心形图标，您可以根据需要调整
-            fontSize = 12.sp,
+            fontSize = 13.sp,
             color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
             modifier = Modifier.padding(end = 8.dp)
         )
@@ -368,16 +420,12 @@ fun LikePeopleSection(
 
             Text(
                 text = displayText,
-                fontSize = 12.sp,
+                fontSize = 13.sp,
                 lineHeight = 16.sp,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .weight(1f)
-                    .clickable {
-                        // 点击点赞列表的回调，可以在这里处理
-                        println("点击了点赞列表")
-                    }
             )
         }
     }
@@ -494,7 +542,7 @@ fun RightLineFeedback(feedback: String?) {
     if (!feedback.isNullOrEmpty()) {
         Text(
             text = feedback,
-            fontSize = 14.sp,
+            fontSize = 15.sp,
             color = MaterialTheme.colorScheme.onBackground,
             lineHeight = 20.sp,
             modifier = Modifier.padding(vertical = 2.dp)
@@ -510,7 +558,7 @@ fun RightLine1(nickname: String, rightIcon: String?, rightText: String?) {
     ) {
         Text(
             text = nickname,
-            fontSize = 14.sp,
+            fontSize = 15.sp,
             maxLines = 1,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.primary,

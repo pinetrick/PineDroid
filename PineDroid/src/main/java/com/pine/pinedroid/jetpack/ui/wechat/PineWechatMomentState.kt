@@ -11,13 +11,14 @@ data class PineWechatMomentState(
     val rightIcon: String? = null,  // 改为可空，默认null更合适
     val rightText: String? = null,   // 改为可空，默认null更合适
     val content: String? = null,
-    val likePeople: List<String> = emptyList(),
-    val images: List<OneImage> = emptyList(),
     val datetime: Date? = null,      // 添加时间字段
     val allowDelete: Boolean = false,
     val id: String = "",             // 添加唯一标识符
     val isLiked: Boolean = false,    // 当前用户是否已点赞
-    val isMenuOpenedState: MutableState<Boolean> = mutableStateOf(false)
+    val isMenuOpenedState: MutableState<Boolean> = mutableStateOf(false),
+    val likePeople: List<String> = emptyList(),
+    val images: List<OneImage> = emptyList(),
+    val feedbacks: List<String> = emptyList(),
 ) {
     // 为了方便访问，提供一个属性委托
     var isMenuOpened: Boolean
@@ -42,7 +43,8 @@ val DEMO_PINE_WECHAT_MOMENT_STATE_1 = PineWechatMomentState(
     datetime = Date(),
     allowDelete = true,
     isLiked = false,
-    isMenuOpenedState = mutableStateOf(true)
+    isMenuOpenedState = mutableStateOf(true),
+    feedbacks = listOf("Pine: 真好", "Bella: Bababababaa", "111111111111112222222222222233333333333333")
 )
 
 val DEMO_PINE_WECHAT_MOMENT_STATE_2 = PineWechatMomentState(
