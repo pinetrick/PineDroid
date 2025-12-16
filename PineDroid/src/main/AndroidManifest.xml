@@ -31,6 +31,9 @@
     <!-- 记步 -->
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="false" />
+    <!-- 剪贴板 -->
+    <uses-permission android:name="android.permission.READ_CLIPBOARD_IN_BACKGROUND" />
+
 
     <application>
         <activity
@@ -51,7 +54,7 @@
         </activity>
         <!-- ContentProvider 用于在App启动时初始化悬浮窗 -->
         <provider
-            android:name=".content_provider.PineContentProvider"
+            android:name=".PineContentProvider"
             android:authorities="${applicationId}.floatinginitprovider"
             android:exported="false" />
 

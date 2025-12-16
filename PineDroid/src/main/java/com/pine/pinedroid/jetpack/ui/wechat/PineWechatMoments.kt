@@ -136,7 +136,7 @@ fun PineWechatMoments(
                 Spacer(modifier = Modifier.padding(top = 8.dp))
 
                 // 点赞和评论区域
-                if (data.likePeople.isNotEmpty() && data.feedbacks.isNotEmpty()) {
+                if (data.likePeople.isNotEmpty() || data.feedbacks.isNotEmpty()) {
                     Column(
                         Modifier
                             .fillMaxWidth()

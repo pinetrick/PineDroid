@@ -1,10 +1,13 @@
 package com.pine.pinedroid.utils.reflect
 
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject
 import kotlin.reflect.full.companionObjectInstance
 import kotlin.reflect.full.declaredMemberProperties
-
+import kotlin.coroutines.intrinsics.COROUTINE_SUSPENDED
 /**
  * 类反射获取T的伴随对象 var值
  */
@@ -75,4 +78,34 @@ fun String.invokeStaticFunction(vararg args: Any?): Any? {
 
     return null
 
+}
+
+suspend fun String.invokeSuspendStaticFunction(
+    vararg args: Any?
+): Any? = suspendCoroutine { cont ->
+
+    try {
+        val lastDot = lastIndexOf('.')
+        require(lastDot > 0)
+
+        val className = substring(0, lastDot)
+        val methodName = substring(lastDot + 1)
+
+        val clazz = Class.forName(className).kotlin
+        val fn = clazz.members.first { it.name == methodName }
+
+        val instance = clazz.objectInstance
+
+        val result = fn.call(
+            instance,
+            *args,
+            cont
+        )
+
+        if (result != COROUTINE_SUSPENDED) {
+            cont.resume(result)
+        }
+    } catch (e: Throwable) {
+        cont.resumeWithException(e)
+    }
 }

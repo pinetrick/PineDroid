@@ -11,6 +11,7 @@ import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.loge
 import com.pine.pinedroid.utils.log.logi
 import com.pine.pinedroid.utils.reflect.invokeStaticFunction
+import com.pine.pinedroid.utils.reflect.invokeSuspendStaticFunction
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -178,7 +179,12 @@ class PineHttpQueue private constructor() {
             if (pendingPostRequest.callback_function != null) {
                 val args = mutableListOf<Any?>(resp)
                 args.addAll(pendingPostRequest.args)
-                val invokeResult = pendingPostRequest.callback_function!!.invokeStaticFunction(*args.toTypedArray())
+
+                val invokeResult = try {
+                    pendingPostRequest.callback_function!!.invokeSuspendStaticFunction(*args.toTypedArray())
+                } catch (e: IllegalArgumentException) {
+                    pendingPostRequest.callback_function!!.invokeStaticFunction(*args.toTypedArray())
+                }
                 if (invokeResult == null) canDelete = false
                 if (invokeResult is Boolean && !invokeResult) canDelete = false
             }

@@ -52,6 +52,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.3")
     implementation("androidx.navigation:navigation-fragment-ktx:2.9.3")
     implementation("io.ktor:ktor-client-okhttp:3.2.3")
+    implementation("io.ktor:ktor-client-cio:3.2.3")
     implementation("io.ktor:ktor-client-core:3.2.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("io.ktor:ktor-client-content-negotiation:3.2.3")
@@ -73,7 +74,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.ui:ui")
-    implementation(libs.androidx.compose.material3)
+//    implementation(libs.androidx.compose.material3)
 
     debugImplementation("androidx.compose.ui:ui-tooling")
 

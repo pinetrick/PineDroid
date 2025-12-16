@@ -7,6 +7,7 @@ import com.pine.pinedroid.utils.log.loge
 import com.pine.pinedroid.utils.log.logv
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.engine.cio.CIO
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -38,7 +39,7 @@ import java.io.File
 import java.util.HashMap
 
 val ktor by lazy {
-    HttpClient(OkHttp) {
+    HttpClient(CIO) {
         install(ContentNegotiation) {
             json(Json { ignoreUnknownKeys = true })
         }
@@ -58,8 +59,9 @@ suspend fun httpDownload(imageUrl: String, outputFile: File): Boolean {
         val response: HttpResponse = ktor.get(imageUrl)
 
         // 创建临时文件，下载完成后再重命名，避免下载中断导致文件损坏
-        val tempFile = File(outputFile.parent, "${outputFile.name}.tmp")
 
+        val tempFile = File(outputFile.parent, "${outputFile.name}.tmp")
+        tempFile.parentFile?.mkdirs()
         response.bodyAsChannel().copyAndClose(tempFile.writeChannel())
 
         // 下载完成后重命名为目标文件
@@ -67,11 +69,12 @@ suspend fun httpDownload(imageUrl: String, outputFile: File): Boolean {
 
         return true
     } catch (e: Exception) {
-        loge("Fail to download: $imageUrl")
+        loge("Failed Download", imageUrl)
         loge(e)
         return false
     }
 }
+
 object BackgroundScope : CoroutineScope by CoroutineScope(Dispatchers.IO + SupervisorJob())
 
 suspend inline fun <reified T> httpGet(url: String, cacheImages: Boolean = false): T? = withContext(Dispatchers.IO) {

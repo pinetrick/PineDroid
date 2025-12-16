@@ -1,4 +1,4 @@
-package com.pine.pinedroid.content_provider
+package com.pine.pinedroid
 
 import android.app.Activity
 import android.app.Application
@@ -7,14 +7,12 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import com.pine.pinedroid.PineConfig
 import com.pine.pinedroid.debug.icon.SmallFloatIcon
 import com.pine.pinedroid.debug.window.FunctionWindowController
 import com.pine.pinedroid.debug.window.PineDebugWindow
 import com.pine.pinedroid.language.LanguageManager
 import com.pine.pinedroid.ui.float_window.FloatingWindowHelper
-import com.pine.pinedroid.utils.PineApp.isAppDebug
-import com.pine.pinedroid.utils.PineApp.printSignatures
+import com.pine.pinedroid.utils.PineApp
 import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.appContext
 import kotlinx.coroutines.CoroutineScope
@@ -31,8 +29,8 @@ class PineContentProvider : ContentProvider() {
             LanguageManager.applySavedLanguage()
             registerActivityLifecycleCallbacks()
 
-            if (isAppDebug()) {
-                printSignatures()
+            if (PineApp.isAppDebug()) {
+                PineApp.printSignatures()
             }
             if (PineDebugWindow.isDebugEnabled) {
                 CoroutineScope(Dispatchers.Main).launch {
