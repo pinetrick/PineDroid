@@ -4,6 +4,22 @@ import android.graphics.Color
 import kotlin.math.max
 import kotlin.math.min
 
+
+fun Double?.distanceToString(): String {
+    if (this == null) return "Unknown"
+
+    return when {
+        this >= 1000 -> {
+            // 保留2位小数显示公里
+            String.format("%.2fkm", this / 1000)
+        }
+        else -> {
+            // 米显示整数
+            "${this.toInt()}m"
+        }
+    }
+}
+
 object PineGpsUtils {
 
 

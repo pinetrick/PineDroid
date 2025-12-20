@@ -41,6 +41,10 @@ data class PineRecorderLatLngBean(
         return surfaceDistance
     }
 
+    fun distanceTo(second: PineRecorderLatLngBean): Double {
+        return distanceTo(second.toPineLatLng())
+    }
+
 
     override fun toString(): String {
         return "PineRecorderLatLngBean(lat=$lat, lng=$lng, altitude=$altitude, accuracy=$accuracy)"
