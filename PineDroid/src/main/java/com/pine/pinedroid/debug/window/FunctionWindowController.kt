@@ -77,7 +77,7 @@ object FunctionWindowController {
 
 
     fun closeFloatWindow(view: View? = null){
-        FloatingWindowHelper.closeFloatingWindow(functionWindow!!)
+        FloatingWindowHelper.closeFloatingWindow(functionWindow)
     }
     fun onUninstallBtnClick(view: View){
         closeFloatWindow()

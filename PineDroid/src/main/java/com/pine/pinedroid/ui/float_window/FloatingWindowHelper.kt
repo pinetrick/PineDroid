@@ -8,6 +8,7 @@ import android.view.View
 import android.view.WindowManager
 import com.pine.pinedroid.debug.window.FunctionWindow
 import com.pine.pinedroid.utils.appContext
+import com.pine.pinedroid.utils.log.loge
 import com.pine.pinedroid.utils.sp
 import com.pine.pinedroid.utils.toast
 import com.pine.pinedroid.utils.ui.ScreenUtil
@@ -17,10 +18,16 @@ import kotlinx.coroutines.withTimeoutOrNull
 object FloatingWindowHelper {
 
     val windowManager = appContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    // 添加一个集合来跟踪已添加的浮动窗口
+    private val floatingViews = mutableSetOf<View>()
 
     suspend fun showFloatingWindow(view: View, draggable: Boolean = false) {
         if (!waitPermission()) return
 
+        // 检查 View 是否已经添加
+        if (floatingViews.contains(view)) {
+            closeFloatingWindow(view)
+        }
 
 
         val layoutParams = WindowManager.LayoutParams(
@@ -31,7 +38,15 @@ object FloatingWindowHelper {
             PixelFormat.TRANSLUCENT
         )
 
-        windowManager.addView(view, layoutParams)
+        try {
+            windowManager.addView(view, layoutParams)
+            floatingViews.add(view) // 记录已添加的 View
+        } catch (e: Exception) {
+            // 处理添加失败的情况
+            loge("FloatingWindow", "Failed to add floating window: ${e.message}")
+            return
+        }
+
 
         if (draggable) {
             // 在 view 内部偏移
@@ -94,8 +109,14 @@ object FloatingWindowHelper {
 
 
     }
-    fun closeFloatingWindow(functionWindow: FunctionWindow) {
-        windowManager.removeView(functionWindow)
+
+
+    fun closeFloatingWindow(functionWindow: View?) {
+        functionWindow?.let {
+            windowManager.removeView(functionWindow)
+            floatingViews.remove(functionWindow)
+        }
+
     }
 
     private suspend fun waitPermission(): Boolean {
