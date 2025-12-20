@@ -6,6 +6,7 @@ import java.util.Date
 
 @Keep
 data class UploadQueueState(
+    var isLoading: Boolean = true,
     var queues: List<PendingPostRequest> = sampleRequests
 
 ){}

@@ -17,7 +17,8 @@ class UploadQueueVM : BaseViewModel<UploadQueueState>(UploadQueueState::class) {
         val lists = model<PendingPostRequest>().select()
         setStateSync {
             copy(
-                queues = lists
+                queues = lists,
+                isLoading = false
             )
         }
         logd(lists)

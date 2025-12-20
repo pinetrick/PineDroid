@@ -46,6 +46,7 @@ import androidx.navigation.NavController
 import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
 import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
+import com.pine.pinedroid.jetpack.ui.loading.PineLoading
 import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
@@ -63,21 +64,23 @@ fun UploadQueueScreen(
         viewModel.onInit()
     }
 
-    PineGeneralScreen(
-        title = {
-            PineTopAppBar(
-                title = "Upload Queue",
-                onReturn = viewModel::navigateBack,
-                actionIcon = "\uf093",
-                onAction = viewModel::processQueue,
-                secondActionIcon = "\uf021",
-                onSecondAction = viewModel::onInit
-            )
-        },
-        content = {
-            Content(viewModel, viewState)
-        },
-    )
+    PineLoading(viewState.isLoading) {
+        PineGeneralScreen(
+            title = {
+                PineTopAppBar(
+                    title = "Upload Queue",
+                    onReturn = viewModel::navigateBack,
+                    actionIcon = "\uf093",
+                    onAction = viewModel::processQueue,
+                    secondActionIcon = "\uf021",
+                    onSecondAction = viewModel::onInit
+                )
+            },
+            content = {
+                Content(viewModel, viewState)
+            },
+        )
+    }
 }
 
 @Composable

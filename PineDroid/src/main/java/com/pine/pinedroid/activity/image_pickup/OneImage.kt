@@ -6,6 +6,7 @@ import android.os.Build
 import android.util.Size
 import androidx.core.net.toUri
 import com.pine.pinedroid.R
+import com.pine.pinedroid.utils.ImageExt
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.toLocalUrl
 
@@ -58,6 +59,16 @@ fun OneImage.toLocalUrl(): String? {
         else -> null
     }
 }
+
+// quality: 0-100，数值越小压缩率越高
+fun OneImage.compress(quality: Int = 100): String? {
+    val localUrl = this.toLocalUrl() ?: return null
+    if (quality == 100) return localUrl
+
+    ImageExt.compressImageQualityToFile(localUrl, localUrl, quality)
+    return localUrl
+}
+
 
 val DEMO_ONE_IMAGE_LIST = listOf<OneImage>(
     OneImage.Resource(R.drawable.pinedroid_image_off),
