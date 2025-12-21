@@ -19,9 +19,12 @@
 
 -keep @com.pine.pinedroid.utils.shrinker_keep.Keep class * { *; }
 -keepclassmembers class * {
-@com.pine.pinedroid.utils.shrinker_keep.Keep *;
+    @com.pine.pinedroid.utils.shrinker_keep.Keep *;
 }
-
+# 3️⃣ 保留顶层 Kotlin 文件类（Kt 类）中带 @Keep 注解的函数和属性
+-keep class **Kt {
+    @com.pine.pinedroid.utils.shrinker_keep.Keep *;
+}
 
 
 -keep class * extends androidx.lifecycle.ViewModel { <init>(...);}

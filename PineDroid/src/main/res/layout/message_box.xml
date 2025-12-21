@@ -28,18 +28,16 @@
 
             <TextView
                 android:id="@+id/mainMassage"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginVertical="10dp"
+                android:layout_marginEnd="20dp"
+                android:lineHeight="20dp"
                 android:gravity="center_vertical"
                 android:text="TextView"
                 android:textColor="#ffffff" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:background="#2dffffff" />
+
         </LinearLayout>
 
         <LinearLayout

@@ -105,6 +105,8 @@ class PineLocationForegroundService : Service() {
                 10000L // 间隔时间10秒
             ).apply {
                 setMinUpdateIntervalMillis(5000L) // 最快间隔5秒
+                setMaxUpdateDelayMillis(30000L) // 最大延迟30秒
+
                 if (BuildConfig.DEBUG) {
                     setMinUpdateDistanceMeters(0f) // 即使没动也触发
                 }
@@ -127,10 +129,9 @@ class PineLocationForegroundService : Service() {
     private fun createLocationCallback() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                logv("onLocationChanged", locationResult)
+                logv("onLocationChanged")
                 locationResult.lastLocation?.let { location ->
                     currentLocation = location
-
                     val altitude = if (location.hasAltitude()) {
                         lastValidAltitude = location.altitude
                         location.altitude
@@ -149,8 +150,12 @@ class PineLocationForegroundService : Service() {
 
                     )
 
+                    logv("Current Location", latLng.toDisplayString())
+
                     callbackFunctionList.removeAll { it.get() == null }
-                    callbackFunctionList.forEach { it.get()?.invoke(latLng) }
+                    callbackFunctionList.forEach {
+                        it.get()?.onLocationChanged(latLng)
+                    }
 
                 }
             }
@@ -197,7 +202,7 @@ class PineLocationForegroundService : Service() {
         const val CHANNEL_ID = "PineLocationForegroundServiceChannel"
         const val NOTIFICATION_ID = 56228466
 
-        val callbackFunctionList: ArrayList<WeakReference<(PineLatLng) -> Unit>> = arrayListOf()
+        val callbackFunctionList: ArrayList<WeakReference<PineLocationUpdateListener>> = arrayListOf()
 
 
         private var serviceInstance: WeakReference<PineLocationForegroundService>? = null
@@ -220,8 +225,10 @@ class PineLocationForegroundService : Service() {
 
         /**
          * 请注意 这个是弱引用，需要一个强引用这个函数确认生命周期
+         * 请在调用处@keep那个变量
          */
-        fun subscribe(onSuccess: (PineLatLng) -> Unit) {
+        fun subscribe(onSuccess: PineLocationUpdateListener) {
+            logd("subscribeLocationChange")
             callbackFunctionList.add(WeakReference(onSuccess))
             startService()
         }
@@ -229,9 +236,12 @@ class PineLocationForegroundService : Service() {
         /**
          * 请注意 这个是弱引用，需要一个强引用这个函数确认生命周期
          */
-        fun unsubscribe(onSuccess: (PineLatLng) -> Unit) {
+        fun unsubscribe(onSuccess: PineLocationUpdateListener) {
+            logd("unsubscribeLocationChange")
             callbackFunctionList.remove(WeakReference(onSuccess))
             startService()
         }
     }
 }
+
+

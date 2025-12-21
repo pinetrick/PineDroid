@@ -49,10 +49,9 @@ fun <T> log(key: String, content: T?, level: Int = Log.DEBUG) {
                 // 安全地序列化，避免 Class 类型
                 try {
                     gson.toJson(content)
-                } catch (e: UnsupportedOperationException) {
-                    // 如果序列化失败，返回类型信息
-                    "${content::class.java.name}: ${content.toString().take(100)}"
-                } catch (e: Exception) {
+                } catch (e: StackOverflowError) {
+                    "${content::class.java.name}: ${content.toString().take(100)} (StackOverflow)"
+                } catch (e: Throwable) {
                     "Serialization error: ${e.message}"
                 }
             }

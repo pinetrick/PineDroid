@@ -172,7 +172,14 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
                     emptyList<Any>()
                 }
             }
-            else -> value
+            else -> {
+                try {
+                    gson.fromJson(value.toString(), targetType.javaType)
+                } catch (e: Exception) {
+                    loge("DatabaseConvert", "Object conversion failed: ${e.message}")
+                    null
+                }
+            }
         }
     }
 

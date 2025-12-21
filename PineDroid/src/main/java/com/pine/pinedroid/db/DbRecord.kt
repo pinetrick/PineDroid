@@ -14,17 +14,24 @@ class DbRecord(public var tableName: String, public var dbName: String) {
     operator fun get(column: String): Any? = kvs[column]
 
     operator fun set(column: String, value: Any?) {
-        if (kvs[column] != value) {
-            var value0 = value
-            if (value0 is Date) {
-                value0 = value.time
-            }
-            else if (value0 is List<*> || value0 is Map<*, *>) {
-                value0 = gson.toJson(value0)
-            }
-            kvs[column] = value0
-            dirtyKeys.add(column) // 自动防重复
+        if (kvs[column] == value) return
+
+
+        val storedValue = when (value) {
+            null -> null
+            is Date -> value.time
+            is String,
+            is Number,
+            is Boolean,
+            is Char -> value
+            is List<*>,
+            is Map<*, *> -> gson.toJson(value)
+            else -> gson.toJson(value) // 非基础类型，统一序列化
         }
+
+        kvs[column] = storedValue
+        dirtyKeys.add(column)
+
     }
 
     fun delete(){
