@@ -8,9 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.pine.pinedroid.jetpack.ui.PineSyncSystemNavBarWithBottomBar
-import com.pine.pinedroid.utils.currentActivity
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -34,6 +32,19 @@ fun <T: Any> HandleNavigation(
                     if (event.popUpThis) {
                         navController?.popBackStack()
                     }
+
+                    // 处理 removeFromHistoryIfExists 逻辑
+                    if (event.rebuildScreenIfExist) {
+                        // 获取当前 backStack 的快照值
+                        val backStack = navController?.currentBackStack?.value
+                        backStack?.find { entry ->
+                            entry.destination.route == event.route
+                        }?.destination?.route?.let { route ->
+                            navController?.popBackStack(route, true)
+                        }
+                    }
+
+
                     navController?.navigate(event.route)
                 }
 

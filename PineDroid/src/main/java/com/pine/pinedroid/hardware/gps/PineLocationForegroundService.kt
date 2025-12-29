@@ -52,6 +52,40 @@ class PineLocationForegroundService : Service() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = createLocationRequest()
         createLocationCallback()
+
+        fetchLastKnownLocationImmediately()
+    }
+
+    /**
+     * 立即获取上次已知的位置（不等待）
+     * 这个方法会在 Service 启动时调用，缓存上次的位置
+     */
+    private fun fetchLastKnownLocationImmediately() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            logv("No location permission to fetch last known location")
+            return
+        }
+
+        // 立即获取上次已知位置（系统缓存的位置）
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location ->
+                location?.let {
+                    logv("Last known location cached: ${location.latitude}, ${location.longitude}")
+                    currentLocation = location
+                    notifyLocationChange(location)
+                }
+            }
+            .addOnFailureListener { e ->
+                logv("Failed to fetch last known location: ${e.message}")
+            }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -131,35 +165,39 @@ class PineLocationForegroundService : Service() {
             override fun onLocationResult(locationResult: LocationResult) {
                 logv("onLocationChanged")
                 locationResult.lastLocation?.let { location ->
-                    currentLocation = location
-                    val altitude = if (location.hasAltitude()) {
-                        lastValidAltitude = location.altitude
-                        location.altitude
-                    } else {
-                        lastValidAltitude ?: 0.0
-                    }
-
-
-                    val latLng = PineLatLng(
-                        location.latitude,
-                        location.longitude,
-                        altitude,
-                        location.accuracy,
-                        location.speed,
-                        dateTime = location.time
-
-                    )
-
-                    logv("Current Location", latLng.toDisplayString())
-
-                    callbackFunctionList.removeAll { it.get() == null }
-                    callbackFunctionList.forEach {
-                        it.get()?.onLocationChanged(latLng)
-                    }
-
+                    notifyLocationChange(location)
                 }
             }
         }
+    }
+
+    private fun notifyLocationChange(location: Location) {
+        currentLocation = location
+        val altitude = if (location.hasAltitude()) {
+            lastValidAltitude = location.altitude
+            location.altitude
+        } else {
+            lastValidAltitude ?: 0.0
+        }
+
+
+        val latLng = PineLatLng(
+            location.latitude,
+            location.longitude,
+            altitude,
+            location.accuracy,
+            location.speed,
+            dateTime = location.time
+
+        )
+
+        logv("Current Location", latLng.toDisplayString())
+
+        callbackFunctionList.removeAll { it.get() == null }
+        callbackFunctionList.forEach {
+            it.get()?.onLocationChanged(latLng)
+        }
+
     }
 
     private fun startLocationUpdates() {

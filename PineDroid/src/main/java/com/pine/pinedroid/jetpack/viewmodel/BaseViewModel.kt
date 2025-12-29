@@ -2,7 +2,6 @@ package com.pine.pinedroid.jetpack.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import com.pine.pinedroid.utils.reflect.createInstance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -55,9 +54,10 @@ open class BaseViewModel<T: Any>(val clazz: KClass<T>): ViewModel() {
         }
     }
 
-    fun navigateTo(route: String, isPopThis: Boolean = false) {
+    //第三个参数，如果为true 会搜索screen队列，如果找到，删除历史screen，并且重新打开这个screen
+    fun navigateTo(route: String, isPopThis: Boolean = false, rebuildScreenIfExist: Boolean = false) {
         viewModelScope.launch {
-            _navEvents.emit(NavEvent.Navigate(route, isPopThis))
+            _navEvents.emit(NavEvent.Navigate(route, isPopThis, rebuildScreenIfExist))
         }
     }
 

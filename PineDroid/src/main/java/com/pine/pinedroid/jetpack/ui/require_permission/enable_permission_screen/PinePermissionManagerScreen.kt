@@ -1,5 +1,6 @@
 package com.pine.pinedroid.jetpack.ui.require_permission.enable_permission_screen
 
+import android.Manifest
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,28 +19,27 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.pine.pinedroid.R
-import com.pine.pinedroid.jetpack.ui.widget.PineOptionRow
+import com.pine.pinedroid.hardware.permission.PineOnePermission
+import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
+import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EnablePermissionScreen(
+fun PinePermissionManagerScreen(
     navController: NavController? = null,
-    viewModel: EnablePermissionScreenVM = viewModel()
+    viewModel: PinePermissionManagerScreenVM = viewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -49,31 +49,37 @@ fun EnablePermissionScreen(
         viewModel.onInit()
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "权限管理") }
+    PineGeneralScreen(
+        title = {
+            PineTopAppBar(
+                title = "权限管理",
+                onReturn = { viewModel.navigateBack() }
             )
-        }
-    ) { innerPadding ->
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            Content(
-                viewModel = viewModel,
-                viewState = viewState,
-            )
-        }
-    }
+        },
+        content = {
+            Scaffold(
+                snackbarHost = { SnackbarHost(snackbarHostState) },
+            ) { innerPadding ->
+                Surface(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                ) {
+                    Content(
+                        viewModel = viewModel,
+                        viewState = viewState,
+                    )
+                }
+            }
+        },
+    )
+
 }
 
 @Composable
 fun Content(
-    viewModel: EnablePermissionScreenVM,
-    viewState: EnablePermissionScreenState,
+    viewModel: PinePermissionManagerScreenVM,
+    viewState: PinePermissionManagerScreenState,
 ) {
     Column(
         modifier = Modifier
@@ -86,47 +92,23 @@ fun Content(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        viewState.isCoarseLocation?.let { enabled ->
+        viewState.permissionList.forEach { permission ->
             PermissionPineOptionRow(
-                icon = "\uf21d",
-                title = "粗略位置",
-                description = "应用获取您的粗略位置以为您提供附近导览",
-                hasPermission = enabled,
-                onClick = {}
+                icon = permission .permission.icon,
+                title = permission.permission.text,
+                description = permission.permission.description,
+                hasPermission = permission.granted,
+                onClick = { viewModel.requirePermission(permission.permission) }
             )
+
+
         }
 
-        viewState.isLocation?.let { enabled ->
-            PermissionPineOptionRow(
-                icon = "\uf601",
-                title = "精确位置",
-                description = "获取您的精确位置以为您提供导航服务",
-                hasPermission = enabled,
-                onClick = {}
-            )
-        }
 
-        viewState.accessCamera?.let { enabled ->
-            PermissionPineOptionRow(
-                icon = "\uf030",
-                title = "拍照",
-                description = "上传照片",
-                hasPermission = enabled,
-                onClick = {}
-            )
-        }
-
-        viewState.accessGallery?.let { enabled ->
-            PermissionPineOptionRow(
-                icon = "\uf03e",
-                title = "图库",
-                description = "上传照片",
-                hasPermission = enabled,
-                onClick = {}
-            )
-        }
     }
 }
+
+
 
 @Composable
 fun HeaderSection() {
@@ -155,11 +137,6 @@ fun HeaderSection() {
     }
 }
 
-data class PermissionItem(
-    val name: String,
-    val granted: Boolean?,
-    val description: String
-)
 
 
 @Preview(
@@ -171,7 +148,7 @@ data class PermissionItem(
 fun PreviewLight() {
     MaterialTheme {
         Surface {
-            EnablePermissionScreen()
+            PinePermissionManagerScreen()
         }
     }
 }

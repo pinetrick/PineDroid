@@ -3,20 +3,21 @@ package com.pine.pinedroid.jetpack.ui.list
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,21 +28,29 @@ import com.pine.pinedroid.utils.ui.spwh
 
 @Composable
 fun PineHorizontalChoiceBar(
-    horizontalChoiceBar: Map<String, Boolean>,
-    onCityChoice: (String) -> Unit,
+    horizontalChoiceBar: List<String>,
+    selectedPage: Int = 0,
+    onPageChoice: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
-        verticalAlignment = Alignment.CenterVertically,
+    val scrollState = rememberLazyListState()
+
+    // 当 selectedPage 变化时，滚动到选中项
+    LaunchedEffect(selectedPage) {
+        scrollState.animateScrollToItem(selectedPage)
+    }
+
+    LazyRow(
+        state = scrollState,
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        horizontalChoiceBar.forEach { (cityName, isSelected) ->
+        itemsIndexed(horizontalChoiceBar) { index, cityName ->
             CityItem(
                 cityName = cityName,
-                isSelected = isSelected,
-                onClick = { onCityChoice(cityName) }
+                isSelected = index == selectedPage,
+                onClick = { onPageChoice(index) }
             )
         }
     }
@@ -65,9 +74,10 @@ fun CityItem(
             .clickable(
                 indication = null, // 去掉涟漪/背景变化
                 interactionSource = remember { MutableInteractionSource() }
-            ) { onClick() },
-        horizontalAlignment = Alignment.CenterHorizontally, // 水平居中
-        verticalArrangement = Arrangement.Center // 垂直居中
+            ) { onClick() }
+            .padding(vertical = 8.dp), // 添加垂直内边距
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = cityName,
@@ -80,14 +90,13 @@ fun CityItem(
         if (isSelected) {
             Box(
                 modifier = Modifier
-                    .height(1.dp)
-                    .width((cityName.length * 4).dp)
-                    .background(selectedColor, shape = MaterialTheme.shapes.medium) // 更圆的角
+                    .height(2.dp) // 增加下划线高度
+                    .width((cityName.length * 8 + 8).dp) // 调整宽度计算
+                    .background(selectedColor, shape = MaterialTheme.shapes.medium)
+                    .padding(top = 4.dp) // 文字和下划线之间的间距
             )
         }
     }
-
-
 }
 
 @Preview(
@@ -97,22 +106,30 @@ fun CityItem(
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun Preview() {
+fun PreviewWithList() {
     Column {
-        PineHorizontalChoiceBar(PineHorizontalChoiceBarDemo,
-            { }
+        PineHorizontalChoiceBar(
+            horizontalChoiceBar = PineHorizontalChoiceBarDemo,
+            selectedPage = 1,
+            onPageChoice = { }
         )
     }
 }
 
-
-val PineHorizontalChoiceBarDemo = mapOf(
-    "奥克兰" to true,
-    "惠灵顿" to false,
-    "ShenZhen" to false,
-    "HangZhou" to true,
-    "ShangHa1i" to false,
-    "GuangZh1ou" to false,
-    "ShenZ2hen" to false,
-    "HangZ3hou" to false,
+@Preview(
+    showBackground = true,
+    widthDp = 360,
+    heightDp = 800
 )
+@Composable
+fun PreviewWithMap() {
+    Column {
+        PineHorizontalChoiceBar(
+            horizontalChoiceBar = PineHorizontalChoiceBarDemo,
+            onPageChoice = { }
+        )
+    }
+}
+
+val PineHorizontalChoiceBarDemo =
+    listOf("奥克兰", "惠灵顿", "ShenZhen", "HangZhou", "ShangHai", "GuangZhou")
