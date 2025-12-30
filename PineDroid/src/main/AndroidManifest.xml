@@ -35,7 +35,8 @@
     <uses-permission android:name="android.permission.READ_CLIPBOARD_IN_BACKGROUND" />
 
 
-    <application>
+    <application
+        android:attributionTags="activity_recognition,location,sensor">
         <activity
             android:name=".activity.PineDroidActivity"
             android:exported="true">
@@ -57,6 +58,7 @@
             android:name=".PineContentProvider"
             android:authorities="${applicationId}.floatinginitprovider"
             android:exported="false" />
+
 
         <!-- 注册位置服务 -->
         <service

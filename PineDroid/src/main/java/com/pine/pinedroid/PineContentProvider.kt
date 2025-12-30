@@ -15,6 +15,7 @@ import com.pine.pinedroid.ui.float_window.FloatingWindowHelper
 import com.pine.pinedroid.utils.PineApp
 import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.appContext
+import com.pine.pinedroid.utils.shrinker_keep.Keep
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

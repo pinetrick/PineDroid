@@ -66,7 +66,6 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
 
 
-
     implementation(platform("androidx.compose:compose-bom:2025.08.00"))
     implementation("androidx.compose.runtime:runtime")
     implementation("androidx.compose.material:material-icons-core")

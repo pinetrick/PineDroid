@@ -26,10 +26,12 @@ import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.logi
 import com.pine.pinedroid.utils.log.logv
 import com.pine.pinedroid.utils.pineToString
+import com.pine.pinedroid.utils.shrinker_keep.Keep
 import com.pine.pinedroid.utils.toast
 import java.lang.ref.WeakReference
 import java.util.Date
 
+@Keep
 class PineLocationForegroundService : Service() {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
