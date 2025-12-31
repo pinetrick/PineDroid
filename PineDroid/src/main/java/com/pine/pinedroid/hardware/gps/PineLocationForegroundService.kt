@@ -165,7 +165,7 @@ class PineLocationForegroundService : Service() {
     private fun createLocationCallback() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                logv("onLocationChanged")
+                //logv("onLocationChanged")
                 locationResult.lastLocation?.let { location ->
                     notifyLocationChange(location)
                 }

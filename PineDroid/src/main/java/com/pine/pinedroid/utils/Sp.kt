@@ -32,6 +32,7 @@ inline fun <reified T> sp(key: String, value: T? = null): T? {
                 "Int" -> prefs.getInt(key, 0) as T?
                 "Long" -> prefs.getLong(key, 0L) as T?
                 "Float" -> prefs.getFloat(key, 0f) as T?
+                "Double" -> prefs.getFloat(key, 0f) as T?
                 "Boolean" -> prefs.getBoolean(key, false) as T?
                 "Object" -> prefs.getString(key, null)?.let { gson.fromJson(it, T::class.java) as T }
                 else -> null

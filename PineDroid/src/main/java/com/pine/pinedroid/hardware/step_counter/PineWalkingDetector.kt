@@ -1,35 +1,32 @@
 package com.pine.pinedroid.hardware.step_counter
 
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import com.google.android.gms.location.ActivityRecognition
+import com.google.android.gms.location.ActivityRecognitionClient
 import com.google.android.gms.location.DetectedActivity
-import com.google.android.gms.location.ActivityRecognitionResult
 import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.log.loge
-import com.pine.pinedroid.utils.toast
-import java.util.concurrent.TimeUnit
-
-// 简化监听接口
-interface MotionListener {
-    fun onMotionChanged(motionType: PineWalkingDetector.MotionType)
-}
+import com.pine.pinedroid.utils.log.logi
+import java.util.concurrent.CopyOnWriteArraySet
 
 /**
- * 极简步行检测器（ActivityRecognition 官方方式，动态注册 BroadcastReceiver）
- * ！！！！！！！！！！！！！！！！！！不好用 有空在修理
+ * Google Play Services 步行检测器（ActivityRecognitionClient）
  */
 class PineWalkingDetector private constructor() {
 
     companion object {
-        private const val TAG = "PineWalkingDetector"
-        private const val DETECTION_INTERVAL_SECONDS = 2L
+
+        private const val DETECTION_INTERVAL_MS = 2_000L
 
         @Volatile
         private var instance: PineWalkingDetector? = null
+
+        var lastPineMotionType: PineMotionType = PineMotionType.UNKNOWN
+
+        fun isOnFoot(): Boolean {
+            return lastPineMotionType in listOf(PineMotionType.WALKING, PineMotionType.RUNNING)
+        }
 
         fun getInstance(): PineWalkingDetector {
             return instance ?: synchronized(this) {
@@ -39,157 +36,32 @@ class PineWalkingDetector private constructor() {
                 }
             }
         }
+
+        internal fun onActivityChanged(type: Int, confidence: Int) {
+            val motion = instance?.convertToMotionType(type) ?: return
+            lastPineMotionType = motion
+            instance?.listeners?.forEach {
+                it.onMotionChanged(motion, confidence)
+            }
+        }
     }
 
-    enum class MotionType {
-        STILL,
-        WALKING,
-        RUNNING,
-        VEHICLE,
-        BICYCLE,
-        UNKNOWN
-    }
 
-    private val activityClient = ActivityRecognition.getClient(activityContext)
-    private var currentMotion = MotionType.STILL
+    private val context = activityContext.applicationContext
+    private val client: ActivityRecognitionClient =
+        ActivityRecognition.getClient(context)
+
+    private val listeners = CopyOnWriteArraySet<MotionListener>()
+
     private var isDetecting = false
-    private val listeners = mutableSetOf<MotionListener>()
+    private var pendingIntent: PendingIntent? = null
 
-    // 动态注册的 Receiver
-    private var activityReceiver: BroadcastReceiver? = null
 
-    // ================================
-    // ActivityRecognition 生命周期
-    // ================================
-
-    fun startDetection() {
-        if (isDetecting) return
-
-        try {
-            // 创建 PendingIntent，不指向具体 Receiver
-            val intent = Intent(activityContext, ActivityRecognitionReceiver::class.java)
-            val pendingIntent = PendingIntent.getBroadcast(
-                activityContext,
-                0,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-            )
-
-            activityClient.requestActivityUpdates(
-                TimeUnit.SECONDS.toMillis(DETECTION_INTERVAL_SECONDS),
-                pendingIntent
-            ).addOnSuccessListener {
-                isDetecting = true
-                loge(TAG, "Activity detection started")
-
-                // 动态注册 Receiver
-                activityReceiver = object : BroadcastReceiver() {
-                    override fun onReceive(context: Context?, intent: Intent?) {
-                        if (intent == null) return
-                        if (!ActivityRecognitionResult.hasResult(intent)) return
-
-                        val result = ActivityRecognitionResult.extractResult(intent) ?: return
-                        val activity = result.mostProbableActivity
-                        val type = activity.type
-                        val confidence = activity.confidence
-
-                        loge(TAG, "Detected activity: $type, confidence=$confidence")
-                        updateMotion(convertToMotionType(type))
-                    }
-                }
-
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    activityContext.registerReceiver(
-                        activityReceiver,
-                        IntentFilter().apply {
-                            addAction("com.google.android.gms.location.ACTIVITY_RECOGNITION_DATA")
-                        },
-                        Context.RECEIVER_NOT_EXPORTED // 添加这个标志
-                    )
-                } else {
-                    // Android 8.0 以下版本不需要这个标志
-                    activityContext.registerReceiver(
-                        activityReceiver,
-                        IntentFilter().apply {
-                            addAction("com.google.android.gms.location.ACTIVITY_RECOGNITION_DATA")
-                        }
-                    )
-                }
-
-            }.addOnFailureListener {
-                loge(TAG, "Activity detection failed: ${it.message}")
-            }
-
-        } catch (e: Exception) {
-            loge(TAG, "startDetection exception: ${e.message}")
-        }
-    }
-
-    fun stopDetection() {
-        if (!isDetecting) return
-
-        try {
-            // 移除更新
-            val intent = Intent(activityContext, ActivityRecognitionReceiver::class.java)
-            val pendingIntent = PendingIntent.getBroadcast(
-                activityContext,
-                0,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-            )
-            activityClient.removeActivityUpdates(pendingIntent)
-            isDetecting = false
-
-            // 注销 Receiver
-            activityReceiver?.let {
-                try {
-                    activityContext.unregisterReceiver(it)
-                } catch (_: Exception) {}
-            }
-            activityReceiver = null
-
-            loge(TAG, "Activity detection stopped")
-
-        } catch (e: Exception) {
-            loge(TAG, "stopDetection exception: ${e.message}")
-        }
-    }
-
-    // ================================
-    // 状态管理
-    // ================================
-
-    private fun updateMotion(newMotion: MotionType) {
-        if (currentMotion == newMotion) return
-        currentMotion = newMotion
-        loge(TAG, "Motion changed: $newMotion")
-        notifyListeners()
-    }
-
-    private fun convertToMotionType(type: Int): MotionType {
-        return when (type) {
-            DetectedActivity.WALKING -> MotionType.WALKING
-            DetectedActivity.RUNNING -> MotionType.RUNNING
-            DetectedActivity.ON_FOOT -> MotionType.WALKING
-            DetectedActivity.STILL -> MotionType.STILL
-            DetectedActivity.IN_VEHICLE -> MotionType.VEHICLE
-            DetectedActivity.ON_BICYCLE -> MotionType.BICYCLE
-            else -> MotionType.UNKNOWN
-        }
-    }
-
-    // ================================
-    // 对外 API
-    // ================================
-
-    fun getCurrentMotion(): MotionType = currentMotion
-
-    fun isMovingOnFoot(): Boolean =
-        currentMotion == MotionType.WALKING || currentMotion == MotionType.RUNNING
+    /* ================= Public API ================= */
 
     fun addListener(listener: MotionListener): PineWalkingDetector {
-        listeners.add(listener)
-        listener.onMotionChanged(currentMotion)
+        if (!listeners.contains(listener))
+            listeners.add(listener)
         return this
     }
 
@@ -197,16 +69,50 @@ class PineWalkingDetector private constructor() {
         listeners.remove(listener)
     }
 
-    private fun notifyListeners() {
-        listeners.forEach {
-            it.onMotionChanged(currentMotion)
+    fun startDetection() {
+        if (isDetecting) return
+
+        val intent = Intent(context, ActivityRecognitionReceiver::class.java)
+
+        pendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+        )
+
+        client.requestActivityUpdates(
+            DETECTION_INTERVAL_MS,
+            pendingIntent!!
+        ).addOnSuccessListener {
+            isDetecting = true
+            logi("ActivityRecognition started")
+        }.addOnFailureListener {
+            loge("ActivityRecognition failed: ${it.message}")
         }
     }
 
-    fun release() {
-        stopDetection()
-        listeners.clear()
-        instance = null
+
+    /* ================= Mapping ================= */
+
+    private fun convertToMotionType(type: Int): PineMotionType {
+        return when (type) {
+            DetectedActivity.WALKING -> PineMotionType.WALKING
+            DetectedActivity.RUNNING -> PineMotionType.RUNNING
+            DetectedActivity.ON_FOOT -> PineMotionType.WALKING
+            DetectedActivity.STILL -> PineMotionType.STILL
+            DetectedActivity.IN_VEHICLE -> PineMotionType.VEHICLE
+            DetectedActivity.ON_BICYCLE -> PineMotionType.BICYCLE
+            else -> PineMotionType.UNKNOWN
+        }
     }
 }
 
+enum class PineMotionType {
+    STILL,
+    WALKING,
+    RUNNING,
+    VEHICLE,
+    BICYCLE,
+    UNKNOWN
+}
