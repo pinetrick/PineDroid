@@ -197,7 +197,8 @@ class PineHttpQueue private constructor() {
                 handleFailedRequest(pendingPostRequest)
             }
         } catch (e: Exception) {
-            loge("Exception handling request for URL: ${pendingPostRequest.url}, error: ${e.message}")
+            loge("Exception handling request for URL: ${pendingPostRequest.url}")
+            loge(e)
             handleFailedRequest(pendingPostRequest)
         }
     }
