@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/appToastRoot"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/toast_bg"
+    android:elevation="12dp"
+    android:gravity="center_vertical"
+    android:maxWidth="320dp"
+    android:minWidth="280dp"
+    android:minHeight="68dp"
+    android:orientation="horizontal"
+    android:outlineProvider="background"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="16dp">
+
+    <!-- 图标部分，支持多种状态 -->
+    <ImageView
+        android:id="@+id/ivToastIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/camera"
+        android:tint="@color/white" />
+
+    <!-- 文本内容区域 -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="start|center_vertical"
+        android:orientation="vertical">  <!-- 修改这里：文本左对齐且垂直居中 -->
+
+        <!-- 标题（可选）-->
+        <TextView
+            android:id="@+id/tvToastTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:letterSpacing="0.02"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="4dp"
+            android:text="提示标题"
+            android:textColor="#E6FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <!-- 消息内容 -->
+        <TextView
+            android:id="@+id/tvToastMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:letterSpacing="0.01"
+            android:lineSpacingExtra="4dp"
+            android:maxLines="3"
+            android:text="这是一条测试消息内容，用于查看布局效果。"
+            android:textColor="#FFFFFFFF"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+</LinearLayout>
