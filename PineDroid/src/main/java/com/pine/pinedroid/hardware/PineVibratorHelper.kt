@@ -95,7 +95,7 @@ object PineVibratorHelper {
 
     /**
      * 播放一个简单的一次性振动。
-     * * @param milliseconds 振动持续时间 (毫秒)
+     * * @param milliseconds 振动持续时间 ( 毫秒) 10~20ms 在 Doze / 屏幕灭时容易被忽略
      * @param amplitude 振动强度 (0-255，默认为 DEFAULT_AMPLITUDE)
      */
     fun vibrateOneShot(milliseconds: Long, amplitude: Int = VibrationEffect.DEFAULT_AMPLITUDE) {

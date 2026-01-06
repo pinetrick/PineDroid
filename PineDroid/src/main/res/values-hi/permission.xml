@@ -37,6 +37,11 @@
     <string name="pine_permission_activity_recognition_text">कदम गिनने के लिए गतिविधि पहचान अनुमति आवश्यक</string>
     <string name="pine_permission_activity_recognition_description">यह अनुमति डिवाइस मोशन सेंसर डेटा पढ़ने, आपके दैनिक कदम गिनने, व्यायाम दूरी ट्रैक करने और अन्य स्वास्थ्य जानकारी के लिए उपयोग की जाती है।</string>
 
+    <string name="pine_permission_background_location_text">ऐप उपयोग में न होने पर स्थान तक पहुँच के लिए बैकग्राउंड लोकेशन अनुमति आवश्यक है</string>
+    <string name="pine_permission_background_location_description">यह अनुमति ऐप को बैकग्राउंड में या स्क्रीन बंद होने पर भी आपका स्थान प्राप्त करने की अनुमति देती है, जिसका उपयोग निरंतर गतिविधि ट्रैकिंग, सुरक्षा निगरानी या स्थान-आधारित स्वचालन जैसी सुविधाओं के लिए किया जाता है।</string>
+
+    <string name="pine_permission_post_notifications_text">फोरग्राउंड सेवा नोटिफिकेशन दिखाने के लिए नोटिफिकेशन अनुमति आवश्यक है</string>
+    <string name="pine_permission_post_notifications_description">यह अनुमति ऐप को नोटिफिकेशन दिखाने की अनुमति देती है, जो बैकग्राउंड लोकेशन ट्रैकिंग और चल रही गतिविधि अपडेट जैसी फोरग्राउंड सेवाओं के लिए आवश्यक हैं।</string>
 
     <string name="pine_permission_title">अनुमति अनुरोध</string>
     <string name="pine_permission_redirect_to_setting">अधिकृत करने के लिए ऐप सेटिंग्स पर जाएं</string>

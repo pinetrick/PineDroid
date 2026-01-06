@@ -37,6 +37,13 @@
     <string name="pine_permission_activity_recognition_text">Autorisation de reconnaissance d\'activité nécessaire pour compter les pas</string>
     <string name="pine_permission_activity_recognition_description">Cette autorisation est utilisée pour lire les données du capteur de mouvement de l\'appareil, compter vos pas quotidiens, suivre la distance d\'exercice et d\'autres informations de santé.</string>
 
+    <string name="pine_permission_background_location_text">Autorisation de localisation en arrière-plan requise pour accéder à la position lorsque l’application n’est pas utilisée</string>
+    <string name="pine_permission_background_location_description">Cette autorisation permet à l’application d’obtenir votre position même en arrière-plan ou lorsque l’écran est éteint, pour des fonctionnalités telles que le suivi continu des activités, la surveillance de la sécurité ou l’automatisation basée sur la localisation.</string>
+
+    <string name="pine_permission_post_notifications_text">Autorisation de notifications requise pour afficher les notifications des services au premier plan</string>
+    <string name="pine_permission_post_notifications_description">Cette autorisation permet à l\'application d\'afficher des notifications, nécessaires pour les services au premier plan tels que le suivi de localisation en arrière-plan et les mises à jour d\'activité en cours.</string>
+
+
     <string name="pine_permission_title">Demande d\'autorisation</string>
     <string name="pine_permission_redirect_to_setting">Aller aux paramètres de l\'application pour autoriser</string>
     <string name="pine_permission_auth_now">Autoriser maintenant</string>

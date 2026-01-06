@@ -37,6 +37,12 @@
     <string name="pine_permission_activity_recognition_text">运动识别权限用于统计步数</string>
     <string name="pine_permission_activity_recognition_description">此权限用于读取设备运动传感器数据，统计您的每日步数、运动距离等健康信息。</string>
 
+    <string name="pine_permission_background_location_text">需要后台定位权限以在应用未使用时获取位置信息</string>
+    <string name="pine_permission_background_location_description">该权限允许应用在后台运行或屏幕关闭时获取您的位置信息，用于持续活动记录、安全监测或基于位置的自动化等功能。</string>
+
+    <string name="pine_permission_post_notifications_text">需要通知权限以显示前台服务通知</string>
+    <string name="pine_permission_post_notifications_description">该权限允许应用显示通知，这些通知对于前台服务（如后台定位和持续活动更新）是必需的。</string>
+
     <string name="pine_permission_title">权限请求</string>
     <string name="pine_permission_redirect_to_setting">去应用设置授权</string>
     <string name="pine_permission_auth_now">立即授权</string>

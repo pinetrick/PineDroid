@@ -37,7 +37,12 @@
     <string name="pine_permission_activity_recognition_text">걸음 수 측정을 위한 활동 인식 권한 필요</string>
     <string name="pine_permission_activity_recognition_description">이 권한은 장치의 모션 센서 데이터를 읽고, 일일 걸음 수를 계산하며, 운동 거리를 추적하고, 기타 건강 정보를 확인하는 데 사용됩니다.</string>
 
-    
+    <string name="pine_permission_background_location_text">앱을 사용하지 않을 때 위치에 접근하기 위해 백그라운드 위치 권한이 필요합니다</string>
+    <string name="pine_permission_background_location_description">이 권한을 통해 앱은 백그라운드에서 실행 중이거나 화면이 꺼진 상태에서도 위치 정보를 수집할 수 있으며, 지속적인 활동 추적, 안전 모니터링 또는 위치 기반 자동화 기능에 사용됩니다.</string>
+
+    <string name="pine_permission_post_notifications_text">포그라운드 서비스 알림을 표시하려면 알림 권한이 필요합니다</string>
+    <string name="pine_permission_post_notifications_description">이 권한을 통해 앱은 백그라운드 위치 추적 및 진행 중인 활동 업데이트와 같은 포그라운드 서비스에 필요한 알림을 표시할 수 있습니다.</string>
+
     <string name="pine_permission_title">권한 요청</string>
     <string name="pine_permission_redirect_to_setting">앱 설정으로 이동하여 권한 부여</string>
     <string name="pine_permission_auth_now">지금 권한 부여</string>

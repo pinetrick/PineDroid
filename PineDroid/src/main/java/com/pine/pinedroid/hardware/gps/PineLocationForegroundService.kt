@@ -3,6 +3,7 @@ package com.pine.pinedroid.hardware.gps
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,6 +11,7 @@ import android.content.pm.ServiceInfo
 import android.location.Location
 import android.os.Binder
 import android.os.Build
+import android.os.HandlerThread
 import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.NotificationCompat
@@ -42,6 +44,7 @@ class PineLocationForegroundService : Service() {
     private var currentLocation: Location? = null
     private var lastValidAltitude: Double? = null
 
+    private val locationThread = HandlerThread("location_thread").apply { start() }
 
     inner class LocalBinder : Binder() {
         fun getService(): PineLocationForegroundService = this@PineLocationForegroundService
@@ -126,12 +129,31 @@ class PineLocationForegroundService : Service() {
     }
 
     private fun buildNotification(): Notification {
+        val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
+            ?.apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+            }
+
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            launchIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("位置服务运行中")
-            .setContentText("正在获取您的位置信息")
+            .setContentTitle("Location service is running")
+            .setContentText("Tracking location in the background")
             .setSmallIcon(android.R.drawable.ic_menu_mylocation)
+            .setContentIntent(pendingIntent)
+            .setOngoing(true)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
             .build()
     }
+
+
 
     private fun createLocationRequest(): LocationRequest {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -141,7 +163,7 @@ class PineLocationForegroundService : Service() {
                 10000L // 间隔时间10秒
             ).apply {
                 setMinUpdateIntervalMillis(5000L) // 最快间隔5秒
-                setMaxUpdateDelayMillis(30000L) // 最大延迟30秒
+               // setMaxUpdateDelayMillis(30000L) // 最大延迟30秒 容易不回调 灭屏后 + Doze：   系统直接 一直等 batch
 
                 if (BuildConfig.DEBUG) {
                     setMinUpdateDistanceMeters(0f) // 即使没动也触发
@@ -211,7 +233,7 @@ class PineLocationForegroundService : Service() {
             fusedLocationClient.requestLocationUpdates(
                 locationRequest,
                 locationCallback,
-                Looper.getMainLooper()
+                locationThread.looper
             )
         }
     }

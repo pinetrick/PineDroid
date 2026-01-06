@@ -37,6 +37,13 @@
     <string name="pine_permission_activity_recognition_text">Activity recognition permission required for step counting</string>
     <string name="pine_permission_activity_recognition_description">This permission is used to read device motion sensor data, count your daily steps, track exercise distance, and other health information.</string>
 
+    <string name="pine_permission_background_location_text">Background location permission required to access location when the app is not in use</string>
+    <string name="pine_permission_background_location_description">This permission allows the app to obtain your location even when running in the background or when the screen is off, used for features such as continuous activity tracking, safety monitoring, or location-based automation.</string>
+
+    <string name="pine_permission_post_notifications_text">Notification permission required to display foreground service notifications</string>
+    <string name="pine_permission_post_notifications_description">This permission allows the app to show notifications, which are required for foreground services such as background location tracking and ongoing activity updates.</string>
+
+
     <string name="pine_permission_title">Permission Request</string>
     <string name="pine_permission_redirect_to_setting">Go to app settings to authorize</string>
     <string name="pine_permission_auth_now">Authorize Now</string>

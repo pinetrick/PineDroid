@@ -37,6 +37,13 @@
     <string name="pine_permission_activity_recognition_text">Permiso de reconocimiento de actividad necesario para contar pasos</string>
     <string name="pine_permission_activity_recognition_description">Este permiso se utiliza para leer datos del sensor de movimiento del dispositivo, contar sus pasos diarios, rastrear la distancia de ejercicio y otra información de salud.</string>
 
+    <string name="pine_permission_background_location_text">Se requiere permiso de ubicación en segundo plano para acceder a la ubicación cuando la app no está en uso</string>
+    <string name="pine_permission_background_location_description">Este permiso permite que la app obtenga tu ubicación incluso cuando se ejecuta en segundo plano o con la pantalla apagada, para funciones como el seguimiento continuo de actividad, la supervisión de seguridad o la automatización basada en la ubicación.</string>
+
+    <string name="pine_permission_post_notifications_text">Se requiere permiso de notificaciones para mostrar notificaciones de servicios en primer plano</string>
+    <string name="pine_permission_post_notifications_description">Este permiso permite que la app muestre notificaciones, necesarias para servicios en primer plano como el seguimiento de ubicación en segundo plano y actualizaciones de actividad en curso.</string>
+
+
     <string name="pine_permission_title">Solicitud de permiso</string>
     <string name="pine_permission_redirect_to_setting">Ir a la configuración de la aplicación para autorizar</string>
     <string name="pine_permission_auth_now">Autorizar ahora</string>

@@ -37,6 +37,13 @@
     <string name="pine_permission_activity_recognition_text">歩数計測に必要な活動認識権限</string>
     <string name="pine_permission_activity_recognition_description">この権限は、デバイスのモーションセンサーデータを読み取り、毎日の歩数をカウントし、運動距離を追跡し、その他の健康情報を取得するために使用されます。</string>
 
+    <string name="pine_permission_background_location_text">アプリを使用していないときに位置情報へアクセスするために、バックグラウンドでの位置情報の許可が必要です</string>
+    <string name="pine_permission_background_location_description">この許可により、アプリはバックグラウンド実行中や画面がオフの状態でも位置情報を取得でき、継続的なアクティビティ追跡、安全監視、位置情報に基づく自動化などの機能に使用されます。</string>
+
+    <string name="pine_permission_post_notifications_text">フォアグラウンドサービス通知を表示するには通知権限が必要です</string>
+    <string name="pine_permission_post_notifications_description">この権限により、バックグラウンドの位置情報追跡や進行中のアクティビティ更新など、フォアグラウンドサービスに必要な通知をアプリが表示できます。</string>
+
+
     <string name="pine_permission_title">権限リクエスト</string>
     <string name="pine_permission_redirect_to_setting">アプリ設定に移動して承認</string>
     <string name="pine_permission_auth_now">今すぐ承認</string>
