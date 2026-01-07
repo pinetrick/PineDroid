@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+
+    <string name="profile_default_avatar_description">Avatar par défaut</string>
+    <string name="profile_login_prompt">Veuillez vous connecter pour accéder à toutes les fonctionnalités</string>
+    <string name="profile_default_username">Utilisateur</string>
+    <string name="profile_logout_button">Se déconnecter</string>
+    <string name="profile_login_button">Se connecter maintenant</string>
+
+
+
+
+
+
+
+
+</resources>

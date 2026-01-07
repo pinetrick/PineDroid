@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!-- 用户资料相关字符串 -->
+    <string name="profile_default_avatar_description">默认头像</string>
+    <string name="profile_login_prompt">请登录以使用完整功能</string>
+    <string name="profile_default_username">用户</string>
+    <string name="profile_logout_button">退出登录</string>
+    <string name="profile_login_button">立即登录</string>
+
+
+
+
+
+
+
+
+
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="profile_default_avatar_description">Avatar predeterminado</string>
+    <string name="profile_login_prompt">Inicia sesión para usar todas las funciones</string>
+    <string name="profile_default_username">Usuario</string>
+    <string name="profile_logout_button">Cerrar sesión</string>
+    <string name="profile_login_button">Iniciar sesión ahora</string>
+
+
+
+
+
+
+
+
+
+
+</resources>

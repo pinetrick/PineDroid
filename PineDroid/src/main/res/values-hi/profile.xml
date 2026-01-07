@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+
+    <string name="profile_default_avatar_description">डिफ़ॉल्ट अवतार</string>
+    <string name="profile_login_prompt">पूर्ण सुविधाओं का उपयोग करने के लिए लॉग इन करें</string>
+    <string name="profile_default_username">उपयोगकर्ता</string>
+    <string name="profile_logout_button">लॉग आउट</string>
+    <string name="profile_login_button">अभी लॉग इन करें</string>
+
+
+
+
+
+
+
+
+</resources>

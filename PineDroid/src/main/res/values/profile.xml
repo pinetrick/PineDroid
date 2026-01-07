@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="profile_default_avatar_description">Default avatar</string>
+    <string name="profile_login_prompt">Please log in to access full features</string>
+    <string name="profile_default_username">User</string>
+    <string name="profile_logout_button">Log out</string>
+    <string name="profile_login_button">Log in now</string>
+
+
+
+
+
+
+
+
+
+
+
+</resources>

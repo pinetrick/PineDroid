@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+
+    <string name="profile_default_avatar_description">기본 아바타</string>
+    <string name="profile_login_prompt">전체 기능을 사용하려면 로그인하세요</string>
+    <string name="profile_default_username">사용자</string>
+    <string name="profile_logout_button">로그아웃</string>
+    <string name="profile_login_button">지금 로그인</string>
+
+
+
+
+
+
+
+
+</resources>

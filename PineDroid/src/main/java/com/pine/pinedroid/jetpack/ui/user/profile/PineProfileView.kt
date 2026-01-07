@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -64,21 +65,20 @@ fun PineProfileView(
             contentAlignment = Alignment.Center
         ) {
             if (image != null) {
-                // 显示用户头像
+                // 显示用户头像 - 内容描述应从参数传入或使用通用描述
                 PineAsyncImage(
                     model = image,
                     modifier = Modifier
                         .size(100.dp)
                         .clip(CircleShape),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+                    contentDescription = ""
                 )
-
-
             } else {
                 // 默认头像
                 Icon(
                     imageVector = Icons.Default.Person,
-                    contentDescription = "",
+                    contentDescription = stringResource(id = R.string.profile_default_avatar_description),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(50.dp)
                 )
@@ -90,14 +90,14 @@ fun PineProfileView(
         // 用户名或提示文本
         if (isLoggedIn) {
             Text(
-                text = name ?: "用户",
+                text = name ?: stringResource(id = R.string.profile_default_username),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Bold
             )
         } else {
             Text(
-                text = "请登录以使用完整功能",
+                text = stringResource(id = R.string.profile_login_prompt),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
             )
@@ -118,7 +118,7 @@ fun PineProfileView(
                 )
             ) {
                 Text(
-                    text = "退出登录",
+                    text = stringResource(id = R.string.profile_logout_button),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium
                 )
@@ -135,7 +135,7 @@ fun PineProfileView(
                 )
             ) {
                 Text(
-                    text = "立即登录",
+                    text = stringResource(id = R.string.profile_login_button),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium
                 )

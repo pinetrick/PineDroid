@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+
+
+
+    <string name="profile_default_avatar_description">デフォルトのアバター</string>
+    <string name="profile_login_prompt">すべての機能を利用するにはログインしてください</string>
+    <string name="profile_default_username">ユーザー</string>
+    <string name="profile_logout_button">ログアウト</string>
+    <string name="profile_login_button">今すぐログイン</string>
+
+
+
+
+
+
+</resources>
