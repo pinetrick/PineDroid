@@ -2,11 +2,22 @@ package com.pine.pinedroid.language
 
 import android.content.res.Configuration
 import android.os.Build
+import androidx.compose.ui.text.toLowerCase
 import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.sp
 import java.util.Locale
 
+private var currentLanguageCode: String? = null
+
+//en zh ...
+fun getCurrentLanguageCode(): String {
+    if (currentLanguageCode == null) {
+        currentLanguageCode = LanguageManager.getSavedLanguage(false).locale.language.lowercase()
+    }
+
+    return currentLanguageCode!!
+}
 object LanguageManager {
     private const val KEY_LANGUAGE = "selected_language"
 
@@ -51,6 +62,8 @@ object LanguageManager {
 
         // 更新状态，通知 UI 刷新
         _appLocaleResource.value = appContext.resources
+
+        currentLanguageCode = null
     }
 
     /**

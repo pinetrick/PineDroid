@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Hindi -->
+    <string name="pine_about_screen_title">ऐप के बारे में</string>
+    <string name="pine_version_number">संस्करण संख्या</string>
+    <string name="pine_version_code">संस्करण कोड</string>
+    <string name="pine_build_date">निर्माण तिथि</string>
+    <string name="pine_minimum_support">न्यूनतम समर्थन</string>
+</resources>

@@ -49,6 +49,9 @@
     <string name="pine_permission_auth_later">Später</string>
     <string name="pine_permission_descritpion">Nach der Autorisierung können Sie ein vollständigeres Funktionserlebnis genießen.</string>
 
+    <string name="pine_permission_manager_title">Berechtigungsverwaltung</string>
+    <string name="pine_permission_manager_title_request">Berechtigungen erforderlich</string>
+    <string name="pine_permission_manager_description">Um die ordnungsgemäße Funktion der App sicherzustellen, aktivieren Sie bitte die folgenden erforderlichen Berechtigungen</string>
 
 
 </resources>

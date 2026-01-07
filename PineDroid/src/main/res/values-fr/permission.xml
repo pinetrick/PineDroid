@@ -50,6 +50,9 @@
     <string name="pine_permission_auth_later">Plus tard</string>
     <string name="pine_permission_descritpion">Après autorisation, vous pouvez profiter d\'une expérience fonctionnelle plus complète.</string>
 
+    <string name="pine_permission_manager_title">Gestion des autorisations</string>
+    <string name="pine_permission_manager_title_request">Autorisations requises</string>
+    <string name="pine_permission_manager_description">Pour assurer le bon fonctionnement de l’application, veuillez activer les autorisations requises suivantes</string>
 
 
 </resources>

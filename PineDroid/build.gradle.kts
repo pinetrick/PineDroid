@@ -125,4 +125,6 @@ dependencies {
     implementation("com.google.maps.android:maps-compose-widgets:6.7.2")
 
 
+    //APP 重启
+    implementation("com.jakewharton:process-phoenix:2.1.0")
 }

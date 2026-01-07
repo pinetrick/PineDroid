@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Japanese -->
+    <string name="pine_about_screen_title">アプリについて</string>
+    <string name="pine_version_number">バージョン番号</string>
+    <string name="pine_version_code">バージョンコード</string>
+    <string name="pine_build_date">ビルド日</string>
+    <string name="pine_minimum_support">最小サポート</string>
+
+</resources>

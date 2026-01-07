@@ -49,6 +49,9 @@
     <string name="pine_permission_auth_later">나중에</string>
     <string name="pine_permission_descritpion">권한 부여 후 더 완전한 기능을 경험할 수 있습니다.</string>
 
+    <string name="pine_permission_manager_title">권한 관리</string>
+    <string name="pine_permission_manager_title_request">권한이 필요합니다</string>
+    <string name="pine_permission_manager_description">앱이 정상적으로 작동하려면 다음과 같은 필수 권한을 활성화해 주세요</string>
 
 
 </resources>

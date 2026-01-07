@@ -49,7 +49,7 @@
             android:name=".activity.image_pickup.ImagePickupActivity">
         </activity>
         <activity
-            android:name=".hardware.permission.location.PinePermissionActivity">
+            android:name=".screen.permission.location.PinePermissionActivity">
         </activity>
         <activity
             android:name=".debug.task_manager.TaskManagerActivity">

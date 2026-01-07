@@ -51,5 +51,11 @@
     <string name="pine_permission_descritpion">After authorization, you can enjoy a more complete functional experience.</string>
 
 
+    <string name="pine_permission_manager_title">Permission Management</string>
+    <string name="pine_permission_manager_title_request">Permissions Required</string>
+    <string name="pine_permission_manager_description">To ensure the app functions properly, please enable the following required permissions</string>
+
+
+
 
 </resources>

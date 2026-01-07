@@ -5,18 +5,14 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.os.SystemClock
-import com.pine.pinedroid.hardware.permission.PinePermissionUtils
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionActivityRecognition
+import com.pine.pinedroid.screen.permission.PinePermissionUtils
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionActivityRecognition
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.log.logv
 import com.pine.pinedroid.utils.log.logw
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 /**
  * 步数回调接口

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Korean -->
+    <string name="pine_about_screen_title">앱 정보</string>
+    <string name="pine_version_number">버전 번호</string>
+    <string name="pine_version_code">버전 코드</string>
+    <string name="pine_build_date">빌드 날짜</string>
+    <string name="pine_minimum_support">최소 지원</string>
+
+</resources>

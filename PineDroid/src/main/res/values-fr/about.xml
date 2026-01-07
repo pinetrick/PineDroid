@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- French -->
+    <string name="pine_about_screen_title">À propos de l\'application</string>
+    <string name="pine_version_number">Numéro de version</string>
+    <string name="pine_version_code">Code de version</string>
+    <string name="pine_build_date">Date de compilation</string>
+    <string name="pine_minimum_support">Support minimum</string>
+</resources>

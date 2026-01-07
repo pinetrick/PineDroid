@@ -50,6 +50,9 @@
     <string name="pine_permission_auth_later">後で</string>
     <string name="pine_permission_descritpion">承認後、より完全な機能体験をお楽しみいただけます。</string>
 
+    <string name="pine_permission_manager_title">権限管理</string>
+    <string name="pine_permission_manager_title_request">権限が必要です</string>
+    <string name="pine_permission_manager_description">アプリを正常に動作させるため、以下の必要な権限を有効にしてください</string>
 
 
 </resources>

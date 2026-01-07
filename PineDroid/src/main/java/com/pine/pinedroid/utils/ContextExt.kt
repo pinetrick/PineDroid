@@ -7,6 +7,9 @@ import androidx.activity.ComponentActivity
 lateinit var activityContext: Context
 lateinit var appContext: Context
 
+val safeAppContext: Context?
+    get() = if (::appContext.isInitialized) appContext else null
+
 val currentActivity: Activity get() = activityContext as Activity
 
 val currentComponentActivity: ComponentActivity  get() = activityContext as ComponentActivity

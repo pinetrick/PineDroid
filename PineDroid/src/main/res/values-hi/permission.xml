@@ -49,6 +49,9 @@
     <string name="pine_permission_auth_later">बाद में</string>
     <string name="pine_permission_descritpion">अधिकृत होने के बाद, आप अधिक संपूर्ण कार्यात्मक अनुभव का आनंद ले सकते हैं।</string>
 
+    <string name="pine_permission_manager_title">अनुमति प्रबंधन</string>
+    <string name="pine_permission_manager_title_request">अनुमतियाँ आवश्यक हैं</string>
+    <string name="pine_permission_manager_description">एप्लिकेशन के सही ढंग से काम करने के लिए, कृपया निम्नलिखित आवश्यक अनुमतियाँ सक्षम करें</string>
 
 
 </resources>

@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.MaterialTheme
 import com.pine.pinedroid.activity.image_pickup.pickup.ImagePickupScreenVM
-import com.pine.pinedroid.hardware.permission.PinePermissionUtils
+import com.pine.pinedroid.screen.permission.PinePermissionUtils
 import com.pine.pinedroid.utils.log.loge
 
 class ImagePickupActivity : ComponentActivity() {

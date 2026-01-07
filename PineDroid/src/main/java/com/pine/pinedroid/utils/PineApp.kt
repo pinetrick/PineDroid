@@ -1,11 +1,20 @@
 package com.pine.pinedroid.utils
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import com.jakewharton.processphoenix.ProcessPhoenix
+import com.pine.pinedroid.utils.log.loge
 import com.pine.pinedroid.utils.log.logi
 import java.security.MessageDigest
+import kotlin.system.exitProcess
 
 object PineApp {
     fun isAppDebug(): Boolean {
@@ -32,4 +41,10 @@ object PineApp {
             }
         }
     }
+
+    fun rebootApp() {
+        ProcessPhoenix.triggerRebirth(appContext)
+    }
+
+
 }

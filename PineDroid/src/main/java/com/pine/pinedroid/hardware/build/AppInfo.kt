@@ -29,7 +29,16 @@ object AppInfo {
     }
 
 
-
+    fun getAppName(): String {
+        return try {
+            val packageManager = appContext.packageManager
+            val applicationInfo = packageManager.getApplicationInfo(appContext.packageName, 0)
+            packageManager.getApplicationLabel(applicationInfo).toString()
+        } catch (e: Exception) {
+            // 兜底：从 AndroidManifest 中获取
+            appContext.applicationInfo.loadLabel(appContext.packageManager).toString()
+        }
+    }
 
 
     fun getBuildDateFromApk(): Long {

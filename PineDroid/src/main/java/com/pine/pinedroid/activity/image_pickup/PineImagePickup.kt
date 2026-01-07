@@ -5,11 +5,11 @@ import android.content.Intent
 import com.pine.pinedroid.activity.image_pickup.camera.CameraScreenVM
 import com.pine.pinedroid.activity.image_pickup.pickup.ImagePickupScreenVM
 import com.pine.pinedroid.activity.image_pickup.preview.ImagePreviewScreenVM
-import com.pine.pinedroid.hardware.permission.PinePermissionUtils
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionCamera
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionReadExternalStorage
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionReadMediaImages
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionReadMediaVideo
+import com.pine.pinedroid.screen.permission.PinePermissionUtils
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionCamera
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionReadExternalStorage
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionReadMediaImages
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionReadMediaVideo
 import com.pine.pinedroid.utils.activityContext
 import com.pine.pinedroid.utils.currentActivity
 
