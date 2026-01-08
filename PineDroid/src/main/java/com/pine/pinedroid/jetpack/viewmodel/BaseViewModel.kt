@@ -79,6 +79,4 @@ open class BaseViewModel<T: Any>(val clazz: KClass<T>): ViewModel() {
             _navEvents.emit(NavEvent.PopUpTo(route, inclusive))
         }
     }
-
-
 }
