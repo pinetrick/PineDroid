@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="pine_loading">処理中…</string>
+    <string name="pine_loading_subtitle">しばらくお待ちください</string>
+    <string name="pine_confirm">確認</string>
 
 
 </resources>

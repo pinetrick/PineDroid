@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="pine_loading">Procesando…</string>
+    <string name="pine_loading_subtitle">Por favor, espere</string>
+    <string name="pine_confirm">Confirmar</string>
 
 
 </resources>

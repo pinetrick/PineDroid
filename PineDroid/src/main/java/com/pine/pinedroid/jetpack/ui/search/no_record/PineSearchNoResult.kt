@@ -10,14 +10,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.pine.pinedroid.R
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
 import com.pine.pinedroid.utils.ui.pct
 import com.pine.pinedroid.utils.ui.spwh
 
 @Composable
 fun PineSearchNoResult(
-    text: String = "No record found",
+    text: String = stringResource(R.string.pine_search_no_record),
 ) {
     Column(
         modifier = Modifier

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="pine_loading">正在处理…</string>
-    <string name="pine_loading_subtitle">请稍候</string>
 
-    <string name="pine_confirm">确定</string>
+    <string name="pine_loading">Processing…</string>
+    <string name="pine_loading_subtitle">Please wait</string>
+    <string name="pine_confirm">Confirm</string>
 
 
 
