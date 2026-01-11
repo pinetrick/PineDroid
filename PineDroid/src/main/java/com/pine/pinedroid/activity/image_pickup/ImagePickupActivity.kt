@@ -5,7 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalResources
 import com.pine.pinedroid.activity.image_pickup.pickup.ImagePickupScreenVM
+import com.pine.pinedroid.language._appLocaleResource
 import com.pine.pinedroid.screen.permission.PinePermissionUtils
 import com.pine.pinedroid.utils.log.loge
 
@@ -22,8 +25,10 @@ class ImagePickupActivity : ComponentActivity() {
 
         val initScreen = intent.getStringExtra("initScreen") ?: "pickup"
         setContent {
-            MaterialTheme {
-                ImagePickupNav(initScreen, cameraLauncher)
+            CompositionLocalProvider(LocalResources provides _appLocaleResource.value) {
+                MaterialTheme {
+                    ImagePickupNav(initScreen, cameraLauncher)
+                }
             }
         }
 
