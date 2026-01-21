@@ -17,8 +17,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
-import com.pine.pinedroid.jetpack.ui.require_permission.rememberPermissionController
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
+import com.pine.pinedroid.screen.permission.require_permission.rememberPermissionController
 
 @Composable
 fun LocationScreen(
