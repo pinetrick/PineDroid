@@ -28,11 +28,7 @@ object FunctionWindowController {
     @SuppressLint("StaticFieldLeak")
     var functionWindow: FunctionWindow? = null
 
-    private var functionButtons: MutableList<Pair<String, () -> Unit>> = mutableListOf()
 
-    fun addButton(key: String, function: () -> Unit) {
-        functionButtons.add(Pair(key, function))
-    }
 
     @SuppressLint("SetTextI18n")
     fun onShowFunctionWindowClick(view: View) {
