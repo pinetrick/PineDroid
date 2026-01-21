@@ -1,19 +1,20 @@
 package com.pine.pindroidpp.permission_test
 
 
-import com.pine.pinedroid.hardware.permission.PinePermissionUtils
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionAlertWindow
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionCamera
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionCoarseLocation
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionFineLocation
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionForegroundServiceLocation
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionReadExternalStorage
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionReadMediaAudio
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionReadMediaImages
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionReadMediaVideo
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionRecordAudio
-import com.pine.pinedroid.hardware.permission.one_permission.PineOnePermissionWriteExternalStorage
+import com.pine.pinedroid.screen.permission.PinePermissionUtils
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionAlertWindow
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionCamera
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionCoarseLocation
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionFineLocation
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionForegroundServiceLocation
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionReadExternalStorage
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionReadMediaAudio
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionReadMediaImages
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionReadMediaVideo
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionRecordAudio
+import com.pine.pinedroid.screen.permission.one_permission.PineOnePermissionWriteExternalStorage
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
+
 
 
 class PermissionTestScreenVM :
