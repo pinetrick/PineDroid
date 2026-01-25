@@ -9,6 +9,7 @@ import com.pine.pinedroid.R
 import com.pine.pinedroid.utils.ImageExt
 import com.pine.pinedroid.utils.appContext
 import com.pine.pinedroid.utils.toLocalUrl
+import java.io.File
 
 sealed class OneImage {
     data class UriImage(val uri: Uri) : OneImage() {
@@ -44,6 +45,10 @@ fun String.toOneImage(): OneImage{
         this.startsWith("/") -> OneImage.LocalImage(this)
         else -> OneImage.UriImage(this.toUri())
     }
+}
+
+fun File.toOneImage(): OneImage{
+    return OneImage.LocalImage(this.absolutePath)
 }
 
 fun OneImage.toLocalUrl(): String? {
