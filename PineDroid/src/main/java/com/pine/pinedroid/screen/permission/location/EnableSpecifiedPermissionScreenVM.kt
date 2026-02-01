@@ -9,6 +9,17 @@ import com.pine.pinedroid.screen.permission.PinePermissionUtils
 class EnableSpecifiedPermissionScreenVM :
     BaseViewModel<EnableSpecifiedPermissionScreenState>(EnableSpecifiedPermissionScreenState::class) {
 
+    override fun getInitialViewState(): EnableSpecifiedPermissionScreenState{
+        return EnableSpecifiedPermissionScreenState(
+            permission = PinePermissionActivity.state.permission,
+            icon = PinePermissionActivity.state.icon,
+            text = PinePermissionActivity.state.text,
+            description = PinePermissionActivity.state.description,
+            optional = PinePermissionActivity.state.optional,
+            isPermissionPermanentlyDenied = PinePermissionActivity.state.isPermissionPermanentlyDenied()
+        )
+    }
+
     override fun onReturnClick() {
         PinePermissionUtils.onPermission(false)
     }
@@ -16,20 +27,6 @@ class EnableSpecifiedPermissionScreenVM :
     fun onResume() {
         if (PinePermissionActivity.state.hasPermission()) {
             PinePermissionUtils.onPermission(true)
-        }
-    }
-
-    fun onInit() {
-
-        setStateSync {
-            copy(
-                permission = PinePermissionActivity.state.permission,
-                icon = PinePermissionActivity.state.icon,
-                text = PinePermissionActivity.state.text,
-                description = PinePermissionActivity.state.description,
-                optional = PinePermissionActivity.state.optional,
-                isPermissionPermanentlyDenied = PinePermissionActivity.state.isPermissionPermanentlyDenied()
-            )
         }
     }
 
