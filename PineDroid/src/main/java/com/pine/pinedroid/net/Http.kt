@@ -104,7 +104,7 @@ suspend inline fun <reified T> httpGet(url: String, cacheImages: Boolean = false
 @OptIn(InternalAPI::class)
 suspend inline fun <reified T> httpPostJson(
     url: String,
-    body: Any,
+    body: Any?,
     files: Map<String, String> = HashMap(), // key 是字段名, value 是本地文件路径
     cacheImages: Boolean = false
 ): T? = withContext(Dispatchers.IO) {
@@ -120,7 +120,7 @@ suspend inline fun <reified T> httpPostJson(
             // 使用 multipart 格式
             setBody(MultiPartFormDataContent(formData {
                 // 添加普通字段
-                body.let {
+                body?.let {
                     val bodyJson = gson.toJson(body)
                     val bodyMap = gson.fromJson<Map<String, Any>>(
                         bodyJson,
