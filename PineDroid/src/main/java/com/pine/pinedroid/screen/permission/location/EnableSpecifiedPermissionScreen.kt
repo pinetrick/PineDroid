@@ -57,7 +57,6 @@ fun EnableSpecifiedPermissionScreen(
 
 
     HandleNavigation(navController = navController, viewModel = viewModel) {
-        viewModel.onInit()
     }
 
     PineOnResume {
