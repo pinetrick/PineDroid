@@ -1,35 +1,27 @@
 package com.pine.pinedroid.debug.task_manager.task_list
 
 import android.app.ActivityManager
-import android.app.usage.StorageStatsManager
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Debug
-import android.os.StatFs
 import androidx.lifecycle.viewModelScope
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.util.*
 
 class TaskListScreenVM : BaseViewModel<TaskListScreenState>(TaskListScreenState::class) {
 
     private lateinit var activityManager: ActivityManager
     private lateinit var packageManager: PackageManager
-    private lateinit var storageStatsManager: StorageStatsManager
 
     fun initialize(context: Context) {
         activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         packageManager = context.packageManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            storageStatsManager = context.getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager
-        }
     }
 
-    suspend fun onInit() {
+    suspend fun onInit(context: Context) {
+        initialize(context)
         loadMemoryInfo()
     }
 
@@ -65,8 +57,8 @@ class TaskListScreenVM : BaseViewModel<TaskListScreenState>(TaskListScreenState:
         // 计算阈值内存（当系统需要开始杀死进程时的内存）
         memoryInfo.lostRAM = formatBytes(systemMemoryInfo.threshold)
 
-        // ZRAM 信息需要特殊处理，这里简化处理
-        memoryInfo.zramInfo = "N/A"
+        // 从 /proc/meminfo 读取 ZRAM (SwapTotal/SwapFree)
+        memoryInfo.zramInfo = readZramInfo()
 
         // 获取运行中的进程
         val runningProcesses = activityManager.runningAppProcesses ?: emptyList()
@@ -113,6 +105,23 @@ class TaskListScreenVM : BaseViewModel<TaskListScreenState>(TaskListScreenState:
                 memoryInfo = memoryInfo,
                 isLoading = false
             )
+        }
+    }
+
+    private fun readZramInfo(): String {
+        return try {
+            val meminfo = File("/proc/meminfo").readText()
+            val swapTotal = Regex("SwapTotal:\\s*(\\d+)").find(meminfo)?.groupValues?.get(1)?.toLongOrNull()
+            val swapFree = Regex("SwapFree:\\s*(\\d+)").find(meminfo)?.groupValues?.get(1)?.toLongOrNull()
+            if (swapTotal != null && swapTotal > 0) {
+                val used = ((swapTotal - (swapFree ?: 0)) * 1024)
+                val total = swapTotal * 1024
+                "${formatBytes(used)} / ${formatBytes(total)}"
+            } else {
+                "Not enabled"
+            }
+        } catch (e: Exception) {
+            "N/A"
         }
     }
 

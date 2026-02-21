@@ -21,18 +21,20 @@ class RunSqlScreenVM : BaseViewModel<RunSqlScreenStatus>(RunSqlScreenStatus::cla
 
     fun initialize(dbName: String, tableName: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _viewState.update { currentState ->
-                currentState.copy(
-                    dbName = dbName,
-                    tableName = tableName,
-                )
-            }
-            _viewState.update { currentState ->
-                currentState.copy(
-                    sql = getDefaultSql()
-                )
-            }
-            onRunSql()
+            _viewState.update { it.copy(dbName = dbName, tableName = tableName) }
+            _viewState.update { it.copy(sql = getDefaultSql()) }
+            runQueryOnIo()
+        }
+    }
+
+    private suspend fun runQueryOnIo() {
+        _viewState.update { it.copy(isLoading = true, error = null) }
+        try {
+            val vs = _viewState.value
+            val queryResult = model(vs.tableName, vs.dbName).rawQuery(vs.sql)
+            _viewState.update { it.copy(table = queryResult.first, tableHeader = queryResult.second, isLoading = false) }
+        } catch (e: Exception) {
+            _viewState.update { it.copy(isLoading = false, error = e.message) }
         }
     }
 
@@ -52,13 +54,8 @@ class RunSqlScreenVM : BaseViewModel<RunSqlScreenStatus>(RunSqlScreenStatus::cla
     }
 
     fun onRunSql() {
-        val vs = _viewState.value
-        val queryResult = model(vs.tableName, vs.dbName).rawQuery(vs.sql)
-        _viewState.update { currentState ->
-            currentState.copy(
-                table = queryResult.first,
-                tableHeader = queryResult.second,
-            )
+        viewModelScope.launch(Dispatchers.IO) {
+            runQueryOnIo()
         }
     }
 

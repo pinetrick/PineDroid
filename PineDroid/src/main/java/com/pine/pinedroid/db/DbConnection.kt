@@ -161,34 +161,29 @@ class DbConnection private constructor(public var dbName: String) {
     }
 
     private fun formatSqlString(sql: String): String {
-        val formattedSql = sql
-            // 先处理复合关键词
-            .replace(Regex("\\bORDER\\s+BY\\b", RegexOption.IGNORE_CASE), "\n  ORDER BY ")
-            .replace(Regex("\\bGROUP\\s+BY\\b", RegexOption.IGNORE_CASE), "\n  GROUP BY ")
-            .replace(Regex("\\bLEFT\\s+JOIN\\b", RegexOption.IGNORE_CASE), "\n  LEFT JOIN ")
-            .replace(Regex("\\bRIGHT\\s+JOIN\\b", RegexOption.IGNORE_CASE), "\n  RIGHT JOIN ")
-            .replace(Regex("\\bINNER\\s+JOIN\\b", RegexOption.IGNORE_CASE), "\n  INNER JOIN ")
-            .replace(Regex("\\bINSERT\\s+INTO\\b", RegexOption.IGNORE_CASE), "INSERT INTO ")
-            .replace(Regex("\\bDELETE\\s+FROM\\b", RegexOption.IGNORE_CASE), "DELETE FROM ")
-
-            // 再处理单个关键词
-            .replace(Regex("\\bSELECT\\b", RegexOption.IGNORE_CASE), "SELECT ")
-            .replace(Regex("\\bFROM\\b", RegexOption.IGNORE_CASE), "\n  FROM ")
-            .replace(Regex("\\bWHERE\\b", RegexOption.IGNORE_CASE), "\n  WHERE ")
-            .replace(Regex("\\bAND\\b", RegexOption.IGNORE_CASE), "\n  AND ")
-            .replace(Regex("\\bOR\\b", RegexOption.IGNORE_CASE), "\n  OR ")
-            .replace(Regex("\\bHAVING\\b", RegexOption.IGNORE_CASE), "\n  HAVING ")
-            .replace(Regex("\\bVALUES\\b", RegexOption.IGNORE_CASE), "\n  VALUES ")
-            .replace(Regex("\\bUPDATE\\b", RegexOption.IGNORE_CASE), "UPDATE ")
-            .replace(Regex("\\bSET\\b", RegexOption.IGNORE_CASE), "\n  SET ")
-            .replace(Regex("\\bJOIN\\b", RegexOption.IGNORE_CASE), "\n  JOIN ")
-            .replace(Regex("\\bON\\b", RegexOption.IGNORE_CASE), "\n  ON ")
-            .replace(Regex("\\bLIMIT\\b", RegexOption.IGNORE_CASE), "\n  LIMIT ")
-            .replace(Regex("\\bOFFSET\\b", RegexOption.IGNORE_CASE), "\n  OFFSET ")
-            .replace("\n\n", "\n")
-        // 使用正则表达式确保只匹配完整的关键词，避免部分匹配
-
-        return formattedSql.trim()
+        return sql
+            .replace(RE_ORDER_BY,    "\n  ORDER BY ")
+            .replace(RE_GROUP_BY,    "\n  GROUP BY ")
+            .replace(RE_LEFT_JOIN,   "\n  LEFT JOIN ")
+            .replace(RE_RIGHT_JOIN,  "\n  RIGHT JOIN ")
+            .replace(RE_INNER_JOIN,  "\n  INNER JOIN ")
+            .replace(RE_INSERT_INTO, "INSERT INTO ")
+            .replace(RE_DELETE_FROM, "DELETE FROM ")
+            .replace(RE_SELECT,      "SELECT ")
+            .replace(RE_FROM,        "\n  FROM ")
+            .replace(RE_WHERE,       "\n  WHERE ")
+            .replace(RE_AND,         "\n  AND ")
+            .replace(RE_OR,          "\n  OR ")
+            .replace(RE_HAVING,      "\n  HAVING ")
+            .replace(RE_VALUES,      "\n  VALUES ")
+            .replace(RE_UPDATE,      "UPDATE ")
+            .replace(RE_SET,         "\n  SET ")
+            .replace(RE_JOIN,        "\n  JOIN ")
+            .replace(RE_ON,          "\n  ON ")
+            .replace(RE_LIMIT,       "\n  LIMIT ")
+            .replace(RE_OFFSET,      "\n  OFFSET ")
+            .replace(RE_DOUBLE_NL,   "\n")
+            .trim()
     }
 
     companion object {
@@ -200,5 +195,28 @@ class DbConnection private constructor(public var dbName: String) {
             val name = dbName ?: DEFAULT_DB_NAME
             return instances.getOrPut(name) { DbConnection(name) }
         }
+
+        // 预编译 SQL 格式化正则，避免每次调用重新创建
+        private val RE_ORDER_BY    = Regex("\\bORDER\\s+BY\\b",    RegexOption.IGNORE_CASE)
+        private val RE_GROUP_BY    = Regex("\\bGROUP\\s+BY\\b",    RegexOption.IGNORE_CASE)
+        private val RE_LEFT_JOIN   = Regex("\\bLEFT\\s+JOIN\\b",   RegexOption.IGNORE_CASE)
+        private val RE_RIGHT_JOIN  = Regex("\\bRIGHT\\s+JOIN\\b",  RegexOption.IGNORE_CASE)
+        private val RE_INNER_JOIN  = Regex("\\bINNER\\s+JOIN\\b",  RegexOption.IGNORE_CASE)
+        private val RE_INSERT_INTO = Regex("\\bINSERT\\s+INTO\\b", RegexOption.IGNORE_CASE)
+        private val RE_DELETE_FROM = Regex("\\bDELETE\\s+FROM\\b", RegexOption.IGNORE_CASE)
+        private val RE_SELECT      = Regex("\\bSELECT\\b",         RegexOption.IGNORE_CASE)
+        private val RE_FROM        = Regex("\\bFROM\\b",            RegexOption.IGNORE_CASE)
+        private val RE_WHERE       = Regex("\\bWHERE\\b",           RegexOption.IGNORE_CASE)
+        private val RE_AND         = Regex("\\bAND\\b",             RegexOption.IGNORE_CASE)
+        private val RE_OR          = Regex("\\bOR\\b",              RegexOption.IGNORE_CASE)
+        private val RE_HAVING      = Regex("\\bHAVING\\b",          RegexOption.IGNORE_CASE)
+        private val RE_VALUES      = Regex("\\bVALUES\\b",          RegexOption.IGNORE_CASE)
+        private val RE_UPDATE      = Regex("\\bUPDATE\\b",          RegexOption.IGNORE_CASE)
+        private val RE_SET         = Regex("\\bSET\\b",             RegexOption.IGNORE_CASE)
+        private val RE_JOIN        = Regex("\\bJOIN\\b",            RegexOption.IGNORE_CASE)
+        private val RE_ON          = Regex("\\bON\\b",              RegexOption.IGNORE_CASE)
+        private val RE_LIMIT       = Regex("\\bLIMIT\\b",           RegexOption.IGNORE_CASE)
+        private val RE_OFFSET      = Regex("\\bOFFSET\\b",          RegexOption.IGNORE_CASE)
+        private val RE_DOUBLE_NL   = Regex("\\n\\n")
     }
 }

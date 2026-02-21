@@ -17,11 +17,12 @@ class TableSelectionVM : BaseViewModel<TableSelectionStatus>(TableSelectionStatu
 
     fun initialize(dbName: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            _viewState.update { it.copy(dbName = dbName, isLoading = true) }
             val tables = db(dbName).tables()
             _viewState.update { currentState ->
                 currentState.copy(
-                    dbName = dbName,
-                    tables = tables
+                    tables = tables,
+                    isLoading = false,
                 )
             }
             if (tables.size == 1) {

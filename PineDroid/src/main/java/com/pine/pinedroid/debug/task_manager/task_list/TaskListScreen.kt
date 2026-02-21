@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
@@ -50,9 +51,10 @@ fun TaskListScreen(
     viewModel: TaskListScreenVM = viewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
+    val context = LocalContext.current
 
     HandleNavigation(navController = navController, viewModel = viewModel) {
-        viewModel.onInit()
+        viewModel.onInit(context)
     }
 
     PineGeneralScreen(

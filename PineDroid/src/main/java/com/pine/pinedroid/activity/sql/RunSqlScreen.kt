@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
@@ -69,7 +70,7 @@ fun RunSqlScreen(
     RunSqlContent(
         state = viewState,
         onSqlChanged = { viewModel.updateSql(it) },
-        onExecute = { viewModel.onRunSql() },
+        onExecute = { if (!viewState.isLoading) viewModel.onRunSql() },
         onReturn = { viewModel.navigateBack() }
     )
 }
@@ -106,6 +107,8 @@ fun RunSqlContent(
         SqlResultTable(
             records = state.table,
             header = state.tableHeader,
+            isLoading = state.isLoading,
+            error = state.error,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.6f)
@@ -204,48 +207,72 @@ fun SqlInputSection(
 fun SqlResultTable(
     records: List<DbRecord>,
     header: List<ColumnInfo>,
+    isLoading: Boolean = false,
+    error: String? = null,
     modifier: Modifier = Modifier
 ) {
     var scale by remember { mutableFloatStateOf(1f) }
 
     Column(modifier = modifier) {
         Text(
-            text = "执行结果 (${records.size} 条记录)",
+            text = if (isLoading) "执行中…" else "执行结果 (${records.size} 条记录)",
             fontSize = 10.spwh,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
         )
 
-        if (records.isEmpty()) {
-            // 空状态
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    "暂无数据或未执行查询",
-                    fontSize = 12.spwh,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+        when {
+            isLoading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+            error != null -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.errorContainer),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        error,
+                        fontSize = 12.spwh,
+                        color = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                }
+            }
+            records.isEmpty() -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        "暂无数据",
+                        fontSize = 12.spwh,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            else -> {
+                PineZoomableTable(
+                    columnCount = header.size,
+                    lineCount = records.size,
+                    renderCell = { rowIndex, columnIndex, scale ->
+                        TableDataRow(
+                            records[rowIndex].kvs.values.toList()[columnIndex].toString(),
+                            scale
+                        )
+                    },
+                    header = { columnIndex, scale ->
+                        TableHeaderRow(header[columnIndex].name, scale)
+                    }
                 )
             }
-        } else {
-
-            PineZoomableTable(
-                columnCount = header.size,
-                lineCount = records.size,
-                renderCell = { rowIndex, columnIndex, scale ->
-                    TableDataRow(
-                        records[rowIndex].kvs.values.toList()[columnIndex].toString(),
-                        scale
-                    )
-                },
-                header = { columnIndex, scale ->
-                    TableHeaderRow(header[columnIndex].name, scale)
-                }
-            )
-
         }
     }
 }

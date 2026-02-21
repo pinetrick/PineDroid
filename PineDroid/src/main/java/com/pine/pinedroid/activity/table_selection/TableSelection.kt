@@ -86,12 +86,20 @@ fun TableSelection(
                 .padding(innerPadding)
         ) {
             when {
-                viewState.tables.isEmpty() -> {
+                viewState.isLoading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator()
+                    }
+                }
+                viewState.tables.isEmpty() -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("该数据库暂无数据表", style = MaterialTheme.typography.bodyMedium)
                     }
                 }
                 else -> {

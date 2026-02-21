@@ -8,9 +8,7 @@ import com.pine.pinedroid.utils.shrinker_keep.Keep
 @Keep
 data class TableSelectionStatus(
     val dbName: String = "Default Database",
-    val tables: List<TableInfo> = listOf<TableInfo>()
-){
-
-
-}
+    val tables: List<TableInfo> = listOf<TableInfo>(),
+    val isLoading: Boolean = false,
+)
 
