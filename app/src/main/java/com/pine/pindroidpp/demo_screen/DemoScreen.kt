@@ -1,12 +1,12 @@
 package com.pine.pindroidpp.demo_screen
 
-
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items as lazyColumnItems
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -14,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.pine.pinedroid.jetpack.ui.list.PineHorizontalChoiceBar
 import com.pine.pinedroid.jetpack.ui.list.shopping.PineShoppingItemBean
+import com.pine.pinedroid.jetpack.ui.list.shopping.PineShoppingListItemHorizontal
 import com.pine.pinedroid.jetpack.ui.list.shopping.PineShoppingListItemVertical
 import com.pine.pinedroid.jetpack.ui.list.staggered_grid.PineLazyVerticalStaggeredGrid
 import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
@@ -36,42 +38,68 @@ fun DemoScreen(
     PineGeneralScreen(
         title = {
             PineTopAppBar(
-                title = "Home Screen",
-                onReturn =  viewModel::navigateBack
+                title = "Shopping List Demo",
+                onReturn = viewModel::navigateBack
             )
         },
         content = {
-            Content(viewModel, viewState)
+            DemoContent(viewModel, viewState)
         },
     )
 }
 
 @Composable
-fun Content(viewModel: DemoScreenVM, viewState: DemoScreenState) {
-    ShoppingList(viewState.shoppingItems)
+fun DemoContent(viewModel: DemoScreenVM, viewState: DemoScreenState) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        PineHorizontalChoiceBar(
+            horizontalChoiceBar = listOf("Grid View", "List View"),
+            selectedPage = viewState.selectedTab,
+            onPageChoice = viewModel::onTabChange
+        )
+
+        when (viewState.selectedTab) {
+            0 -> VerticalGridView(viewState.shoppingItems)
+            1 -> HorizontalListView(viewState.shoppingItems)
+        }
+    }
 }
 
-
 @Composable
-private fun ShoppingList(
-    destinations: List<PineShoppingItemBean>,
-    onItemClick: (PineShoppingItemBean) -> Unit = {},
-) {
-    if (destinations.isEmpty()) return PineSearchNoResult()
-
+private fun VerticalGridView(items: List<PineShoppingItemBean>) {
+    if (items.isEmpty()) {
+        PineSearchNoResult()
+        return
+    }
     PineLazyVerticalStaggeredGrid(
-        modifier = Modifier,
+        modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(8.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalItemSpacing = 4.dp
     ) {
-
-        items(destinations) { destination ->
+        items(items) { item ->
             PineShoppingListItemVertical(
-                shoppingItemBean = destination,
-                onItemClick = onItemClick
+                shoppingItemBean = item,
+                onItemClick = {}
             )
         }
     }
 }
 
+@Composable
+private fun HorizontalListView(items: List<PineShoppingItemBean>) {
+    if (items.isEmpty()) {
+        PineSearchNoResult()
+        return
+    }
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(vertical = 4.dp)
+    ) {
+        lazyColumnItems(items) { item ->
+            PineShoppingListItemHorizontal(
+                shoppingItemBean = item,
+                onItemClick = {}
+            )
+        }
+    }
+}

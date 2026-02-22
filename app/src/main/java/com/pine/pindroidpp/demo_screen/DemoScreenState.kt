@@ -5,6 +5,6 @@ import com.pine.pinedroid.utils.shrinker_keep.Keep
 
 @Keep
 data class DemoScreenState(
-    var shoppingItems: List<PineShoppingItemBean> = PineShoppingItemBean.ShoppingItemBeanDemo
-
-){}
+    var shoppingItems: List<PineShoppingItemBean> = PineShoppingItemBean.ShoppingItemBeanDemo,
+    var selectedTab: Int = 0,
+)
