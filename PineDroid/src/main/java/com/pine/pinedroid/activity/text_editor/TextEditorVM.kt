@@ -64,6 +64,7 @@ class TextEditorVM : BaseViewModel<TextEditorState>(TextEditorState::class) {
                 }
 
                 val content = file.readText(Charset.forName(detectEncoding(file)))
+                originalContent = content
                 val canWrite = file.canWrite()
 
                 _viewState.update { viewState ->

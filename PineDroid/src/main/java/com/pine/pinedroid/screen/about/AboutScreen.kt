@@ -1,3 +1,5 @@
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+
 package com.pine.pinedroid.screen.about
 
 import androidx.compose.foundation.Image

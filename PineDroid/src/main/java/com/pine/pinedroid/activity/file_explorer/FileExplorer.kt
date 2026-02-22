@@ -1,6 +1,7 @@
 package com.pine.pinedroid.activity.file_explorer
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,28 +16,40 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CreateNewFolder
+import androidx.compose.material.icons.filled.NoteAdd
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Storage
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -56,19 +69,15 @@ import java.util.Date
 import java.util.Locale
 
 
-// FileExplorer.kt
 @Composable
 fun FileExplorer(
     navController: NavController? = null,
     viewModel: FileExplorerVM = viewModel()
 ) {
-    // 处理导航
     HandleNavigation(navController = navController, viewModel = viewModel)
 
-    // 收集状态
     val state by viewModel.viewState.collectAsState()
 
-    // 初始化加载（如果需要）
     LaunchedEffect(Unit) {
         if (state.currentDir == "/") {
             viewModel.initialize()
@@ -79,15 +88,14 @@ fun FileExplorer(
         state = state,
         onNavigateToParent = { viewModel.navigateToParent() },
         onItemClick = { file ->
-            if (file.isDirectory) {
-                viewModel.loadDirectory(file.absolutePath)
-            }
-            else {
-                viewModel.loadFile(file.absolutePath)
-            }
+            if (file.isDirectory) viewModel.loadDirectory(file.absolutePath)
+            else viewModel.loadFile(file.absolutePath)
         },
-        onDataBases = {viewModel.onDatabase()},
-        onRefresh = { viewModel.refresh() }
+        onDataBases = { viewModel.onDatabase() },
+        onRefresh = { viewModel.refresh() },
+        onDelete = { viewModel.deleteFile(it) },
+        onCreateFile = { viewModel.createFile(it) },
+        onCreateFolder = { viewModel.createFolder(it) },
     )
 }
 
@@ -98,8 +106,32 @@ fun FileExplorerScreen(
     onNavigateToParent: () -> Unit,
     onItemClick: (File) -> Unit,
     onDataBases: () -> Unit,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onDelete: (File) -> Unit,
+    onCreateFile: (String) -> Unit,
+    onCreateFolder: (String) -> Unit,
 ) {
+    var showCreateMenu by remember { mutableStateOf(false) }
+    var showCreateFileDialog by remember { mutableStateOf(false) }
+    var showCreateFolderDialog by remember { mutableStateOf(false) }
+
+    if (showCreateFileDialog) {
+        CreateItemDialog(
+            title = "新建文件",
+            placeholder = "文件名（如 test.txt）",
+            onConfirm = { onCreateFile(it); showCreateFileDialog = false },
+            onDismiss = { showCreateFileDialog = false }
+        )
+    }
+    if (showCreateFolderDialog) {
+        CreateItemDialog(
+            title = "新建文件夹",
+            placeholder = "文件夹名",
+            onConfirm = { onCreateFolder(it); showCreateFolderDialog = false },
+            onDismiss = { showCreateFolderDialog = false }
+        )
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -112,27 +144,37 @@ fun FileExplorerScreen(
                     )
                 },
                 navigationIcon = {
-
                     IconButton(onClick = onNavigateToParent) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "返回上级"
-                        )
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回上级")
                     }
-
                 },
                 actions = {
                     IconButton(onClick = onDataBases) {
-                        Icon(
-                            imageVector = Icons.Default.Storage,
-                            contentDescription = "DB"
-                        )
+                        Icon(Icons.Default.Storage, contentDescription = "DB")
+                    }
+                    // Create file/folder
+                    Box {
+                        IconButton(onClick = { showCreateMenu = true }) {
+                            Icon(Icons.Default.Add, contentDescription = "新建")
+                        }
+                        DropdownMenu(
+                            expanded = showCreateMenu,
+                            onDismissRequest = { showCreateMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("新建文件") },
+                                leadingIcon = { Icon(Icons.Default.NoteAdd, null) },
+                                onClick = { showCreateFileDialog = true; showCreateMenu = false }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("新建文件夹") },
+                                leadingIcon = { Icon(Icons.Default.CreateNewFolder, null) },
+                                onClick = { showCreateFolderDialog = true; showCreateMenu = false }
+                            )
+                        }
                     }
                     IconButton(onClick = onRefresh) {
-                        Icon(
-                            imageVector = Icons.Default.Refresh,
-                            contentDescription = "刷新"
-                        )
+                        Icon(Icons.Default.Refresh, contentDescription = "刷新")
                     }
                 }
             )
@@ -149,9 +191,9 @@ fun FileExplorerScreen(
                 ErrorView(error = state.error, onRetry = onRefresh)
             } else {
                 FileList(
-                    currentDir = state.currentDir,
                     files = state.files,
-                    onItemClick = onItemClick
+                    onItemClick = onItemClick,
+                    onDelete = onDelete,
                 )
             }
         }
@@ -191,25 +233,23 @@ fun ErrorView(error: String, onRetry: () -> Unit) {
 
 @Composable
 fun FileList(
-    currentDir: String,
     files: List<File>,
-    onItemClick: (File) -> Unit
+    onItemClick: (File) -> Unit,
+    onDelete: (File) -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-
-        if (files.isEmpty()) {
-            EmptyDirectoryView()
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(8.dp)
-            ) {
-                items(files) { file ->
-                    FileListItem(
-                        file = file,
-                        onClick = { onItemClick(file) }
-                    )
-                }
+    if (files.isEmpty()) {
+        EmptyDirectoryView()
+    } else {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(8.dp)
+        ) {
+            items(files) { file ->
+                FileListItem(
+                    file = file,
+                    onClick = { onItemClick(file) },
+                    onDelete = { onDelete(file) },
+                )
             }
         }
     }
@@ -228,65 +268,137 @@ fun EmptyDirectoryView() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FileListItem(file: File, onClick: () -> Unit) {
+fun FileListItem(file: File, onClick: () -> Unit, onDelete: () -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    var showDeleteConfirm by remember { mutableStateOf(false) }
+    val clipboardManager = LocalClipboardManager.current
+
+    if (showDeleteConfirm) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirm = false },
+            title = { Text("确认删除") },
+            text = { Text("确定要删除「${file.name}」吗？此操作不可撤销。") },
+            confirmButton = {
+                TextButton(onClick = { onDelete(); showDeleteConfirm = false }) {
+                    Text("删除", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteConfirm = false }) { Text("取消") }
+            }
+        )
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 1.pct)
-            .clickable(onClick = onClick),
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = { expanded = true }
+            ),
         shape = RoundedCornerShape(8.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(2.pct),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            PineIcon(
-                text = file.getFontAwesomeIcon(),
-                fontSize = 24.spwh,
-                color = if (file.isDirectory) MaterialTheme.colorScheme.primary
-                else MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.size(14.pct),
-            )
-
-            Spacer(modifier = Modifier.width(3.pct))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = file.name,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+        Box {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(2.pct),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                PineIcon(
+                    text = file.getFontAwesomeIcon(),
+                    fontSize = 24.spwh,
+                    color = if (file.isDirectory) MaterialTheme.colorScheme.primary
+                    else MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(14.pct),
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.width(3.pct))
 
-                Text(
-                    text = if (file.isDirectory) {
-                        "文件夹"
-                    } else {
-                        "${file.length().bToDisplayFileSize()} • " +
-                                SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-                                    .format(Date(file.lastModified()))
-                    },
-                    fontSize = 16.spwh,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = file.name,
+                        fontWeight = FontWeight.Medium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        text = if (file.isDirectory) {
+                            val count = file.listFiles()?.size ?: 0
+                            "$count 项"
+                        } else {
+                            "${file.length().bToDisplayFileSize()} • " +
+                                    SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+                                        .format(Date(file.lastModified()))
+                        },
+                        fontSize = 16.spwh,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                }
+
+                PineIcon(
+                    text = "\uf105",
+                    fontSize = 24.spwh,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    modifier = Modifier.size(16.pct),
                 )
             }
 
-            PineIcon(
-                text = "\uf105",
-                fontSize = 24.spwh,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                modifier = Modifier.size(16.pct),
-            )
-
-
-
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                DropdownMenuItem(
+                    text = { Text("复制路径") },
+                    onClick = {
+                        clipboardManager.setText(AnnotatedString(file.absolutePath))
+                        expanded = false
+                    }
+                )
+                DropdownMenuItem(
+                    text = { Text("删除", color = MaterialTheme.colorScheme.error) },
+                    onClick = { showDeleteConfirm = true; expanded = false }
+                )
+            }
         }
     }
+}
+
+@Composable
+fun CreateItemDialog(
+    title: String,
+    placeholder: String,
+    onConfirm: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var name by remember { mutableStateOf("") }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                placeholder = { Text(placeholder) },
+                singleLine = true,
+            )
+        },
+        confirmButton = {
+            TextButton(
+                onClick = { if (name.isNotBlank()) onConfirm(name.trim()) },
+                enabled = name.isNotBlank()
+            ) { Text("创建") }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("取消") }
+        }
+    )
 }
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 800)
@@ -297,40 +409,17 @@ fun PreviewFileExplorer() {
             state = FileExplorerState(
                 currentDir = "/data/data/com.example.app",
                 files = listOf(
-                    File("/data/data/com.example.app/files").apply {
-                        // 模拟文件属性
-                    },
-                    File("/data/data/com.example.app/databases").apply {
-                        // 模拟文件夹属性
-                    }
+                    File("/data/data/com.example.app/files"),
+                    File("/data/data/com.example.app/databases")
                 )
             ),
             onNavigateToParent = {},
             onItemClick = {},
             onDataBases = {},
-            onRefresh = {}
+            onRefresh = {},
+            onDelete = {},
+            onCreateFile = {},
+            onCreateFolder = {},
         )
-    }
-}
-
-@Preview
-@Composable
-fun PreviewFileListItem() {
-    MaterialTheme {
-        Column(modifier = Modifier.padding(16.dp)) {
-            FileListItem(
-                file = File("/path/to/folder").apply {
-                    // 模拟文件夹
-                },
-                onClick = {}
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            FileListItem(
-                file = File("/path/to/file.txt").apply {
-                    // 模拟文件
-                },
-                onClick = {}
-            )
-        }
     }
 }

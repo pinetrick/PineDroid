@@ -41,4 +41,12 @@ class UploadQueueVM : BaseViewModel<UploadQueueState>(UploadQueueState::class) {
         PineHttpQueue.i.handlePendingRequest(request)
         onInit()
     }
+
+    fun clearAll() = viewModelScope.launch {
+        val confirm = MsgBox().invoke("Clear all pending uploads? This cannot be undone.", "Cancel", "Clear All")
+        if (confirm == 1) return@launch
+
+        viewState.value.queues.forEach { it.delete() }
+        onInit()
+    }
 }

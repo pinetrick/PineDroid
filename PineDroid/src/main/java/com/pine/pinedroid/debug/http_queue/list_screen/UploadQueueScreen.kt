@@ -1,3 +1,5 @@
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+
 package com.pine.pinedroid.debug.http_queue.list_screen
 
 import android.content.res.Configuration
@@ -71,12 +73,23 @@ fun UploadQueueScreen(
         PineGeneralScreen(
             title = {
                 PineTopAppBar(
-                    title = "Upload Queue",
-                    onReturn = viewModel::navigateBack,
-                    actionIcon = "\uf093",
-                    onAction = viewModel::processQueue,
-                    secondActionIcon = "\uf021",
-                    onSecondAction = viewModel::onInit
+                    title = { Text("Upload Queue", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) },
+                    navigationIcon = {
+                        IconButton(onClick = viewModel::navigateBack) {
+                            PineIcon(text = "\uf060", fontSize = 20.sp, color = MaterialTheme.colorScheme.primary)
+                        }
+                    },
+                    actions = {
+                        IconButton(onClick = viewModel::clearAll) {
+                            PineIcon(text = "\uf1f8", fontSize = 20.sp, color = MaterialTheme.colorScheme.error)
+                        }
+                        IconButton(onClick = viewModel::processQueue) {
+                            PineIcon(text = "\uf093", fontSize = 20.sp, color = MaterialTheme.colorScheme.primary)
+                        }
+                        IconButton(onClick = viewModel::onInit) {
+                            PineIcon(text = "\uf021", fontSize = 20.sp, color = MaterialTheme.colorScheme.primary)
+                        }
+                    }
                 )
             },
             content = {

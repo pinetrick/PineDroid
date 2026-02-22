@@ -3,9 +3,11 @@ package com.pine.pinedroid.debug.task_manager.task_list
 import android.app.ActivityManager
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Process
 import androidx.lifecycle.viewModelScope
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -27,6 +29,35 @@ class TaskListScreenVM : BaseViewModel<TaskListScreenState>(TaskListScreenState:
 
     fun onRefresh() = viewModelScope.launch {
         setState { copy(isLoading = true) }
+        loadMemoryInfo()
+    }
+
+    fun onKillClick(app: AppInfos) {
+        setStateSync { copy(processToKill = app) }
+    }
+
+    fun onKillDismiss() {
+        setStateSync { copy(processToKill = null) }
+    }
+
+    fun onKillConfirm() = viewModelScope.launch {
+        val app = viewState.value.processToKill ?: return@launch
+        setState { copy(processToKill = null, isLoading = true) }
+        withContext(Dispatchers.IO) {
+            try {
+                val pid = app.pid.toInt()
+                if (app.isMainProcess) {
+                    // 杀掉主进程 = 强制退出 App
+                    Process.killProcess(pid)
+                } else {
+                    // 先尝试通过 ActivityManager 终止（适用于后台进程）
+                    activityManager.killBackgroundProcesses(app.packageName)
+                    // 再强制 kill 子进程
+                    Process.killProcess(pid)
+                }
+            } catch (_: Exception) { }
+            delay(500) // 等待进程终止
+        }
         loadMemoryInfo()
     }
 
@@ -72,21 +103,22 @@ class TaskListScreenVM : BaseViewModel<TaskListScreenState>(TaskListScreenState:
 
                     // 获取进程名称
                     val processName = processInfo.processName
-                    val appName = getAppNameFromPackage(processName)
+                    // packageName 是冒号前的部分（子进程如 com.example.app:work）
+                    val packageName = processName.substringBefore(":")
+                    val appName = getAppNameFromPackage(packageName)
+                    val isMainProcess = !processName.contains(":")
 
                     // 判断进程类型
-                    val category = if (processName.contains(":")) {
-                        "Service"
-                    } else {
-                        "Activity"
-                    }
+                    val category = if (isMainProcess) "Main Process" else processName.substringAfter(":")
 
                     apps.add(
                         AppInfos(
                             name = appName,
+                            packageName = packageName,
                             pss = "${pssInKb}K",
                             pid = processInfo.pid.toString(),
-                            category = category
+                            category = category,
+                            isMainProcess = isMainProcess,
                         )
                     )
                 }

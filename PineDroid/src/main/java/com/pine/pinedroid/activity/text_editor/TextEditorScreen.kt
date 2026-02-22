@@ -1,7 +1,6 @@
 package com.pine.pinedroid.activity.text_editor
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,12 +18,13 @@ import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -32,21 +32,19 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -55,8 +53,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -66,7 +70,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -77,15 +80,80 @@ fun TextEditorScreen(
     filePath: String = "",
     viewModel: TextEditorVM = viewModel()
 ) {
-    // 处理导航
     HandleNavigation(navController = navController, viewModel = viewModel)
 
-    // 收集状态
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val clipboardManager = LocalClipboardManager.current
 
-    // 显示错误消息
+    // Local editor state
+    var textFieldValue by remember { mutableStateOf(TextFieldValue("")) }
+    var isSearchVisible by remember { mutableStateOf(false) }
+    var searchQuery by remember { mutableStateOf("") }
+    var searchIndex by remember { mutableIntStateOf(0) }
+
+    // Compute search match positions
+    val searchMatches = remember(searchQuery, viewState.content) {
+        if (searchQuery.length < 2) return@remember emptyList<Int>()
+        val result = mutableListOf<Int>()
+        val text = viewState.content.lowercase()
+        val q = searchQuery.lowercase()
+        var idx = 0
+        while (true) {
+            val found = text.indexOf(q, idx)
+            if (found == -1) break
+            result.add(found)
+            idx = found + 1
+        }
+        result
+    }
+
+    // Reset index when matches change
+    LaunchedEffect(searchMatches) { searchIndex = 0 }
+
+    // Sync textFieldValue when file loads
+    LaunchedEffect(viewState.content) {
+        if (textFieldValue.text != viewState.content) {
+            textFieldValue = TextFieldValue(viewState.content)
+        }
+    }
+
+    // Build annotated value for search highlighting
+    val displayValue = remember(textFieldValue, searchMatches, searchIndex, searchQuery) {
+        if (searchMatches.isEmpty() || searchQuery.length < 2) {
+            textFieldValue
+        } else {
+            val annotated = buildAnnotatedString {
+                append(textFieldValue.text)
+                searchMatches.forEachIndexed { i, start ->
+                    val end = (start + searchQuery.length).coerceAtMost(textFieldValue.text.length)
+                    addStyle(
+                        SpanStyle(
+                            background = if (i == searchIndex)
+                                Color(0xFFFFAA00).copy(alpha = 0.7f)
+                            else
+                                Color(0xFFFFFF00).copy(alpha = 0.4f)
+                        ),
+                        start, end
+                    )
+                }
+            }
+            TextFieldValue(annotated, textFieldValue.selection)
+        }
+    }
+
+    fun jumpToMatch(index: Int) {
+        if (searchMatches.isEmpty()) return
+        val safe = ((index % searchMatches.size) + searchMatches.size) % searchMatches.size
+        searchIndex = safe
+        val pos = searchMatches[safe]
+        textFieldValue = textFieldValue.copy(
+            selection = TextRange(pos, (pos + searchQuery.length).coerceAtMost(textFieldValue.text.length))
+        )
+    }
+
+    // Error snackbar
     viewState.error?.let { error ->
         LaunchedEffect(error) {
             val result = snackbarHostState.showSnackbar(
@@ -93,24 +161,20 @@ fun TextEditorScreen(
                 actionLabel = "确定",
                 withDismissAction = true
             )
-            if (result == SnackbarResult.ActionPerformed) {
-                viewModel.clearError()
-            }
+            if (result == SnackbarResult.ActionPerformed) viewModel.clearError()
         }
     }
 
-    // 保存成功提示
+    // Save success
     LaunchedEffect(viewState.isSaving) {
         if (!viewState.isSaving && viewState.error == null && !viewState.isModified) {
             snackbarHostState.showSnackbar("保存成功")
         }
     }
 
-    // 初始化加载（如果需要）
+    // Load file
     LaunchedEffect(filePath) {
-        if (filePath.isNotEmpty()) {
-            viewModel.loadFile(filePath)
-        }
+        if (filePath.isNotEmpty()) viewModel.loadFile(filePath)
     }
 
     Scaffold(
@@ -126,23 +190,37 @@ fun TextEditorScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController?.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "返回"
-                        )
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回")
                     }
                 },
                 actions = {
+                    // Copy file path
+                    if (viewState.filePath.isNotEmpty()) {
+                        IconButton(onClick = {
+                            clipboardManager.setText(AnnotatedString(viewState.filePath))
+                            coroutineScope.launch { snackbarHostState.showSnackbar("路径已复制") }
+                        }) {
+                            Icon(Icons.Default.ContentCopy, "复制路径")
+                        }
+                    }
+                    // Search toggle
+                    IconButton(onClick = {
+                        isSearchVisible = !isSearchVisible
+                        if (!isSearchVisible) searchQuery = ""
+                    }) {
+                        Icon(
+                            imageVector = if (isSearchVisible) Icons.Default.Close else Icons.Default.Search,
+                            contentDescription = "搜索"
+                        )
+                    }
+                    // Save
                     if (viewState.isModified) {
                         IconButton(
                             onClick = { viewModel.saveFile() },
                             enabled = !viewState.isSaving && !viewState.isReadOnly
                         ) {
                             if (viewState.isSaving) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(24.dp),
-                                    strokeWidth = 2.dp
-                                )
+                                CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
                             } else {
                                 Icon(Icons.Filled.Save, "保存")
                             }
@@ -162,16 +240,109 @@ fun TextEditorScreen(
             }
         }
     ) { innerPadding ->
-        Box(
+        Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            when {
-                viewState.isLoading -> {
-                    // 加载中状态
+            // Search bar
+            if (isSearchVisible) {
+                SearchBar(
+                    query = searchQuery,
+                    matchCount = searchMatches.size,
+                    currentIndex = searchIndex,
+                    onQueryChange = { searchQuery = it },
+                    onNext = { jumpToMatch(searchIndex + 1) },
+                    onPrev = { jumpToMatch(searchIndex - 1) }
+                )
+            }
+
+            // Content area
+            Box(modifier = Modifier.weight(1f)) {
+                when {
+                    viewState.isLoading -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                CircularProgressIndicator()
+                                Text("正在加载文件...")
+                            }
+                        }
+                    }
+
+                    viewState.error != null -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Warning,
+                                    contentDescription = "错误",
+                                    tint = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.size(48.dp)
+                                )
+                                Text(
+                                    text = viewState.error ?: "未知错误",
+                                    color = MaterialTheme.colorScheme.error,
+                                    textAlign = TextAlign.Center
+                                )
+                                Button(onClick = { viewModel.loadFile(viewState.filePath) }) {
+                                    Text("重试")
+                                }
+                            }
+                        }
+                    }
+
+                    else -> {
+                        val customTextSelectionColors = TextSelectionColors(
+                            handleColor = MaterialTheme.colorScheme.primary,
+                            backgroundColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
+                        )
+                        CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .verticalScroll(rememberScrollState())
+                            ) {
+                                BasicTextField(
+                                    value = displayValue,
+                                    onValueChange = {
+                                        // Strip annotations, keep only text + selection
+                                        textFieldValue = TextFieldValue(it.text, it.selection)
+                                        viewModel.updateContent(it.text)
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    textStyle = TextStyle(
+                                        fontFamily = FontFamily.Monospace,
+                                        fontSize = 14.sp,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    ),
+                                    enabled = !viewState.isReadOnly && !viewState.isSaving,
+                                    readOnly = viewState.isReadOnly,
+                                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Saving overlay
+                if (viewState.isSaving) {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Black.copy(alpha = 0.3f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
@@ -179,91 +350,58 @@ fun TextEditorScreen(
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             CircularProgressIndicator()
-                            Text("正在加载文件...")
+                            Text("正在保存...", color = Color.White)
                         }
                     }
                 }
-
-                viewState.error != null -> {
-                    // 错误状态
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Warning,
-                                contentDescription = "错误",
-                                tint = MaterialTheme.colorScheme.error,
-                                modifier = Modifier.size(48.dp)
-                            )
-                            Text(
-                                text = viewState.error ?: "未知错误",
-                                color = MaterialTheme.colorScheme.error,
-                                textAlign = TextAlign.Center
-                            )
-                            Button(onClick = { viewModel.loadFile(viewState.filePath) }) {
-                                Text("重试")
-                            }
-                        }
-                    }
-                }
-
-                else -> {
-                    // 正常编辑状态
-                    val customTextSelectionColors = TextSelectionColors(
-                        handleColor = MaterialTheme.colorScheme.primary,
-                        backgroundColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
-                    )
-
-                    CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
-                        BasicTextField(
-                            value = viewState.content,
-                            onValueChange = { viewModel.updateContent(it) },
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(16.dp),
-                            textStyle = TextStyle(
-                                fontFamily = FontFamily.Monospace,
-                                fontSize = 14.sp,
-                                color = MaterialTheme.colorScheme.onSurface
-                            ),
-                            enabled = !viewState.isReadOnly && !viewState.isSaving,
-                            readOnly = viewState.isReadOnly,
-                            decorationBox = { innerTextField ->
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .verticalScroll(rememberScrollState())
-                                ) {
-                                    innerTextField()
-                                }
-                            }
-                        )
-                    }
-                }
             }
+        }
+    }
+}
 
-            // 保存中覆盖层
-            if (viewState.isSaving) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.3f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        CircularProgressIndicator()
-                        Text("正在保存...", color = Color.White)
-                    }
-                }
-            }
+@Composable
+fun SearchBar(
+    query: String,
+    matchCount: Int,
+    currentIndex: Int,
+    onQueryChange: (String) -> Unit,
+    onNext: () -> Unit,
+    onPrev: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        OutlinedTextField(
+            value = query,
+            onValueChange = onQueryChange,
+            modifier = Modifier.weight(1f),
+            placeholder = { Text("搜索（至少2个字符）", style = MaterialTheme.typography.bodyMedium) },
+            singleLine = true,
+            textStyle = MaterialTheme.typography.bodyMedium,
+        )
+        val label = when {
+            query.length < 2 -> ""
+            matchCount == 0 -> "无结果"
+            else -> "${currentIndex + 1}/$matchCount"
+        }
+        if (label.isNotEmpty()) {
+            Text(
+                text = label,
+                modifier = Modifier.padding(horizontal = 6.dp),
+                style = MaterialTheme.typography.bodySmall,
+                color = if (matchCount == 0) MaterialTheme.colorScheme.error
+                else MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        IconButton(onClick = onPrev, enabled = matchCount > 1) {
+            Icon(Icons.Default.KeyboardArrowUp, "上一个")
+        }
+        IconButton(onClick = onNext, enabled = matchCount > 1) {
+            Icon(Icons.Default.KeyboardArrowDown, "下一个")
         }
     }
 }
@@ -283,14 +421,11 @@ fun FileStatusBar(viewState: TextEditorState) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // 编码信息
             Text(
                 text = viewState.encoding,
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-
-            // 统计信息
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
                     text = "行: ${viewState.lineCount}",
@@ -308,8 +443,6 @@ fun FileStatusBar(viewState: TextEditorState) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-
-            // 修改状态
             if (viewState.isModified) {
                 Text(
                     text = "已修改",
@@ -321,12 +454,10 @@ fun FileStatusBar(viewState: TextEditorState) {
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewTextEditorScreenReadOnly() {
     MaterialTheme {
-
         TextEditorScreen()
     }
 }

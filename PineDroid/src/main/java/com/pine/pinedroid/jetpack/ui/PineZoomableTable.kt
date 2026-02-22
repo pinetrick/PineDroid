@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.Dp
 import com.pine.pinedroid.utils.ui.pct
 
 
-
 @Composable
 fun PineZoomableTable(
     columnCount: Int,
@@ -37,18 +36,13 @@ fun PineZoomableTable(
 ) {
     var scale by remember { mutableFloatStateOf(1f) }
     val horizontalScrollState = rememberScrollState()
-    val verticalScrollState = rememberScrollState()
 
     val columnWidths = remember(columnCount) {
         mutableStateOf(List(columnCount) { initialColumnWidth })
     }
 
-    val transformableState = rememberTransformableState { zoomChange, panChange, _ ->
-        val newScale = (scale * zoomChange).coerceIn(0.3f, 5f)
-
-        // 更新缩放比例
-        scale = newScale
-
+    val transformableState = rememberTransformableState { zoomChange, _, _ ->
+        scale = (scale * zoomChange).coerceIn(0.3f, 5f)
     }
 
     Box(
@@ -57,15 +51,10 @@ fun PineZoomableTable(
             .background(MaterialTheme.colorScheme.background)
             .transformable(state = transformableState)
     ) {
-        Column(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-        ) {
-            // 表头 - 可以水平滚动
+        Column(modifier = Modifier.align(Alignment.TopStart)) {
+            // 表头 — 与数据行共享同一水平滚动状态
             header?.let { headerComposable ->
-                Box(
-                    modifier = Modifier.horizontalScroll(horizontalScrollState)
-                ) {
+                Box(modifier = Modifier.horizontalScroll(horizontalScrollState)) {
                     Row {
                         repeat(columnCount) { columnIndex ->
                             Box(
@@ -80,14 +69,10 @@ fun PineZoomableTable(
                 }
             }
 
-            // 内容区域 - 可以水平和垂直滚动
-            Box(
-                modifier = Modifier
-                    .horizontalScroll(horizontalScrollState)
-                    .verticalScroll(verticalScrollState)
-            ) {
-                Column {
-                    repeat(lineCount) { rowIndex ->
+            // 数据行 — LazyColumn 按需渲染，每行独立共享水平滚动状态
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(lineCount) { rowIndex ->
+                    Box(modifier = Modifier.horizontalScroll(horizontalScrollState)) {
                         Row {
                             repeat(columnCount) { columnIndex ->
                                 Box(
@@ -103,10 +88,8 @@ fun PineZoomableTable(
                 }
             }
         }
-
     }
 }
-
 
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 800)
@@ -115,10 +98,10 @@ fun ZoomableTablePreview() {
     PineZoomableTable(
         columnCount = 3,
         lineCount = 3,
-        renderCell = { rowIndex, columnIndex, scale ->
+        renderCell = { rowIndex, columnIndex, _ ->
             Text("Hello$rowIndex,$columnIndex")
         },
-        header = { columnIndex, scale ->
+        header = { columnIndex, _ ->
             Text("Header$columnIndex")
         }
     )

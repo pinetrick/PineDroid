@@ -1,3 +1,5 @@
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+
 package com.pine.pinedroid.language.language_switch_screen
 
 import android.content.res.Configuration

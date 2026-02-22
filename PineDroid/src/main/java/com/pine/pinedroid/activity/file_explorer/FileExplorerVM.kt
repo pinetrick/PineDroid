@@ -78,6 +78,7 @@ class FileExplorerVM : BaseViewModel<FileExplorerState>(FileExplorerState::class
         val currentDir = _viewState.value.currentDir
         if (currentDir == "/") {
             currentActivity.finish()
+            return
         }
 
         val parentDir = File(currentDir).parent
@@ -92,5 +93,41 @@ class FileExplorerVM : BaseViewModel<FileExplorerState>(FileExplorerState::class
 
     fun refresh() {
         loadDirectory(_viewState.value.currentDir)
+    }
+
+    fun deleteFile(file: File) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val success = if (file.isDirectory) file.deleteRecursively() else file.delete()
+                if (success) refresh()
+                else _viewState.update { it.copy(error = "删除失败") }
+            } catch (e: Exception) {
+                _viewState.update { it.copy(error = "删除失败: ${e.message}") }
+            }
+        }
+    }
+
+    fun createFile(name: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val file = File(_viewState.value.currentDir, name)
+                if (file.createNewFile()) refresh()
+                else _viewState.update { it.copy(error = "创建失败，文件可能已存在") }
+            } catch (e: Exception) {
+                _viewState.update { it.copy(error = "创建失败: ${e.message}") }
+            }
+        }
+    }
+
+    fun createFolder(name: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val dir = File(_viewState.value.currentDir, name)
+                if (dir.mkdir()) refresh()
+                else _viewState.update { it.copy(error = "创建失败，文件夹可能已存在") }
+            } catch (e: Exception) {
+                _viewState.update { it.copy(error = "创建失败: ${e.message}") }
+            }
+        }
     }
 }

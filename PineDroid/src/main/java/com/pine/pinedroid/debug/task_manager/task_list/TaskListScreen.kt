@@ -1,3 +1,5 @@
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+
 package com.pine.pinedroid.debug.task_manager.task_list
 
 
@@ -15,9 +17,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -26,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,11 +40,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
@@ -71,24 +78,69 @@ fun TaskListScreen(
         },
     )
 }
+
 @Composable
 fun Content(viewModel: TaskListScreenVM, viewState: TaskListScreenState) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // 内存概览卡片
         MemoryOverviewCard(memoryInfo = viewState.memoryInfo)
 
-        // 进程列表
         ProcessList(
             apps = viewState.apps,
             isLoading = viewState.isLoading,
-            onRefresh = { viewModel.onRefresh() }
+            onRefresh = { viewModel.onRefresh() },
+            onKillClick = { viewModel.onKillClick(it) }
         )
     }
+
+    // Kill 确认对话框
+    viewState.processToKill?.let { app ->
+        KillConfirmDialog(
+            app = app,
+            onConfirm = { viewModel.onKillConfirm() },
+            onDismiss = { viewModel.onKillDismiss() }
+        )
+    }
+}
+
+@Composable
+fun KillConfirmDialog(app: AppInfos, onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = {
+            Icon(
+                imageVector = Icons.Default.Clear,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.error
+            )
+        },
+        title = { Text("Kill Process?") },
+        text = {
+            Column {
+                Text("Process: ${app.name}")
+                Text("PID: ${app.pid}  |  ${app.category}", style = MaterialTheme.typography.bodySmall)
+                if (app.isMainProcess) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Warning: This is the main process. Killing it will force-quit the app.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text("Kill", color = MaterialTheme.colorScheme.error)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("Cancel") }
+        }
+    )
 }
 
 @Composable
@@ -99,22 +151,18 @@ fun MemoryOverviewCard(memoryInfo: MemoryInfo) {
             .padding(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
+        Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = "Memory Overview",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
-
             Spacer(modifier = Modifier.height(8.dp))
-
             MemoryInfoItem("Total RAM", memoryInfo.totalRAM)
             MemoryInfoItem("Free RAM", memoryInfo.freeRAM)
             MemoryInfoItem("Used RAM", memoryInfo.usedRAM)
-            MemoryInfoItem("Lost RAM", memoryInfo.lostRAM)
+            MemoryInfoItem("Low Mem Threshold", memoryInfo.lostRAM)
             MemoryInfoItem("ZRAM", memoryInfo.zramInfo)
         }
     }
@@ -146,7 +194,8 @@ fun MemoryInfoItem(label: String, value: String) {
 fun ProcessList(
     apps: List<AppInfos>,
     isLoading: Boolean,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onKillClick: (AppInfos) -> Unit,
 ) {
     var expandedItems by remember { mutableStateOf(setOf<String>()) }
 
@@ -164,7 +213,6 @@ fun ProcessList(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
-
             IconButton(onClick = onRefresh) {
                 Icon(
                     imageVector = Icons.Default.Refresh,
@@ -172,6 +220,28 @@ fun ProcessList(
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
+        }
+
+        // Android 10+ 限制说明
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 8.dp),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Info,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 1.dp)
+            )
+            Text(
+                text = "Android 10+ restricts process visibility to this app only. Other apps cannot be listed without root access.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
 
         if (isLoading) {
@@ -184,21 +254,16 @@ fun ProcessList(
                 CircularProgressIndicator()
             }
         } else {
-            LazyColumn(
-                modifier = Modifier.weight(1f)
-            ) {
+            LazyColumn(modifier = Modifier.weight(1f)) {
                 items(apps) { app ->
                     ProcessItem(
                         app = app,
                         isExpanded = expandedItems.contains("${app.pid}-${app.name}"),
                         onExpandedChange = { expanded ->
                             val key = "${app.pid}-${app.name}"
-                            expandedItems = if (expanded) {
-                                expandedItems + key
-                            } else {
-                                expandedItems - key
-                            }
-                        }
+                            expandedItems = if (expanded) expandedItems + key else expandedItems - key
+                        },
+                        onKillClick = { onKillClick(app) }
                     )
                     Divider()
                 }
@@ -211,7 +276,8 @@ fun ProcessList(
 fun ProcessItem(
     app: AppInfos,
     isExpanded: Boolean,
-    onExpandedChange: (Boolean) -> Unit
+    onExpandedChange: (Boolean) -> Unit,
+    onKillClick: () -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -220,24 +286,37 @@ fun ProcessItem(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         onClick = { onExpandedChange(!isExpanded) }
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
+        Column(modifier = Modifier.padding(start = 16.dp, end = 4.dp, top = 12.dp, bottom = 12.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = app.name,
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Medium,
-                        maxLines = if (isExpanded) Int.MAX_VALUE else 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                // 名称 + 主进程标记
+                Column(modifier = Modifier.weight(1f)) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Text(
+                            text = app.name,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Medium,
+                            maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f, fill = false)
+                        )
+                        if (app.isMainProcess) {
+                            Text(
+                                text = "MAIN",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier
+                                    .background(
+                                        color = MaterialTheme.colorScheme.primary,
+                                        shape = MaterialTheme.shapes.extraSmall
+                                    )
+                                    .padding(horizontal = 4.dp, vertical = 1.dp)
+                            )
+                        }
+                    }
 
                     if (isExpanded) {
                         Spacer(modifier = Modifier.height(8.dp))
@@ -245,21 +324,26 @@ fun ProcessItem(
                     }
                 }
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = app.pss,
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
                     )
-
                     Icon(
                         imageVector = if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
-                        contentDescription = if (isExpanded) "Collapse" else "Expand",
+                        contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                    // Kill 按钮
+                    IconButton(onClick = onKillClick) {
+                        Icon(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = "Kill",
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
                 }
             }
 
@@ -289,8 +373,9 @@ fun ProcessItem(
 fun ProcessDetail(app: AppInfos) {
     Column {
         DetailRow("Process ID", app.pid)
-        DetailRow("Category", app.category)
-        DetailRow("Memory Usage", app.pss)
+        DetailRow("Package", app.packageName)
+        DetailRow("Type", app.category)
+        DetailRow("Memory (PSS)", app.pss)
     }
 }
 
@@ -322,5 +407,4 @@ fun DetailRow(label: String, value: String) {
 @Composable
 fun PreviewDark() {
     TaskListScreen()
-
 }
