@@ -15,6 +15,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.unit.IntSize
 import com.pine.pinedroid.R
 import com.pine.pinedroid.activity.image_pickup.OneImage
 
@@ -25,11 +27,22 @@ fun PineZoomableImage(
 ) {
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
+    var containerSize by remember { mutableStateOf(IntSize.Zero) }
+
+    fun clampOffset(raw: Offset, currentScale: Float): Offset {
+        val maxX = (containerSize.width * (currentScale - 1) / 2f).coerceAtLeast(0f)
+        val maxY = (containerSize.height * (currentScale - 1) / 2f).coerceAtLeast(0f)
+        return Offset(
+            raw.x.coerceIn(-maxX, maxX),
+            raw.y.coerceIn(-maxY, maxY)
+        )
+    }
 
     val transformableState = rememberTransformableState { zoomChange, panChange, _ ->
-        scale = (scale * zoomChange).coerceIn(1f, 5f)
-        if (scale > 1f) {
-            offset += panChange
+        val newScale = (scale * zoomChange).coerceIn(1f, 5f)
+        scale = newScale
+        if (newScale > 1f) {
+            offset = clampOffset(offset + panChange, newScale)
         } else {
             offset = Offset.Zero
         }
@@ -39,6 +52,7 @@ fun PineZoomableImage(
         modifier = modifier
             .background(Color.Black)
             .clipToBounds()
+            .onSizeChanged { containerSize = it }
             .transformable(state = transformableState)
             .pointerInput(Unit) {
                 detectTapGestures(

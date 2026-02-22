@@ -56,6 +56,13 @@ fun TableSelection(
         }
     }
 
+    // 若只有一张表，在 UI 层触发跳转（确保 HandleNavigation 已在监听）
+    LaunchedEffect(viewState.tables, viewState.isLoading) {
+        if (!viewState.isLoading && viewState.tables.size == 1) {
+            viewModel.onOpenTable(viewState.tables.first())
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(

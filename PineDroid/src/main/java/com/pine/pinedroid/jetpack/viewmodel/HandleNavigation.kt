@@ -29,23 +29,25 @@ fun <T: Any> HandleNavigation(
         viewModel.navEvents.collect { event ->
             when (event) {
                 is NavEvent.Navigate -> {
-                    if (event.popUpThis) {
-                        navController?.popBackStack()
-                    }
-
-                    // 处理 removeFromHistoryIfExists 逻辑
-                    if (event.rebuildScreenIfExist) {
-                        // 获取当前 backStack 的快照值
-                        val backStack = navController?.currentBackStack?.value
-                        backStack?.find { entry ->
-                            entry.destination.route == event.route
-                        }?.destination?.route?.let { route ->
-                            navController?.popBackStack(route, true)
+                    try {
+                        if (event.popUpThis) {
+                            navController?.popBackStack()
                         }
+
+                        // 处理 removeFromHistoryIfExists 逻辑
+                        if (event.rebuildScreenIfExist) {
+                            // 获取当前 backStack 的快照值
+                            val backStack = navController?.currentBackStack?.value
+                            backStack?.find { entry ->
+                                entry.destination.route == event.route
+                            }?.destination?.route?.let { route ->
+                                navController?.popBackStack(route, true)
+                            }
+                        }
+
+                        navController?.navigate(event.route)
+                    } catch (_: Exception) {
                     }
-
-
-                    navController?.navigate(event.route)
                 }
 
                 is NavEvent.NavigateWithArgs -> {

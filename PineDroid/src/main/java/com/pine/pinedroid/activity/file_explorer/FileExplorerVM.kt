@@ -1,5 +1,8 @@
 package com.pine.pinedroid.activity.file_explorer
 
+import android.content.Intent
+import android.webkit.MimeTypeMap
+import androidx.core.content.FileProvider
 import androidx.lifecycle.viewModelScope
 import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.activity.image_pickup.preview.ImagePreviewScreenVM
@@ -58,6 +61,27 @@ class FileExplorerVM : BaseViewModel<FileExplorerState>(FileExplorerState::class
             navigateTo("preview")
         } else if (file.isTxtFile() || file.isLikelyTextFile()) {
             navigateTo("text_editor/" + file.absoluteFile.toString().replace("/", "$"))
+        } else {
+            openWithSystem(file)
+        }
+    }
+
+    private fun openWithSystem(file: File) {
+        try {
+            val uri = FileProvider.getUriForFile(
+                appContext,
+                "${appContext.packageName}.fileprovider",
+                file
+            )
+            val mimeType = MimeTypeMap.getSingleton()
+                .getMimeTypeFromExtension(file.extension.lowercase()) ?: "*/*"
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, mimeType)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            currentActivity.startActivity(Intent.createChooser(intent, file.name))
+        } catch (e: Exception) {
+            _viewState.update { it.copy(error = "无法打开文件: ${e.message}") }
         }
     }
 
