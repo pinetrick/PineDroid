@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_file_explorer_new_file">新建文件</string>
+    <string name="pine_file_explorer_create_file_hint">文件名（如 test.txt）</string>
+    <string name="pine_file_explorer_new_folder">新建文件夹</string>
+    <string name="pine_file_explorer_create_folder_hint">文件夹名</string>
+    <string name="pine_file_explorer_back_cd">返回上级</string>
+    <string name="pine_file_explorer_new_cd">新建</string>
+    <string name="pine_file_explorer_retry">重试</string>
+    <string name="pine_file_explorer_empty_dir">空文件夹</string>
+    <string name="pine_file_explorer_delete_title">确认删除</string>
+    <string name="pine_file_explorer_delete_msg">确定要删除「%s」吗？此操作不可撤销。</string>
+    <string name="pine_file_explorer_delete">删除</string>
+    <string name="pine_file_explorer_cancel">取消</string>
+    <string name="pine_file_explorer_copy_path">复制路径</string>
+    <string name="pine_file_explorer_create">创建</string>
+    <string name="pine_file_explorer_item_count">%d 项</string>
+</resources>

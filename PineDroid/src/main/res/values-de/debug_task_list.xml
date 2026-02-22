@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_task_list_title">Laufende Aufgaben</string>
+    <string name="pine_task_list_kill_title">Prozess beenden?</string>
+    <string name="pine_task_list_process">Prozess: %s</string>
+    <string name="pine_task_list_pid_category">PID: %1$s  |  %2$s</string>
+    <string name="pine_task_list_main_process_warning">Warnung: Dies ist der Hauptprozess. Das Beenden erzwingt den App-Abbruch.</string>
+    <string name="pine_task_list_kill">Beenden</string>
+    <string name="pine_task_list_cancel">Abbrechen</string>
+    <string name="pine_task_list_memory_overview">Speicherübersicht</string>
+    <string name="pine_task_list_total_ram">Gesamter RAM</string>
+    <string name="pine_task_list_free_ram">Freier RAM</string>
+    <string name="pine_task_list_used_ram">Verwendeter RAM</string>
+    <string name="pine_task_list_low_mem_threshold">Niedrigspeicher-Schwellenwert</string>
+    <string name="pine_task_list_zram">ZRAM</string>
+    <string name="pine_task_list_running_processes">Laufende Prozesse (%d)</string>
+    <string name="pine_task_list_refresh">Aktualisieren</string>
+    <string name="pine_task_list_android10_note">Android 10+ schränkt die Prozesstransparenz auf diese App ein. Andere Apps können ohne Root-Zugriff nicht aufgelistet werden.</string>
+    <string name="pine_task_list_main_badge">HAUPT</string>
+    <string name="pine_task_list_kill_cd">Beenden</string>
+    <string name="pine_task_list_detail_pid">Prozess-ID</string>
+    <string name="pine_task_list_detail_package">Paket</string>
+    <string name="pine_task_list_detail_type">Typ</string>
+    <string name="pine_task_list_detail_memory">Speicher (PSS)</string>
+    <string name="pine_task_list_pid">PID: %s</string>
+</resources>

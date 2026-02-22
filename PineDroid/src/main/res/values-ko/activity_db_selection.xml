@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_db_selection_title">데이터베이스 선택</string>
+    <string name="pine_db_selection_back">뒤로</string>
+    <string name="pine_db_selection_db_icon_cd">데이터베이스</string>
+    <string name="pine_db_selection_modified">수정됨: %s</string>
+    <string name="pine_db_selection_empty_icon_cd">데이터베이스 없음</string>
+    <string name="pine_db_selection_empty_title">데이터베이스 파일을 찾을 수 없음</string>
+    <string name="pine_db_selection_empty_desc">앱 디렉토리에 데이터베이스 파일이 있는지 확인하세요</string>
+    <string name="pine_db_selection_loading">데이터베이스 로딩 중…</string>
+</resources>

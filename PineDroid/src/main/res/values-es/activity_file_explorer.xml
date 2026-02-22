@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_file_explorer_new_file">Nuevo archivo</string>
+    <string name="pine_file_explorer_create_file_hint">Nombre del archivo (p.ej. test.txt)</string>
+    <string name="pine_file_explorer_new_folder">Nueva carpeta</string>
+    <string name="pine_file_explorer_create_folder_hint">Nombre de la carpeta</string>
+    <string name="pine_file_explorer_back_cd">Volver</string>
+    <string name="pine_file_explorer_new_cd">Nuevo</string>
+    <string name="pine_file_explorer_retry">Reintentar</string>
+    <string name="pine_file_explorer_empty_dir">Carpeta vacía</string>
+    <string name="pine_file_explorer_delete_title">Confirmar eliminación</string>
+    <string name="pine_file_explorer_delete_msg">¿Está seguro de que desea eliminar \"%s\"? Esta acción no se puede deshacer.</string>
+    <string name="pine_file_explorer_delete">Eliminar</string>
+    <string name="pine_file_explorer_cancel">Cancelar</string>
+    <string name="pine_file_explorer_copy_path">Copiar ruta</string>
+    <string name="pine_file_explorer_create">Crear</string>
+    <string name="pine_file_explorer_item_count">%d elementos</string>
+</resources>

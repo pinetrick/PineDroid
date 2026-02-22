@@ -34,13 +34,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.pine.pinedroid.R
 import com.pine.pinedroid.db.ColumnInfo
 import com.pine.pinedroid.db.DbRecord
 import com.pine.pinedroid.db.bean.fakeColumnInfos
@@ -78,7 +81,7 @@ fun RunSqlScreen(
         },
     )
 
-    // 编辑弹框
+    // Edit cell dialog
     viewState.editingCell?.let { editing ->
         EditCellDialog(
             columnName = editing.columnName,
@@ -153,7 +156,7 @@ fun SqlInputSection(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "返回",
+                    contentDescription = stringResource(R.string.pine_sql_back_cd),
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(24.dp)
                 )
@@ -182,7 +185,7 @@ fun SqlInputSection(
                     decorationBox = { innerTextField ->
                         if (sql.isEmpty()) {
                             Text(
-                                "输入SQL语句，例如: SELECT * FROM table_name",
+                                stringResource(R.string.pine_sql_hint),
                                 fontSize = 12.sp,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                             )
@@ -202,7 +205,7 @@ fun SqlInputSection(
             ) {
                 Icon(
                     imageVector = Icons.Filled.PlayArrow,
-                    contentDescription = "执行SQL",
+                    contentDescription = stringResource(R.string.pine_sql_execute_cd),
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(24.dp)
                 )
@@ -220,9 +223,12 @@ fun SqlResultTable(
     onCellClick: (record: DbRecord, columnName: String, currentValue: String) -> Unit = { _, _, _ -> },
     modifier: Modifier = Modifier
 ) {
+    val executingStr = stringResource(R.string.pine_sql_executing)
+    val resultStr = stringResource(R.string.pine_sql_result, records.size)
+
     Column(modifier = modifier) {
         Text(
-            text = if (isLoading) "执行中…" else "执行结果 (${records.size} 条记录)",
+            text = if (isLoading) executingStr else resultStr,
             fontSize = 10.spwh,
             fontWeight = FontWeight.Bold,
         )
@@ -258,7 +264,7 @@ fun SqlResultTable(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        "暂无数据",
+                        stringResource(R.string.pine_sql_empty),
                         fontSize = 12.spwh,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -296,6 +302,8 @@ fun TableDataCell(
     Text(
         text = value,
         fontSize = 8.sp * scale,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
         modifier = Modifier
             .clickable(onClick = onClick)
             .padding(4.dp)
@@ -308,6 +316,8 @@ private fun TableHeaderCell(name: String, scale: Float) {
         text = name,
         fontSize = 8.sp * scale,
         fontWeight = FontWeight.Bold,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
         color = MaterialTheme.colorScheme.onPrimaryContainer,
         modifier = Modifier.padding(4.dp)
     )
@@ -324,7 +334,7 @@ fun EditCellDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("编辑: $columnName") },
+        title = { Text(stringResource(R.string.pine_sql_edit_title, columnName)) },
         text = {
             OutlinedTextField(
                 value = text,
@@ -335,12 +345,12 @@ fun EditCellDialog(
         },
         confirmButton = {
             TextButton(onClick = { onConfirm(text) }) {
-                Text("保存")
+                Text(stringResource(R.string.pine_sql_save))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("取消")
+                Text(stringResource(R.string.pine_sql_cancel))
             }
         }
     )

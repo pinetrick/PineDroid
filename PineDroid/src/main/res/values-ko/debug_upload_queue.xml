@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_upload_queue_title">업로드 대기열</string>
+    <string name="pine_upload_queue_empty">대기 중인 업로드 없음</string>
+    <string name="pine_upload_queue_delete">삭제</string>
+    <string name="pine_upload_queue_upload">업로드</string>
+    <string name="pine_upload_queue_file_preview">파일 미리보기</string>
+</resources>

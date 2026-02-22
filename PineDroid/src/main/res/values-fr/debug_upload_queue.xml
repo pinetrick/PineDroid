@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_upload_queue_title">File d\'envoi</string>
+    <string name="pine_upload_queue_empty">Aucun envoi en attente</string>
+    <string name="pine_upload_queue_delete">Supprimer</string>
+    <string name="pine_upload_queue_upload">Envoyer</string>
+    <string name="pine_upload_queue_file_preview">Aperçu du fichier</string>
+</resources>

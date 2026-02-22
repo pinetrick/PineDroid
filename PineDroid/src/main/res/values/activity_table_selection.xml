@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_table_selection_back_cd">Back</string>
+    <string name="pine_table_selection_empty">No tables in this database</string>
+    <string name="pine_table_selection_row_count">Rows: %s</string>
+    <string name="pine_table_selection_table_icon_cd">Table icon</string>
+</resources>

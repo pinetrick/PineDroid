@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_file_explorer_new_file">新規ファイル</string>
+    <string name="pine_file_explorer_create_file_hint">ファイル名 (例: test.txt)</string>
+    <string name="pine_file_explorer_new_folder">新規フォルダ</string>
+    <string name="pine_file_explorer_create_folder_hint">フォルダ名</string>
+    <string name="pine_file_explorer_back_cd">上の階層へ</string>
+    <string name="pine_file_explorer_new_cd">新規</string>
+    <string name="pine_file_explorer_retry">再試行</string>
+    <string name="pine_file_explorer_empty_dir">空のフォルダ</string>
+    <string name="pine_file_explorer_delete_title">削除の確認</string>
+    <string name="pine_file_explorer_delete_msg">「%s」を削除しますか？この操作は元に戻せません。</string>
+    <string name="pine_file_explorer_delete">削除</string>
+    <string name="pine_file_explorer_cancel">キャンセル</string>
+    <string name="pine_file_explorer_copy_path">パスをコピー</string>
+    <string name="pine_file_explorer_create">作成</string>
+    <string name="pine_file_explorer_item_count">%d 項目</string>
+</resources>

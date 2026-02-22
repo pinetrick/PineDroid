@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_db_selection_title">Database Selection</string>
+    <string name="pine_db_selection_back">Back</string>
+    <string name="pine_db_selection_db_icon_cd">Database</string>
+    <string name="pine_db_selection_modified">Modified: %s</string>
+    <string name="pine_db_selection_empty_icon_cd">No databases</string>
+    <string name="pine_db_selection_empty_title">No database files found</string>
+    <string name="pine_db_selection_empty_desc">Please check if the database file exists in the app directory</string>
+    <string name="pine_db_selection_loading">Loading databases…</string>
+</resources>

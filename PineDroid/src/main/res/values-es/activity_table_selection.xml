@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_table_selection_back_cd">Atrás</string>
+    <string name="pine_table_selection_empty">No hay tablas en esta base de datos</string>
+    <string name="pine_table_selection_row_count">Filas: %s</string>
+    <string name="pine_table_selection_table_icon_cd">Icono de tabla</string>
+</resources>

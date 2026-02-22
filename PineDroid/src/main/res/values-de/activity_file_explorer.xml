@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_file_explorer_new_file">Neue Datei</string>
+    <string name="pine_file_explorer_create_file_hint">Dateiname (z.B. test.txt)</string>
+    <string name="pine_file_explorer_new_folder">Neuer Ordner</string>
+    <string name="pine_file_explorer_create_folder_hint">Ordnername</string>
+    <string name="pine_file_explorer_back_cd">Zurück</string>
+    <string name="pine_file_explorer_new_cd">Neu</string>
+    <string name="pine_file_explorer_retry">Wiederholen</string>
+    <string name="pine_file_explorer_empty_dir">Leerer Ordner</string>
+    <string name="pine_file_explorer_delete_title">Löschen bestätigen</string>
+    <string name="pine_file_explorer_delete_msg">Möchten Sie \"%s\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</string>
+    <string name="pine_file_explorer_delete">Löschen</string>
+    <string name="pine_file_explorer_cancel">Abbrechen</string>
+    <string name="pine_file_explorer_copy_path">Pfad kopieren</string>
+    <string name="pine_file_explorer_create">Erstellen</string>
+    <string name="pine_file_explorer_item_count">%d Elemente</string>
+</resources>

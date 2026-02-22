@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_db_selection_title">Selección de base de datos</string>
+    <string name="pine_db_selection_back">Atrás</string>
+    <string name="pine_db_selection_db_icon_cd">Base de datos</string>
+    <string name="pine_db_selection_modified">Modificado: %s</string>
+    <string name="pine_db_selection_empty_icon_cd">Sin bases de datos</string>
+    <string name="pine_db_selection_empty_title">No se encontraron archivos de base de datos</string>
+    <string name="pine_db_selection_empty_desc">Compruebe si el archivo de base de datos existe en el directorio de la app</string>
+    <string name="pine_db_selection_loading">Cargando bases de datos…</string>
+</resources>

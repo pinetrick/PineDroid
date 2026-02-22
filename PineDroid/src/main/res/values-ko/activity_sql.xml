@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_sql_back_cd">뒤로</string>
+    <string name="pine_sql_hint">SQL 입력, 예: SELECT * FROM table_name</string>
+    <string name="pine_sql_execute_cd">SQL 실행</string>
+    <string name="pine_sql_executing">실행 중…</string>
+    <string name="pine_sql_result">결과 (%d개 레코드)</string>
+    <string name="pine_sql_empty">데이터 없음</string>
+    <string name="pine_sql_edit_title">편집: %s</string>
+    <string name="pine_sql_save">저장</string>
+    <string name="pine_sql_cancel">취소</string>
+</resources>

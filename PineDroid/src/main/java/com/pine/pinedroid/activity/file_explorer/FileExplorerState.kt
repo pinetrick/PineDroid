@@ -8,5 +8,7 @@ data class FileExplorerState(
     val currentDir: String = "/",
     val files: List<File> = emptyList(),
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val showLocationPicker: Boolean = true,
+    val locationRoot: String? = null,
 )

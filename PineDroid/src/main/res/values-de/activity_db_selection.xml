@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_db_selection_title">Datenbankauswahl</string>
+    <string name="pine_db_selection_back">Zurück</string>
+    <string name="pine_db_selection_db_icon_cd">Datenbank</string>
+    <string name="pine_db_selection_modified">Geändert: %s</string>
+    <string name="pine_db_selection_empty_icon_cd">Keine Datenbanken</string>
+    <string name="pine_db_selection_empty_title">Keine Datenbankdateien gefunden</string>
+    <string name="pine_db_selection_empty_desc">Bitte prüfen Sie, ob die Datenbankdatei im App-Verzeichnis vorhanden ist</string>
+    <string name="pine_db_selection_loading">Datenbanken werden geladen…</string>
+</resources>

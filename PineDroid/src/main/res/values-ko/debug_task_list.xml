@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_task_list_title">실행 중인 작업</string>
+    <string name="pine_task_list_kill_title">프로세스를 종료하시겠습니까?</string>
+    <string name="pine_task_list_process">프로세스: %s</string>
+    <string name="pine_task_list_pid_category">PID: %1$s  |  %2$s</string>
+    <string name="pine_task_list_main_process_warning">경고: 이것은 메인 프로세스입니다. 종료하면 앱이 강제 종료됩니다.</string>
+    <string name="pine_task_list_kill">종료</string>
+    <string name="pine_task_list_cancel">취소</string>
+    <string name="pine_task_list_memory_overview">메모리 개요</string>
+    <string name="pine_task_list_total_ram">전체 RAM</string>
+    <string name="pine_task_list_free_ram">여유 RAM</string>
+    <string name="pine_task_list_used_ram">사용 중 RAM</string>
+    <string name="pine_task_list_low_mem_threshold">낮은 메모리 임계값</string>
+    <string name="pine_task_list_zram">ZRAM</string>
+    <string name="pine_task_list_running_processes">실행 중인 프로세스 (%d)</string>
+    <string name="pine_task_list_refresh">새로고침</string>
+    <string name="pine_task_list_android10_note">Android 10 이상은 이 앱에만 프로세스 가시성을 제한합니다. 다른 앱은 루트 권한 없이 나열할 수 없습니다.</string>
+    <string name="pine_task_list_main_badge">메인</string>
+    <string name="pine_task_list_kill_cd">종료</string>
+    <string name="pine_task_list_detail_pid">프로세스 ID</string>
+    <string name="pine_task_list_detail_package">패키지</string>
+    <string name="pine_task_list_detail_type">유형</string>
+    <string name="pine_task_list_detail_memory">메모리 (PSS)</string>
+    <string name="pine_task_list_pid">PID: %s</string>
+</resources>

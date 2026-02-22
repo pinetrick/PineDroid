@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -48,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.pine.pinedroid.R
 import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
 import com.pine.pinedroid.jetpack.ui.image.PineAsyncImage
@@ -73,7 +75,7 @@ fun UploadQueueScreen(
         PineGeneralScreen(
             title = {
                 PineTopAppBar(
-                    title = { Text("Upload Queue", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) },
+                    title = { Text(stringResource(R.string.pine_upload_queue_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) },
                     navigationIcon = {
                         IconButton(onClick = viewModel::navigateBack) {
                             PineIcon(text = "\uf060", fontSize = 20.sp, color = MaterialTheme.colorScheme.primary)
@@ -119,7 +121,7 @@ fun Content(viewModel: UploadQueueVM, viewState: UploadQueueState) {
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
                     )
                     Text(
-                        text = "No pending uploads",
+                        text = stringResource(R.string.pine_upload_queue_empty),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                     )
@@ -294,7 +296,7 @@ fun UploadQueueItem(
                 IconButton(onClick = onDelete, modifier = Modifier.size(36.dp)) {
                     Icon(
                         imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete",
+                        contentDescription = stringResource(R.string.pine_upload_queue_delete),
                         modifier = Modifier.size(18.dp),
                         tint = MaterialTheme.colorScheme.error.copy(alpha = 0.8f)
                     )
@@ -304,11 +306,11 @@ fun UploadQueueItem(
                 TextButton(onClick = onUpload) {
                     Icon(
                         imageVector = Icons.Default.Upload,
-                        contentDescription = "Upload",
+                        contentDescription = stringResource(R.string.pine_upload_queue_upload),
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("Upload", style = MaterialTheme.typography.labelMedium)
+                    Text(stringResource(R.string.pine_upload_queue_upload), style = MaterialTheme.typography.labelMedium)
                 }
             }
         }
@@ -335,7 +337,7 @@ fun FilePreviewItem(key: String, filePath: String) {
                 if (isImageFile(filePath)) {
                     PineAsyncImage(
                         model = OneImage.LocalImage(filePath),
-                        contentDescription = "File preview",
+                        contentDescription = stringResource(R.string.pine_upload_queue_file_preview),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize(),
                         error = painterResource(android.R.drawable.ic_menu_report_image),

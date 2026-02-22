@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.pine.pinedroid.activity.image_pickup.OneImage
 import com.pine.pinedroid.activity.image_pickup.preview.ImagePreviewScreenVM
 import com.pine.pinedroid.db.AppDatabases.isSqliteDatabaseFile
+import com.pine.pinedroid.file.isLikelyTextFile
 import com.pine.pinedroid.file.isPicture
 import com.pine.pinedroid.file.isTxtFile
 
@@ -17,21 +18,45 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
 
+data class StorageLocation(val label: String, val path: String, val icon: String)
+
 class FileExplorerVM : BaseViewModel<FileExplorerState>(FileExplorerState::class) {
 
     fun initialize() {
-        loadDirectory("/data/data/${appContext.packageName}")
+        _viewState.update { it.copy(showLocationPicker = true) }
+    }
+
+    fun getStorageLocations(): List<StorageLocation> {
+        val locations = mutableListOf<StorageLocation>()
+
+        locations.add(StorageLocation("应用数据", "/data/data/${appContext.packageName}", "\uf1c0"))
+
+        val externalDirs = appContext.getExternalFilesDirs(null)
+        externalDirs.forEachIndexed { index, dir ->
+            if (dir != null) {
+                var root: File = dir
+                repeat(4) { root = root.parentFile ?: root }
+                val label = if (index == 0) "内部存储" else "SD卡"
+                locations.add(StorageLocation(label, root.absolutePath, "\uf0a0"))
+            }
+        }
+
+        locations.add(StorageLocation("根目录", "/", "\uf07c"))
+        return locations
+    }
+
+    fun selectLocation(path: String) {
+        _viewState.update { it.copy(showLocationPicker = false, locationRoot = path) }
+        loadDirectory(path)
     }
     fun loadFile(path: String) {
         val file = File(path)
         if (isSqliteDatabaseFile(file)) {
             navigateTo("table/" + file.name)
-        }
-        else if (file.isPicture()){
+        } else if (file.isPicture()) {
             ImagePreviewScreenVM.images = listOf(OneImage.LocalImage(file.absoluteFile.toString()))
             navigateTo("preview")
-        }
-        else if (file.isTxtFile()) {
+        } else if (file.isTxtFile() || file.isLikelyTextFile()) {
             navigateTo("text_editor/" + file.absoluteFile.toString().replace("/", "$"))
         }
     }
@@ -75,15 +100,23 @@ class FileExplorerVM : BaseViewModel<FileExplorerState>(FileExplorerState::class
     }
 
     fun navigateToParent() {
-        val currentDir = _viewState.value.currentDir
-        if (currentDir == "/") {
+        val state = _viewState.value
+        if (state.showLocationPicker) {
             currentActivity.finish()
             return
         }
 
+        val currentDir = state.currentDir
+        if (currentDir == state.locationRoot || File(currentDir).parent == null) {
+            _viewState.update { it.copy(showLocationPicker = true) }
+            return
+        }
+
         val parentDir = File(currentDir).parent
-        parentDir?.let {
-            loadDirectory(it)
+        if (parentDir != null) {
+            loadDirectory(parentDir)
+        } else {
+            _viewState.update { it.copy(showLocationPicker = true) }
         }
     }
 

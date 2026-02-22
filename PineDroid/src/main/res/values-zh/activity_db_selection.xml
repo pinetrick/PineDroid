@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_db_selection_title">数据库选择</string>
+    <string name="pine_db_selection_back">返回</string>
+    <string name="pine_db_selection_db_icon_cd">数据库</string>
+    <string name="pine_db_selection_modified">修改时间: %s</string>
+    <string name="pine_db_selection_empty_icon_cd">空数据库</string>
+    <string name="pine_db_selection_empty_title">未找到数据库文件</string>
+    <string name="pine_db_selection_empty_desc">请检查数据库文件是否存在于应用目录中</string>
+    <string name="pine_db_selection_loading">加载数据库中…</string>
+</resources>

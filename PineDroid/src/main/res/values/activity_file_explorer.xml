@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_file_explorer_new_file">New File</string>
+    <string name="pine_file_explorer_create_file_hint">File name (e.g. test.txt)</string>
+    <string name="pine_file_explorer_new_folder">New Folder</string>
+    <string name="pine_file_explorer_create_folder_hint">Folder name</string>
+    <string name="pine_file_explorer_back_cd">Go back</string>
+    <string name="pine_file_explorer_new_cd">New</string>
+    <string name="pine_file_explorer_retry">Retry</string>
+    <string name="pine_file_explorer_empty_dir">Empty folder</string>
+    <string name="pine_file_explorer_delete_title">Confirm Delete</string>
+    <string name="pine_file_explorer_delete_msg">Are you sure you want to delete \"%s\"? This action cannot be undone.</string>
+    <string name="pine_file_explorer_delete">Delete</string>
+    <string name="pine_file_explorer_cancel">Cancel</string>
+    <string name="pine_file_explorer_copy_path">Copy Path</string>
+    <string name="pine_file_explorer_create">Create</string>
+    <string name="pine_file_explorer_item_count">%d items</string>
+</resources>

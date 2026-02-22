@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_task_list_title">Running Tasks</string>
+    <string name="pine_task_list_kill_title">Kill Process?</string>
+    <string name="pine_task_list_process">Process: %s</string>
+    <string name="pine_task_list_pid_category">PID: %1$s  |  %2$s</string>
+    <string name="pine_task_list_main_process_warning">Warning: This is the main process. Killing it will force-quit the app.</string>
+    <string name="pine_task_list_kill">Kill</string>
+    <string name="pine_task_list_cancel">Cancel</string>
+    <string name="pine_task_list_memory_overview">Memory Overview</string>
+    <string name="pine_task_list_total_ram">Total RAM</string>
+    <string name="pine_task_list_free_ram">Free RAM</string>
+    <string name="pine_task_list_used_ram">Used RAM</string>
+    <string name="pine_task_list_low_mem_threshold">Low Mem Threshold</string>
+    <string name="pine_task_list_zram">ZRAM</string>
+    <string name="pine_task_list_running_processes">Running Processes (%d)</string>
+    <string name="pine_task_list_refresh">Refresh</string>
+    <string name="pine_task_list_android10_note">Android 10+ restricts process visibility to this app only. Other apps cannot be listed without root access.</string>
+    <string name="pine_task_list_main_badge">MAIN</string>
+    <string name="pine_task_list_kill_cd">Kill</string>
+    <string name="pine_task_list_detail_pid">Process ID</string>
+    <string name="pine_task_list_detail_package">Package</string>
+    <string name="pine_task_list_detail_type">Type</string>
+    <string name="pine_task_list_detail_memory">Memory (PSS)</string>
+    <string name="pine_task_list_pid">PID: %s</string>
+</resources>

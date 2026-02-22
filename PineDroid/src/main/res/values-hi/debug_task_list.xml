@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_task_list_title">चल रहे कार्य</string>
+    <string name="pine_task_list_kill_title">प्रक्रिया समाप्त करें?</string>
+    <string name="pine_task_list_process">प्रक्रिया: %s</string>
+    <string name="pine_task_list_pid_category">PID: %1$s  |  %2$s</string>
+    <string name="pine_task_list_main_process_warning">चेतावनी: यह मुख्य प्रक्रिया है। इसे समाप्त करने से ऐप बंद हो जाएगा।</string>
+    <string name="pine_task_list_kill">समाप्त करें</string>
+    <string name="pine_task_list_cancel">रद्द करें</string>
+    <string name="pine_task_list_memory_overview">मेमोरी अवलोकन</string>
+    <string name="pine_task_list_total_ram">कुल RAM</string>
+    <string name="pine_task_list_free_ram">मुक्त RAM</string>
+    <string name="pine_task_list_used_ram">प्रयुक्त RAM</string>
+    <string name="pine_task_list_low_mem_threshold">कम मेमोरी सीमा</string>
+    <string name="pine_task_list_zram">ZRAM</string>
+    <string name="pine_task_list_running_processes">चल रही प्रक्रियाएं (%d)</string>
+    <string name="pine_task_list_refresh">ताज़ा करें</string>
+    <string name="pine_task_list_android10_note">Android 10+ प्रक्रिया दृश्यता को केवल इस ऐप तक सीमित करता है। अन्य ऐप्स को root एक्सेस के बिना सूचीबद्ध नहीं किया जा सकता।</string>
+    <string name="pine_task_list_main_badge">मुख्य</string>
+    <string name="pine_task_list_kill_cd">समाप्त करें</string>
+    <string name="pine_task_list_detail_pid">प्रक्रिया ID</string>
+    <string name="pine_task_list_detail_package">पैकेज</string>
+    <string name="pine_task_list_detail_type">प्रकार</string>
+    <string name="pine_task_list_detail_memory">मेमोरी (PSS)</string>
+    <string name="pine_task_list_pid">PID: %s</string>
+</resources>

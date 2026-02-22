@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_file_explorer_new_file">Nouveau fichier</string>
+    <string name="pine_file_explorer_create_file_hint">Nom du fichier (ex. test.txt)</string>
+    <string name="pine_file_explorer_new_folder">Nouveau dossier</string>
+    <string name="pine_file_explorer_create_folder_hint">Nom du dossier</string>
+    <string name="pine_file_explorer_back_cd">Retour</string>
+    <string name="pine_file_explorer_new_cd">Nouveau</string>
+    <string name="pine_file_explorer_retry">Réessayer</string>
+    <string name="pine_file_explorer_empty_dir">Dossier vide</string>
+    <string name="pine_file_explorer_delete_title">Confirmer la suppression</string>
+    <string name="pine_file_explorer_delete_msg">Voulez-vous vraiment supprimer \"%s\" ? Cette action est irréversible.</string>
+    <string name="pine_file_explorer_delete">Supprimer</string>
+    <string name="pine_file_explorer_cancel">Annuler</string>
+    <string name="pine_file_explorer_copy_path">Copier le chemin</string>
+    <string name="pine_file_explorer_create">Créer</string>
+    <string name="pine_file_explorer_item_count">%d éléments</string>
+</resources>

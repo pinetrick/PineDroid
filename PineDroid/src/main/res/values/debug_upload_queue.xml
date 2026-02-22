@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_upload_queue_title">Upload Queue</string>
+    <string name="pine_upload_queue_empty">No pending uploads</string>
+    <string name="pine_upload_queue_delete">Delete</string>
+    <string name="pine_upload_queue_upload">Upload</string>
+    <string name="pine_upload_queue_file_preview">File preview</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_table_selection_back_cd">戻る</string>
+    <string name="pine_table_selection_empty">このデータベースにはテーブルがありません</string>
+    <string name="pine_table_selection_row_count">行数: %s</string>
+    <string name="pine_table_selection_table_icon_cd">テーブルアイコン</string>
+</resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_task_list_title">运行中的任务</string>
+    <string name="pine_task_list_kill_title">终止进程？</string>
+    <string name="pine_task_list_process">进程：%s</string>
+    <string name="pine_task_list_pid_category">PID：%1$s  |  %2$s</string>
+    <string name="pine_task_list_main_process_warning">警告：这是主进程，终止它将强制关闭应用。</string>
+    <string name="pine_task_list_kill">终止</string>
+    <string name="pine_task_list_cancel">取消</string>
+    <string name="pine_task_list_memory_overview">内存概览</string>
+    <string name="pine_task_list_total_ram">总内存</string>
+    <string name="pine_task_list_free_ram">可用内存</string>
+    <string name="pine_task_list_used_ram">已用内存</string>
+    <string name="pine_task_list_low_mem_threshold">低内存阈值</string>
+    <string name="pine_task_list_zram">ZRAM</string>
+    <string name="pine_task_list_running_processes">运行中进程（%d）</string>
+    <string name="pine_task_list_refresh">刷新</string>
+    <string name="pine_task_list_android10_note">Android 10+ 限制了进程可见性，仅能查看本应用进程，查看其他应用需要 root 权限。</string>
+    <string name="pine_task_list_main_badge">主进程</string>
+    <string name="pine_task_list_kill_cd">终止</string>
+    <string name="pine_task_list_detail_pid">进程 ID</string>
+    <string name="pine_task_list_detail_package">包名</string>
+    <string name="pine_task_list_detail_type">类型</string>
+    <string name="pine_task_list_detail_memory">内存（PSS）</string>
+    <string name="pine_task_list_pid">PID：%s</string>
+</resources>

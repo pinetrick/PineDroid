@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_task_list_title">実行中のタスク</string>
+    <string name="pine_task_list_kill_title">プロセスを終了しますか？</string>
+    <string name="pine_task_list_process">プロセス: %s</string>
+    <string name="pine_task_list_pid_category">PID: %1$s  |  %2$s</string>
+    <string name="pine_task_list_main_process_warning">警告: これはメインプロセスです。終了するとアプリが強制終了されます。</string>
+    <string name="pine_task_list_kill">終了</string>
+    <string name="pine_task_list_cancel">キャンセル</string>
+    <string name="pine_task_list_memory_overview">メモリ概要</string>
+    <string name="pine_task_list_total_ram">合計 RAM</string>
+    <string name="pine_task_list_free_ram">空き RAM</string>
+    <string name="pine_task_list_used_ram">使用中 RAM</string>
+    <string name="pine_task_list_low_mem_threshold">低メモリしきい値</string>
+    <string name="pine_task_list_zram">ZRAM</string>
+    <string name="pine_task_list_running_processes">実行中プロセス (%d)</string>
+    <string name="pine_task_list_refresh">更新</string>
+    <string name="pine_task_list_android10_note">Android 10以降はプロセスの可視性をこのアプリのみに制限しています。他のアプリはroot権限なしでは一覧表示できません。</string>
+    <string name="pine_task_list_main_badge">メイン</string>
+    <string name="pine_task_list_kill_cd">終了</string>
+    <string name="pine_task_list_detail_pid">プロセス ID</string>
+    <string name="pine_task_list_detail_package">パッケージ</string>
+    <string name="pine_task_list_detail_type">タイプ</string>
+    <string name="pine_task_list_detail_memory">メモリ (PSS)</string>
+    <string name="pine_task_list_pid">PID: %s</string>
+</resources>

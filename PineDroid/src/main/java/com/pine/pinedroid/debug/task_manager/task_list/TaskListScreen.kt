@@ -42,12 +42,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.pine.pinedroid.R
 import com.pine.pinedroid.jetpack.ui.nav.PineGeneralScreen
 import com.pine.pinedroid.jetpack.ui.nav.PineTopAppBar
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
@@ -59,6 +61,7 @@ fun TaskListScreen(
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current
+    val title = stringResource(R.string.pine_task_list_title)
 
     HandleNavigation(navController = navController, viewModel = viewModel) {
         viewModel.onInit(context)
@@ -67,7 +70,7 @@ fun TaskListScreen(
     PineGeneralScreen(
         title = {
             PineTopAppBar(
-                title = "Running Task",
+                title = title,
                 onReturn = viewModel::navigateBack,
                 actionIcon = "\uf2f9",
                 onAction = { viewModel.onRefresh() },
@@ -96,7 +99,7 @@ fun Content(viewModel: TaskListScreenVM, viewState: TaskListScreenState) {
         )
     }
 
-    // Kill 确认对话框
+    // Kill confirm dialog
     viewState.processToKill?.let { app ->
         KillConfirmDialog(
             app = app,
@@ -117,15 +120,15 @@ fun KillConfirmDialog(app: AppInfos, onConfirm: () -> Unit, onDismiss: () -> Uni
                 tint = MaterialTheme.colorScheme.error
             )
         },
-        title = { Text("Kill Process?") },
+        title = { Text(stringResource(R.string.pine_task_list_kill_title)) },
         text = {
             Column {
-                Text("Process: ${app.name}")
-                Text("PID: ${app.pid}  |  ${app.category}", style = MaterialTheme.typography.bodySmall)
+                Text(stringResource(R.string.pine_task_list_process, app.name))
+                Text(stringResource(R.string.pine_task_list_pid_category, app.pid, app.category), style = MaterialTheme.typography.bodySmall)
                 if (app.isMainProcess) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Warning: This is the main process. Killing it will force-quit the app.",
+                        text = stringResource(R.string.pine_task_list_main_process_warning),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -134,11 +137,11 @@ fun KillConfirmDialog(app: AppInfos, onConfirm: () -> Unit, onDismiss: () -> Uni
         },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text("Kill", color = MaterialTheme.colorScheme.error)
+                Text(stringResource(R.string.pine_task_list_kill), color = MaterialTheme.colorScheme.error)
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.pine_task_list_cancel)) }
         }
     )
 }
@@ -153,17 +156,17 @@ fun MemoryOverviewCard(memoryInfo: MemoryInfo) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "Memory Overview",
+                text = stringResource(R.string.pine_task_list_memory_overview),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
             Spacer(modifier = Modifier.height(8.dp))
-            MemoryInfoItem("Total RAM", memoryInfo.totalRAM)
-            MemoryInfoItem("Free RAM", memoryInfo.freeRAM)
-            MemoryInfoItem("Used RAM", memoryInfo.usedRAM)
-            MemoryInfoItem("Low Mem Threshold", memoryInfo.lostRAM)
-            MemoryInfoItem("ZRAM", memoryInfo.zramInfo)
+            MemoryInfoItem(stringResource(R.string.pine_task_list_total_ram), memoryInfo.totalRAM)
+            MemoryInfoItem(stringResource(R.string.pine_task_list_free_ram), memoryInfo.freeRAM)
+            MemoryInfoItem(stringResource(R.string.pine_task_list_used_ram), memoryInfo.usedRAM)
+            MemoryInfoItem(stringResource(R.string.pine_task_list_low_mem_threshold), memoryInfo.lostRAM)
+            MemoryInfoItem(stringResource(R.string.pine_task_list_zram), memoryInfo.zramInfo)
         }
     }
 }
@@ -208,7 +211,7 @@ fun ProcessList(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Running Processes (${apps.size})",
+                text = stringResource(R.string.pine_task_list_running_processes, apps.size),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
@@ -216,13 +219,13 @@ fun ProcessList(
             IconButton(onClick = onRefresh) {
                 Icon(
                     imageVector = Icons.Default.Refresh,
-                    contentDescription = "Refresh",
+                    contentDescription = stringResource(R.string.pine_task_list_refresh),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
         }
 
-        // Android 10+ 限制说明
+        // Android 10+ note
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -238,7 +241,7 @@ fun ProcessList(
                 modifier = Modifier.padding(top = 1.dp)
             )
             Text(
-                text = "Android 10+ restricts process visibility to this app only. Other apps cannot be listed without root access.",
+                text = stringResource(R.string.pine_task_list_android10_note),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -292,7 +295,6 @@ fun ProcessItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // 名称 + 主进程标记
                 Column(modifier = Modifier.weight(1f)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text(
@@ -305,7 +307,7 @@ fun ProcessItem(
                         )
                         if (app.isMainProcess) {
                             Text(
-                                text = "MAIN",
+                                text = stringResource(R.string.pine_task_list_main_badge),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onPrimary,
                                 modifier = Modifier
@@ -336,11 +338,10 @@ fun ProcessItem(
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    // Kill 按钮
                     IconButton(onClick = onKillClick) {
                         Icon(
                             imageVector = Icons.Default.Clear,
-                            contentDescription = "Kill",
+                            contentDescription = stringResource(R.string.pine_task_list_kill_cd),
                             tint = MaterialTheme.colorScheme.error
                         )
                     }
@@ -354,7 +355,7 @@ fun ProcessItem(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "PID: ${app.pid}",
+                        text = stringResource(R.string.pine_task_list_pid, app.pid),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -372,10 +373,10 @@ fun ProcessItem(
 @Composable
 fun ProcessDetail(app: AppInfos) {
     Column {
-        DetailRow("Process ID", app.pid)
-        DetailRow("Package", app.packageName)
-        DetailRow("Type", app.category)
-        DetailRow("Memory (PSS)", app.pss)
+        DetailRow(stringResource(R.string.pine_task_list_detail_pid), app.pid)
+        DetailRow(stringResource(R.string.pine_task_list_detail_package), app.packageName)
+        DetailRow(stringResource(R.string.pine_task_list_detail_type), app.category)
+        DetailRow(stringResource(R.string.pine_task_list_detail_memory), app.pss)
     }
 }
 

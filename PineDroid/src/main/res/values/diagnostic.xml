@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_diag_screen_title">Diagnostics</string>
+
+    <string name="pine_diag_section_memory">Memory</string>
+    <string name="pine_diag_section_cpu">CPU</string>
+    <string name="pine_diag_section_network">Network</string>
+    <string name="pine_diag_section_storage">Storage</string>
+    <string name="pine_diag_section_device">Device</string>
+
+    <string name="pine_diag_heap_used">Heap Used</string>
+    <string name="pine_diag_heap_max">Heap Max</string>
+    <string name="pine_diag_pss_memory">Process Memory (PSS)</string>
+    <string name="pine_diag_ram_avail">RAM Available</string>
+    <string name="pine_diag_ram_total">RAM Total</string>
+
+    <string name="pine_diag_cpu_cores">CPU Cores</string>
+    <string name="pine_diag_cpu_abi">Architecture</string>
+
+    <string name="pine_diag_net_type">Network Type</string>
+    <string name="pine_diag_net_connected">Connected</string>
+    <string name="pine_diag_net_internet">Internet Access</string>
+
+    <string name="pine_diag_storage_total">Internal Storage Total</string>
+    <string name="pine_diag_storage_avail">Internal Storage Available</string>
+    <string name="pine_diag_cache_size">App Cache Size</string>
+
+    <string name="pine_diag_device_model">Device Model</string>
+    <string name="pine_diag_manufacturer">Manufacturer</string>
+    <string name="pine_diag_android_ver">Android Version</string>
+    <string name="pine_diag_api_level">API Level</string>
+</resources>

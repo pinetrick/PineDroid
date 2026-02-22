@@ -49,6 +49,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -57,6 +58,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.pine.pinedroid.R
 import com.pine.pinedroid.jetpack.ui.font.PineIcon
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import com.pine.pinedroid.utils.file.bToDisplayFileSize
@@ -86,6 +88,8 @@ fun FileExplorer(
 
     FileExplorerScreen(
         state = state,
+        storageLocations = viewModel.getStorageLocations(),
+        onSelectLocation = { viewModel.selectLocation(it) },
         onNavigateToParent = { viewModel.navigateToParent() },
         onItemClick = { file ->
             if (file.isDirectory) viewModel.loadDirectory(file.absolutePath)
@@ -103,6 +107,8 @@ fun FileExplorer(
 @Composable
 fun FileExplorerScreen(
     state: FileExplorerState,
+    storageLocations: List<StorageLocation> = emptyList(),
+    onSelectLocation: (String) -> Unit = {},
     onNavigateToParent: () -> Unit,
     onItemClick: (File) -> Unit,
     onDataBases: () -> Unit,
@@ -117,16 +123,16 @@ fun FileExplorerScreen(
 
     if (showCreateFileDialog) {
         CreateItemDialog(
-            title = "新建文件",
-            placeholder = "文件名（如 test.txt）",
+            title = stringResource(R.string.pine_file_explorer_new_file),
+            placeholder = stringResource(R.string.pine_file_explorer_create_file_hint),
             onConfirm = { onCreateFile(it); showCreateFileDialog = false },
             onDismiss = { showCreateFileDialog = false }
         )
     }
     if (showCreateFolderDialog) {
         CreateItemDialog(
-            title = "新建文件夹",
-            placeholder = "文件夹名",
+            title = stringResource(R.string.pine_file_explorer_new_folder),
+            placeholder = stringResource(R.string.pine_file_explorer_create_folder_hint),
             onConfirm = { onCreateFolder(it); showCreateFolderDialog = false },
             onDismiss = { showCreateFolderDialog = false }
         )
@@ -145,7 +151,7 @@ fun FileExplorerScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateToParent) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回上级")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.pine_file_explorer_back_cd))
                     }
                 },
                 actions = {
@@ -155,26 +161,26 @@ fun FileExplorerScreen(
                     // Create file/folder
                     Box {
                         IconButton(onClick = { showCreateMenu = true }) {
-                            Icon(Icons.Default.Add, contentDescription = "新建")
+                            Icon(Icons.Default.Add, contentDescription = stringResource(R.string.pine_file_explorer_new_cd))
                         }
                         DropdownMenu(
                             expanded = showCreateMenu,
                             onDismissRequest = { showCreateMenu = false }
                         ) {
                             DropdownMenuItem(
-                                text = { Text("新建文件") },
+                                text = { Text(stringResource(R.string.pine_file_explorer_new_file)) },
                                 leadingIcon = { Icon(Icons.Default.NoteAdd, null) },
                                 onClick = { showCreateFileDialog = true; showCreateMenu = false }
                             )
                             DropdownMenuItem(
-                                text = { Text("新建文件夹") },
+                                text = { Text(stringResource(R.string.pine_file_explorer_new_folder)) },
                                 leadingIcon = { Icon(Icons.Default.CreateNewFolder, null) },
                                 onClick = { showCreateFolderDialog = true; showCreateMenu = false }
                             )
                         }
                     }
                     IconButton(onClick = onRefresh) {
-                        Icon(Icons.Default.Refresh, contentDescription = "刷新")
+                        Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.pine_file_explorer_retry))
                     }
                 }
             )
@@ -185,7 +191,12 @@ fun FileExplorerScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            if (state.isLoading) {
+            if (state.showLocationPicker) {
+                StorageLocationPicker(
+                    locations = storageLocations,
+                    onSelect = onSelectLocation,
+                )
+            } else if (state.isLoading) {
                 LoadingIndicator()
             } else if (state.error != null) {
                 ErrorView(error = state.error, onRetry = onRefresh)
@@ -226,7 +237,7 @@ fun ErrorView(error: String, onRetry: () -> Unit) {
             modifier = Modifier.padding(bottom = 16.dp)
         )
         Button(onClick = onRetry) {
-            Text("重试")
+            Text(stringResource(R.string.pine_file_explorer_retry))
         }
     }
 }
@@ -262,7 +273,7 @@ fun EmptyDirectoryView() {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "空文件夹",
+            text = stringResource(R.string.pine_file_explorer_empty_dir),
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
         )
     }
@@ -278,15 +289,15 @@ fun FileListItem(file: File, onClick: () -> Unit, onDelete: () -> Unit) {
     if (showDeleteConfirm) {
         AlertDialog(
             onDismissRequest = { showDeleteConfirm = false },
-            title = { Text("确认删除") },
-            text = { Text("确定要删除「${file.name}」吗？此操作不可撤销。") },
+            title = { Text(stringResource(R.string.pine_file_explorer_delete_title)) },
+            text = { Text(stringResource(R.string.pine_file_explorer_delete_msg, file.name)) },
             confirmButton = {
                 TextButton(onClick = { onDelete(); showDeleteConfirm = false }) {
-                    Text("删除", color = MaterialTheme.colorScheme.error)
+                    Text(stringResource(R.string.pine_file_explorer_delete), color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showDeleteConfirm = false }) { Text("取消") }
+                TextButton(onClick = { showDeleteConfirm = false }) { Text(stringResource(R.string.pine_file_explorer_cancel)) }
             }
         )
     }
@@ -318,6 +329,14 @@ fun FileListItem(file: File, onClick: () -> Unit, onDelete: () -> Unit) {
 
                 Spacer(modifier = Modifier.width(3.pct))
 
+                val fileInfoText = if (file.isDirectory) {
+                    stringResource(R.string.pine_file_explorer_item_count, file.listFiles()?.size ?: 0)
+                } else {
+                    "${file.length().bToDisplayFileSize()} • " +
+                            SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+                                .format(Date(file.lastModified()))
+                }
+
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = file.name,
@@ -329,14 +348,7 @@ fun FileListItem(file: File, onClick: () -> Unit, onDelete: () -> Unit) {
                     Spacer(modifier = Modifier.height(4.dp))
 
                     Text(
-                        text = if (file.isDirectory) {
-                            val count = file.listFiles()?.size ?: 0
-                            "$count 项"
-                        } else {
-                            "${file.length().bToDisplayFileSize()} • " +
-                                    SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-                                        .format(Date(file.lastModified()))
-                        },
+                        text = fileInfoText,
                         fontSize = 16.spwh,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
@@ -355,14 +367,14 @@ fun FileListItem(file: File, onClick: () -> Unit, onDelete: () -> Unit) {
                 onDismissRequest = { expanded = false }
             ) {
                 DropdownMenuItem(
-                    text = { Text("复制路径") },
+                    text = { Text(stringResource(R.string.pine_file_explorer_copy_path)) },
                     onClick = {
                         clipboardManager.setText(AnnotatedString(file.absolutePath))
                         expanded = false
                     }
                 )
                 DropdownMenuItem(
-                    text = { Text("删除", color = MaterialTheme.colorScheme.error) },
+                    text = { Text(stringResource(R.string.pine_file_explorer_delete), color = MaterialTheme.colorScheme.error) },
                     onClick = { showDeleteConfirm = true; expanded = false }
                 )
             }
@@ -393,12 +405,64 @@ fun CreateItemDialog(
             TextButton(
                 onClick = { if (name.isNotBlank()) onConfirm(name.trim()) },
                 enabled = name.isNotBlank()
-            ) { Text("创建") }
+            ) { Text(stringResource(R.string.pine_file_explorer_create)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("取消") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.pine_file_explorer_cancel)) }
         }
     )
+}
+
+@Composable
+fun StorageLocationPicker(
+    locations: List<StorageLocation>,
+    onSelect: (String) -> Unit,
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(8.dp)
+    ) {
+        items(locations) { location ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 1.pct)
+                    .combinedClickable(onClick = { onSelect(location.path) }),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(2.pct),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    PineIcon(
+                        text = location.icon,
+                        fontSize = 24.spwh,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(14.pct),
+                    )
+                    Spacer(modifier = Modifier.width(3.pct))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(text = location.label, fontWeight = FontWeight.Medium)
+                        Text(
+                            text = location.path,
+                            fontSize = 16.spwh,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                    PineIcon(
+                        text = "\uf105",
+                        fontSize = 24.spwh,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        modifier = Modifier.size(16.pct),
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 800)

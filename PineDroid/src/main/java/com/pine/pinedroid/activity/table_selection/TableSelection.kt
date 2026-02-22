@@ -27,12 +27,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.pine.pinedroid.R
 import com.pine.pinedroid.db.bean.TableInfo
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,13 +46,10 @@ fun TableSelection(
     dbName: String = "",
     viewModel: TableSelectionVM = viewModel()
 ) {
-    // 处理导航
     HandleNavigation(navController = navController, viewModel = viewModel)
 
-    // 收集状态
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
 
-    // 初始化加载（如果需要）
     LaunchedEffect(dbName) {
         if (dbName.isNotEmpty()) {
             viewModel.initialize(dbName)
@@ -72,7 +71,7 @@ fun TableSelection(
                         IconButton(onClick = { navController.navigateUp() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "返回"
+                                contentDescription = stringResource(R.string.pine_table_selection_back_cd)
                             )
                         }
                     }
@@ -99,7 +98,7 @@ fun TableSelection(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("该数据库暂无数据表", style = MaterialTheme.typography.bodyMedium)
+                        Text(stringResource(R.string.pine_table_selection_empty), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
                 else -> {
@@ -151,7 +150,7 @@ fun TableListItem(
             supportingContent = {
                 if (tableInfo.rowCount != null) {
                     Text(
-                        text = "行数: ${tableInfo.rowCount}",
+                        text = stringResource(R.string.pine_table_selection_row_count, tableInfo.rowCount.toString()),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -159,7 +158,7 @@ fun TableListItem(
             leadingContent = {
                 Icon(
                     imageVector = Icons.Default.TableChart,
-                    contentDescription = "表图标"
+                    contentDescription = stringResource(R.string.pine_table_selection_table_icon_cd)
                 )
             }
         )
@@ -175,4 +174,3 @@ fun TableSelectionPreview() {
     )
 
 }
-

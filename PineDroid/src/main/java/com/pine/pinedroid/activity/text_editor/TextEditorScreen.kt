@@ -54,6 +54,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -69,6 +70,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.pine.pinedroid.R
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import kotlinx.coroutines.launch
 import java.io.File
@@ -92,6 +94,11 @@ fun TextEditorScreen(
     var isSearchVisible by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
     var searchIndex by remember { mutableIntStateOf(0) }
+
+    // Pre-resolve strings for use in LaunchedEffect / coroutines
+    val confirmStr = stringResource(R.string.pine_text_editor_confirm)
+    val saveSuccessStr = stringResource(R.string.pine_text_editor_save_success)
+    val pathCopiedStr = stringResource(R.string.pine_text_editor_path_copied)
 
     // Compute search match positions
     val searchMatches = remember(searchQuery, viewState.content) {
@@ -158,7 +165,7 @@ fun TextEditorScreen(
         LaunchedEffect(error) {
             val result = snackbarHostState.showSnackbar(
                 message = error,
-                actionLabel = "确定",
+                actionLabel = confirmStr,
                 withDismissAction = true
             )
             if (result == SnackbarResult.ActionPerformed) viewModel.clearError()
@@ -168,7 +175,7 @@ fun TextEditorScreen(
     // Save success
     LaunchedEffect(viewState.isSaving) {
         if (!viewState.isSaving && viewState.error == null && !viewState.isModified) {
-            snackbarHostState.showSnackbar("保存成功")
+            snackbarHostState.showSnackbar(saveSuccessStr)
         }
     }
 
@@ -183,14 +190,14 @@ fun TextEditorScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = viewState.fileName.ifEmpty { "文本编辑器" },
+                        text = viewState.fileName.ifEmpty { stringResource(R.string.pine_text_editor_title) },
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController?.navigateUp() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.pine_text_editor_back_cd))
                     }
                 },
                 actions = {
@@ -198,9 +205,9 @@ fun TextEditorScreen(
                     if (viewState.filePath.isNotEmpty()) {
                         IconButton(onClick = {
                             clipboardManager.setText(AnnotatedString(viewState.filePath))
-                            coroutineScope.launch { snackbarHostState.showSnackbar("路径已复制") }
+                            coroutineScope.launch { snackbarHostState.showSnackbar(pathCopiedStr) }
                         }) {
-                            Icon(Icons.Default.ContentCopy, "复制路径")
+                            Icon(Icons.Default.ContentCopy, stringResource(R.string.pine_text_editor_copy_path_cd))
                         }
                     }
                     // Search toggle
@@ -210,7 +217,7 @@ fun TextEditorScreen(
                     }) {
                         Icon(
                             imageVector = if (isSearchVisible) Icons.Default.Close else Icons.Default.Search,
-                            contentDescription = "搜索"
+                            contentDescription = stringResource(R.string.pine_text_editor_search_cd)
                         )
                     }
                     // Save
@@ -222,7 +229,7 @@ fun TextEditorScreen(
                             if (viewState.isSaving) {
                                 CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
                             } else {
-                                Icon(Icons.Filled.Save, "保存")
+                                Icon(Icons.Filled.Save, stringResource(R.string.pine_text_editor_save_cd))
                             }
                         }
                     }
@@ -270,7 +277,7 @@ fun TextEditorScreen(
                                 verticalArrangement = Arrangement.spacedBy(16.dp)
                             ) {
                                 CircularProgressIndicator()
-                                Text("正在加载文件...")
+                                Text(stringResource(R.string.pine_text_editor_loading))
                             }
                         }
                     }
@@ -286,17 +293,17 @@ fun TextEditorScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Filled.Warning,
-                                    contentDescription = "错误",
+                                    contentDescription = stringResource(R.string.pine_text_editor_error_cd),
                                     tint = MaterialTheme.colorScheme.error,
                                     modifier = Modifier.size(48.dp)
                                 )
                                 Text(
-                                    text = viewState.error ?: "未知错误",
+                                    text = viewState.error ?: stringResource(R.string.pine_text_editor_unknown_error),
                                     color = MaterialTheme.colorScheme.error,
                                     textAlign = TextAlign.Center
                                 )
                                 Button(onClick = { viewModel.loadFile(viewState.filePath) }) {
-                                    Text("重试")
+                                    Text(stringResource(R.string.pine_text_editor_retry))
                                 }
                             }
                         }
@@ -350,7 +357,7 @@ fun TextEditorScreen(
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             CircularProgressIndicator()
-                            Text("正在保存...", color = Color.White)
+                            Text(stringResource(R.string.pine_text_editor_saving), color = Color.White)
                         }
                     }
                 }
@@ -379,13 +386,14 @@ fun SearchBar(
             value = query,
             onValueChange = onQueryChange,
             modifier = Modifier.weight(1f),
-            placeholder = { Text("搜索（至少2个字符）", style = MaterialTheme.typography.bodyMedium) },
+            placeholder = { Text(stringResource(R.string.pine_text_editor_search_hint), style = MaterialTheme.typography.bodyMedium) },
             singleLine = true,
             textStyle = MaterialTheme.typography.bodyMedium,
         )
+        val noResultsStr = stringResource(R.string.pine_text_editor_no_results)
         val label = when {
             query.length < 2 -> ""
-            matchCount == 0 -> "无结果"
+            matchCount == 0 -> noResultsStr
             else -> "${currentIndex + 1}/$matchCount"
         }
         if (label.isNotEmpty()) {
@@ -398,10 +406,10 @@ fun SearchBar(
             )
         }
         IconButton(onClick = onPrev, enabled = matchCount > 1) {
-            Icon(Icons.Default.KeyboardArrowUp, "上一个")
+            Icon(Icons.Default.KeyboardArrowUp, stringResource(R.string.pine_text_editor_prev_cd))
         }
         IconButton(onClick = onNext, enabled = matchCount > 1) {
-            Icon(Icons.Default.KeyboardArrowDown, "下一个")
+            Icon(Icons.Default.KeyboardArrowDown, stringResource(R.string.pine_text_editor_next_cd))
         }
     }
 }
@@ -428,24 +436,24 @@ fun FileStatusBar(viewState: TextEditorState) {
             )
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    text = "行: ${viewState.lineCount}",
+                    text = stringResource(R.string.pine_text_editor_lines, viewState.lineCount),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = "字: ${viewState.wordCount}",
+                    text = stringResource(R.string.pine_text_editor_words, viewState.wordCount),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = "字符: ${viewState.charCount}",
+                    text = stringResource(R.string.pine_text_editor_chars, viewState.charCount),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             if (viewState.isModified) {
                 Text(
-                    text = "已修改",
+                    text = stringResource(R.string.pine_text_editor_modified),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary
                 )

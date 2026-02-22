@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_upload_queue_title">Upload-Warteschlange</string>
+    <string name="pine_upload_queue_empty">Keine ausstehenden Uploads</string>
+    <string name="pine_upload_queue_delete">Löschen</string>
+    <string name="pine_upload_queue_upload">Hochladen</string>
+    <string name="pine_upload_queue_file_preview">Dateivorschau</string>
+</resources>

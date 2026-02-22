@@ -42,6 +42,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.pine.pinedroid.R
 import com.pine.pinedroid.db.bean.DatabaseInfo
 import com.pine.pinedroid.jetpack.viewmodel.HandleNavigation
 import com.pine.pinedroid.utils.file.bToDisplayFileSize
@@ -66,18 +68,14 @@ fun DbSelection(
     navController: NavController? = null,
     viewModel: DbSelectionVM = viewModel()
 ) {
-    // 处理导航
     HandleNavigation(navController = navController, viewModel = viewModel)
 
-    // 收集状态
     val state by viewModel.viewState.collectAsState()
 
-    // 初始化加载（如果需要）
     LaunchedEffect(Unit) {
         viewModel.initialize()
     }
 
-    // 构建UI
     DbSelectionScreen(
         state = state,
         onNew = viewModel::onNew,
@@ -97,12 +95,12 @@ fun DbSelectionScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("数据库选择") },
+                title = { Text(stringResource(R.string.pine_db_selection_title)) },
                 navigationIcon = {
                     IconButton(onClick = onClose) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "返回"
+                            contentDescription = stringResource(R.string.pine_db_selection_back)
                         )
                     }
 
@@ -176,10 +174,9 @@ fun DatabaseItem(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // 数据库图标
             Icon(
                 imageVector = Icons.Default.Storage,
-                contentDescription = "数据库",
+                contentDescription = stringResource(R.string.pine_db_selection_db_icon_cd),
                 modifier = Modifier
                     .size(40.dp)
                     .background(
@@ -192,7 +189,6 @@ fun DatabaseItem(
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // 数据库信息
             Column(
                 modifier = Modifier.weight(1f)
             ) {
@@ -215,7 +211,7 @@ fun DatabaseItem(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text = "修改时间: ${databaseInfo.lastModified.formatDate()}",
+                    text = stringResource(R.string.pine_db_selection_modified, databaseInfo.lastModified.formatDate()),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 12.sp
@@ -247,7 +243,7 @@ fun EmptyState() {
     ) {
         Icon(
             imageVector = Icons.Default.Storage,
-            contentDescription = "空数据库",
+            contentDescription = stringResource(R.string.pine_db_selection_empty_icon_cd),
             modifier = Modifier.size(64.dp),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -255,7 +251,7 @@ fun EmptyState() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "未找到数据库文件",
+            text = stringResource(R.string.pine_db_selection_empty_title),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -263,7 +259,7 @@ fun EmptyState() {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "请检查数据库文件是否存在于应用目录中",
+            text = stringResource(R.string.pine_db_selection_empty_desc),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
@@ -282,7 +278,7 @@ fun LoadingState() {
         ) {
             CircularProgressIndicator()
             Spacer(modifier = Modifier.height(16.dp))
-            Text("加载数据库中...")
+            Text(stringResource(R.string.pine_db_selection_loading))
         }
     }
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_table_selection_back_cd">뒤로</string>
+    <string name="pine_table_selection_empty">이 데이터베이스에 테이블이 없습니다</string>
+    <string name="pine_table_selection_row_count">행 수: %s</string>
+    <string name="pine_table_selection_table_icon_cd">테이블 아이콘</string>
+</resources>

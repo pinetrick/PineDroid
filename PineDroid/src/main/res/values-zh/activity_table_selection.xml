@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_table_selection_back_cd">返回</string>
+    <string name="pine_table_selection_empty">该数据库暂无数据表</string>
+    <string name="pine_table_selection_row_count">行数: %s</string>
+    <string name="pine_table_selection_table_icon_cd">表图标</string>
+</resources>

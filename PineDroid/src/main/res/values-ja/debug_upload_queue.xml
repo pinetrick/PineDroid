@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_upload_queue_title">アップロードキュー</string>
+    <string name="pine_upload_queue_empty">保留中のアップロードはありません</string>
+    <string name="pine_upload_queue_delete">削除</string>
+    <string name="pine_upload_queue_upload">アップロード</string>
+    <string name="pine_upload_queue_file_preview">ファイルプレビュー</string>
+</resources>

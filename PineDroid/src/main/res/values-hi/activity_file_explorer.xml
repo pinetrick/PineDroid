@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_file_explorer_new_file">नई फ़ाइल</string>
+    <string name="pine_file_explorer_create_file_hint">फ़ाइल नाम (जैसे test.txt)</string>
+    <string name="pine_file_explorer_new_folder">नया फ़ोल्डर</string>
+    <string name="pine_file_explorer_create_folder_hint">फ़ोल्डर नाम</string>
+    <string name="pine_file_explorer_back_cd">वापस</string>
+    <string name="pine_file_explorer_new_cd">नया</string>
+    <string name="pine_file_explorer_retry">पुनः प्रयास</string>
+    <string name="pine_file_explorer_empty_dir">खाली फ़ोल्डर</string>
+    <string name="pine_file_explorer_delete_title">हटाने की पुष्टि करें</string>
+    <string name="pine_file_explorer_delete_msg">क्या आप \"%s\" को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।</string>
+    <string name="pine_file_explorer_delete">हटाएं</string>
+    <string name="pine_file_explorer_cancel">रद्द करें</string>
+    <string name="pine_file_explorer_copy_path">पथ कॉपी करें</string>
+    <string name="pine_file_explorer_create">बनाएं</string>
+    <string name="pine_file_explorer_item_count">%d आइटम</string>
+</resources>

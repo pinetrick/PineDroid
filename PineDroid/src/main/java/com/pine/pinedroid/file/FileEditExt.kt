@@ -28,14 +28,40 @@ fun File.isPicture(): Boolean{
             extension.equals("svg", true) ||
             extension.equals("gif", true))
 }
-fun File.isTxtFile(): Boolean {
-    return !isDirectory && (extension.equals("txt", true) ||
-            extension.equals("log", true) ||
-            extension.equals("xml", true) ||
-            extension.equals("json", true) ||
-            extension.equals("html", true) ||
-            extension.equals("css", true) ||
-            extension.equals("js", true) ||
-            extension.equals("kt", true) ||
-            extension.equals("java", true))
+private val TEXT_EXTENSIONS = setOf(
+    // 文本 & 配置
+    "txt", "log", "ini", "conf", "cfg", "properties", "env",
+    "yaml", "yml", "toml",
+    // 数据
+    "json", "xml", "html", "htm", "csv", "sql",
+    // Web
+    "css", "js", "ts", "jsx", "tsx",
+    // 代码
+    "kt", "java", "py", "rb", "php", "sh", "bash", "bat", "cmd",
+    "c", "cpp", "h", "hpp", "go", "rs", "swift", "dart",
+    // 文档
+    "md", "markdown", "gradle", "gitignore", "gitattributes", "pro"
+)
+
+fun File.isTxtFile(): Boolean = !isDirectory && extension.lowercase() in TEXT_EXTENSIONS
+
+/** 对无后缀或未知后缀的文件，通过读取前 512 字节来嗅探是否为纯文本 */
+fun File.isLikelyTextFile(maxSize: Long = 5 * 1024 * 1024): Boolean {
+    if (isDirectory || !exists() || !canRead()) return false
+    if (length() > maxSize) return false
+    return try {
+        val buf = ByteArray(512)
+        val read = inputStream().use { it.read(buf) }
+        if (read <= 0) return true
+        // 有 null 字节 → 二进制
+        if (buf.take(read).any { it == 0.toByte() }) return false
+        // 非打印控制字符比例超 10% → 二进制
+        val nonPrint = buf.take(read).count { b ->
+            val i = b.toInt() and 0xFF
+            i < 0x20 && i !in listOf(0x09, 0x0A, 0x0D) // 排除 tab/LF/CR
+        }
+        nonPrint.toDouble() / read < 0.10
+    } catch (_: Exception) {
+        false
+    }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_db_selection_title">データベース選択</string>
+    <string name="pine_db_selection_back">戻る</string>
+    <string name="pine_db_selection_db_icon_cd">データベース</string>
+    <string name="pine_db_selection_modified">更新日時: %s</string>
+    <string name="pine_db_selection_empty_icon_cd">データベースなし</string>
+    <string name="pine_db_selection_empty_title">データベースファイルが見つかりません</string>
+    <string name="pine_db_selection_empty_desc">アプリディレクトリにデータベースファイルが存在するか確認してください</string>
+    <string name="pine_db_selection_loading">データベースを読み込み中…</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_upload_queue_title">Cola de carga</string>
+    <string name="pine_upload_queue_empty">Sin cargas pendientes</string>
+    <string name="pine_upload_queue_delete">Eliminar</string>
+    <string name="pine_upload_queue_upload">Subir</string>
+    <string name="pine_upload_queue_file_preview">Vista previa del archivo</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_upload_queue_title">अपलोड कतार</string>
+    <string name="pine_upload_queue_empty">कोई लंबित अपलोड नहीं</string>
+    <string name="pine_upload_queue_delete">हटाएं</string>
+    <string name="pine_upload_queue_upload">अपलोड करें</string>
+    <string name="pine_upload_queue_file_preview">फ़ाइल पूर्वावलोकन</string>
+</resources>

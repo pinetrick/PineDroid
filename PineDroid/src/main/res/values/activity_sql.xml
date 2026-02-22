@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_sql_back_cd">Back</string>
+    <string name="pine_sql_hint">Enter SQL, e.g.: SELECT * FROM table_name</string>
+    <string name="pine_sql_execute_cd">Execute SQL</string>
+    <string name="pine_sql_executing">Executing…</string>
+    <string name="pine_sql_result">Result (%d records)</string>
+    <string name="pine_sql_empty">No data</string>
+    <string name="pine_sql_edit_title">Edit: %s</string>
+    <string name="pine_sql_save">Save</string>
+    <string name="pine_sql_cancel">Cancel</string>
+</resources>

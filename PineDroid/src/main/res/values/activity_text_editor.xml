@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_text_editor_title">Text Editor</string>
+    <string name="pine_text_editor_back_cd">Back</string>
+    <string name="pine_text_editor_path_copied">Path copied</string>
+    <string name="pine_text_editor_copy_path_cd">Copy path</string>
+    <string name="pine_text_editor_search_cd">Search</string>
+    <string name="pine_text_editor_save_cd">Save</string>
+    <string name="pine_text_editor_loading">Loading file…</string>
+    <string name="pine_text_editor_error_cd">Error</string>
+    <string name="pine_text_editor_unknown_error">Unknown error</string>
+    <string name="pine_text_editor_retry">Retry</string>
+    <string name="pine_text_editor_saving">Saving…</string>
+    <string name="pine_text_editor_search_hint">Search (at least 2 chars)</string>
+    <string name="pine_text_editor_no_results">No results</string>
+    <string name="pine_text_editor_prev_cd">Previous</string>
+    <string name="pine_text_editor_next_cd">Next</string>
+    <string name="pine_text_editor_lines">Lines: %d</string>
+    <string name="pine_text_editor_words">Words: %d</string>
+    <string name="pine_text_editor_chars">Chars: %d</string>
+    <string name="pine_text_editor_modified">Modified</string>
+    <string name="pine_text_editor_confirm">OK</string>
+    <string name="pine_text_editor_save_success">Saved successfully</string>
+</resources>

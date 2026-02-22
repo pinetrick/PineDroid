@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_sql_back_cd">戻る</string>
+    <string name="pine_sql_hint">SQLを入力 (例: SELECT * FROM table_name)</string>
+    <string name="pine_sql_execute_cd">SQLを実行</string>
+    <string name="pine_sql_executing">実行中…</string>
+    <string name="pine_sql_result">結果 (%d 件)</string>
+    <string name="pine_sql_empty">データなし</string>
+    <string name="pine_sql_edit_title">編集: %s</string>
+    <string name="pine_sql_save">保存</string>
+    <string name="pine_sql_cancel">キャンセル</string>
+</resources>

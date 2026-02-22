@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_sql_back_cd">वापस</string>
+    <string name="pine_sql_hint">SQL दर्ज करें, जैसे: SELECT * FROM table_name</string>
+    <string name="pine_sql_execute_cd">SQL चलाएं</string>
+    <string name="pine_sql_executing">चल रहा है…</string>
+    <string name="pine_sql_result">परिणाम (%d रिकॉर्ड)</string>
+    <string name="pine_sql_empty">कोई डेटा नहीं</string>
+    <string name="pine_sql_edit_title">संपादित करें: %s</string>
+    <string name="pine_sql_save">सहेजें</string>
+    <string name="pine_sql_cancel">रद्द करें</string>
+</resources>

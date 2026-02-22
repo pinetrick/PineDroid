@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_text_editor_title">テキストエディタ</string>
+    <string name="pine_text_editor_back_cd">戻る</string>
+    <string name="pine_text_editor_path_copied">パスをコピーしました</string>
+    <string name="pine_text_editor_copy_path_cd">パスをコピー</string>
+    <string name="pine_text_editor_search_cd">検索</string>
+    <string name="pine_text_editor_save_cd">保存</string>
+    <string name="pine_text_editor_loading">ファイルを読み込み中…</string>
+    <string name="pine_text_editor_error_cd">エラー</string>
+    <string name="pine_text_editor_unknown_error">不明なエラー</string>
+    <string name="pine_text_editor_retry">再試行</string>
+    <string name="pine_text_editor_saving">保存中…</string>
+    <string name="pine_text_editor_search_hint">検索 (2文字以上)</string>
+    <string name="pine_text_editor_no_results">結果なし</string>
+    <string name="pine_text_editor_prev_cd">前へ</string>
+    <string name="pine_text_editor_next_cd">次へ</string>
+    <string name="pine_text_editor_lines">行: %d</string>
+    <string name="pine_text_editor_words">語: %d</string>
+    <string name="pine_text_editor_chars">文字: %d</string>
+    <string name="pine_text_editor_modified">変更済み</string>
+    <string name="pine_text_editor_confirm">OK</string>
+    <string name="pine_text_editor_save_success">保存しました</string>
+</resources>

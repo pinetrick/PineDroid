@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_db_selection_title">डेटाबेस चयन</string>
+    <string name="pine_db_selection_back">वापस</string>
+    <string name="pine_db_selection_db_icon_cd">डेटाबेस</string>
+    <string name="pine_db_selection_modified">संशोधित: %s</string>
+    <string name="pine_db_selection_empty_icon_cd">कोई डेटाबेस नहीं</string>
+    <string name="pine_db_selection_empty_title">कोई डेटाबेस फ़ाइल नहीं मिली</string>
+    <string name="pine_db_selection_empty_desc">कृपया जाँचें कि डेटाबेस फ़ाइल ऐप निर्देशिका में मौजूद है</string>
+    <string name="pine_db_selection_loading">डेटाबेस लोड हो रहे हैं…</string>
+</resources>

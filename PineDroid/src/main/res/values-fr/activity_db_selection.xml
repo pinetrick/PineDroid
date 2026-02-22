@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_db_selection_title">Sélection de base de données</string>
+    <string name="pine_db_selection_back">Retour</string>
+    <string name="pine_db_selection_db_icon_cd">Base de données</string>
+    <string name="pine_db_selection_modified">Modifié : %s</string>
+    <string name="pine_db_selection_empty_icon_cd">Aucune base de données</string>
+    <string name="pine_db_selection_empty_title">Aucun fichier de base de données trouvé</string>
+    <string name="pine_db_selection_empty_desc">Vérifiez si le fichier de base de données existe dans le répertoire de l\'application</string>
+    <string name="pine_db_selection_loading">Chargement des bases de données…</string>
+</resources>
