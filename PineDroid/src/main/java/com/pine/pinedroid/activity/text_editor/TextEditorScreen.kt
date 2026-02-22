@@ -26,6 +26,8 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Warning
+import androidx.activity.compose.BackHandler
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
@@ -42,6 +44,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -97,8 +100,16 @@ fun TextEditorScreen(
     var isSearchVisible by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
     var searchIndex by remember { mutableIntStateOf(0) }
-    var fontSize by remember { mutableIntStateOf(14) }
+    var fontSize by remember { mutableIntStateOf(10) }
     var showMoreMenu by remember { mutableStateOf(false) }
+    var showExitDialog by remember { mutableStateOf(false) }
+
+    fun tryExit() {
+        if (viewState.isModified) showExitDialog = true
+        else navController?.navigateUp()
+    }
+
+    BackHandler { tryExit() }
 
     // Pre-resolve strings for use in LaunchedEffect / coroutines
     val confirmStr = stringResource(R.string.pine_text_editor_confirm)
@@ -191,6 +202,30 @@ fun TextEditorScreen(
         if (filePath.isNotEmpty()) viewModel.loadFile(filePath)
     }
 
+    if (showExitDialog) {
+        AlertDialog(
+            onDismissRequest = { showExitDialog = false },
+            title = { Text("未保存的更改") },
+            text = { Text("文件已修改，是否保存？") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showExitDialog = false
+                    viewModel.saveFile()
+                    navController?.navigateUp()
+                }) { Text("保存") }
+            },
+            dismissButton = {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    TextButton(onClick = { showExitDialog = false }) { Text("取消") }
+                    TextButton(onClick = {
+                        showExitDialog = false
+                        navController?.navigateUp()
+                    }) { Text("不保存", color = MaterialTheme.colorScheme.error) }
+                }
+            }
+        )
+    }
+
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
         topBar = {
@@ -204,7 +239,7 @@ fun TextEditorScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController?.navigateUp() }) {
+                    IconButton(onClick = { tryExit() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.pine_text_editor_back_cd))
                     }
                 },
