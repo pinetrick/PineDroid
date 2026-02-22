@@ -167,6 +167,23 @@ class TextEditorVM : BaseViewModel<TextEditorState>(TextEditorState::class) {
         _viewState.update { it.copy(error = null) }
     }
 
+    fun formatJson() {
+        val content = _viewState.value.content.trim()
+        try {
+            val formatted = when {
+                content.startsWith("{") -> org.json.JSONObject(content).toString(2)
+                content.startsWith("[") -> org.json.JSONArray(content).toString(2)
+                else -> {
+                    _viewState.update { it.copy(error = "内容不是有效的 JSON") }
+                    return
+                }
+            }
+            updateContent(formatted)
+        } catch (e: Exception) {
+            _viewState.update { it.copy(error = "JSON 格式化失败: ${e.message}") }
+        }
+    }
+
 
     private fun detectEncoding(file: File): String {
         // 简单的编码检测，可以根据需要扩展

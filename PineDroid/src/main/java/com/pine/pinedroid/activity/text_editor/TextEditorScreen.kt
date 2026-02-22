@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Warning
@@ -94,6 +95,8 @@ fun TextEditorScreen(
     var isSearchVisible by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
     var searchIndex by remember { mutableIntStateOf(0) }
+    var fontSize by remember { mutableIntStateOf(14) }
+    var showMoreMenu by remember { mutableStateOf(false) }
 
     // Pre-resolve strings for use in LaunchedEffect / coroutines
     val confirmStr = stringResource(R.string.pine_text_editor_confirm)
@@ -172,11 +175,13 @@ fun TextEditorScreen(
         }
     }
 
-    // Save success
+    // Save success — only show after an actual save (isSaving: false→true→false)
+    var hadSaving by remember { mutableStateOf(false) }
     LaunchedEffect(viewState.isSaving) {
-        if (!viewState.isSaving && viewState.error == null && !viewState.isModified) {
+        if (hadSaving && !viewState.isSaving && viewState.error == null) {
             snackbarHostState.showSnackbar(saveSuccessStr)
         }
+        if (viewState.isSaving) hadSaving = true
     }
 
     // Load file
@@ -231,6 +236,46 @@ fun TextEditorScreen(
                             } else {
                                 Icon(Icons.Filled.Save, stringResource(R.string.pine_text_editor_save_cd))
                             }
+                        }
+                    }
+                    // More menu
+                    Box {
+                        IconButton(onClick = { showMoreMenu = true }) {
+                            Icon(Icons.Default.MoreVert, contentDescription = "更多选项")
+                        }
+                        DropdownMenu(
+                            expanded = showMoreMenu,
+                            onDismissRequest = { showMoreMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("JSON 格式化") },
+                                onClick = { viewModel.formatJson(); showMoreMenu = false }
+                            )
+                            DropdownMenuItem(
+                                text = {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Text("字体大小")
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            IconButton(onClick = { if (fontSize > 10) fontSize-- }) {
+                                                Text("A-", style = MaterialTheme.typography.labelLarge)
+                                            }
+                                            Text(
+                                                "${fontSize}sp",
+                                                modifier = Modifier.padding(horizontal = 4.dp),
+                                                style = MaterialTheme.typography.bodySmall
+                                            )
+                                            IconButton(onClick = { if (fontSize < 26) fontSize++ }) {
+                                                Text("A+", style = MaterialTheme.typography.labelLarge)
+                                            }
+                                        }
+                                    }
+                                },
+                                onClick = {}
+                            )
                         }
                     }
                 },
@@ -332,7 +377,7 @@ fun TextEditorScreen(
                                         .padding(16.dp),
                                     textStyle = TextStyle(
                                         fontFamily = FontFamily.Monospace,
-                                        fontSize = 14.sp,
+                                        fontSize = fontSize.sp,
                                         color = MaterialTheme.colorScheme.onSurface
                                     ),
                                     enabled = !viewState.isReadOnly && !viewState.isSaving,
