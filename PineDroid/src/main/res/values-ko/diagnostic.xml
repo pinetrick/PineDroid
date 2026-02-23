@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_diag_screen_title">진단</string>
+    <string name="pine_diag_section_memory">메모리</string>
+    <string name="pine_diag_section_cpu">CPU</string>
+    <string name="pine_diag_section_network">네트워크</string>
+    <string name="pine_diag_section_storage">저장소</string>
+    <string name="pine_diag_section_device">기기</string>
+    <string name="pine_diag_heap_used">사용 중인 힙</string>
+    <string name="pine_diag_heap_max">최대 힙</string>
+    <string name="pine_diag_pss_memory">프로세스 메모리 (PSS)</string>
+    <string name="pine_diag_ram_avail">사용 가능한 RAM</string>
+    <string name="pine_diag_ram_total">전체 RAM</string>
+    <string name="pine_diag_cpu_cores">CPU 코어 수</string>
+    <string name="pine_diag_cpu_abi">아키텍처</string>
+    <string name="pine_diag_net_type">네트워크 유형</string>
+    <string name="pine_diag_net_connected">연결됨</string>
+    <string name="pine_diag_net_internet">인터넷 접속</string>
+    <string name="pine_diag_storage_total">내부 저장소 전체</string>
+    <string name="pine_diag_storage_avail">내부 저장소 사용 가능</string>
+    <string name="pine_diag_cache_size">앱 캐시 크기</string>
+    <string name="pine_diag_device_model">기기 모델</string>
+    <string name="pine_diag_manufacturer">제조사</string>
+    <string name="pine_diag_android_ver">Android 버전</string>
+    <string name="pine_diag_api_level">API 레벨</string>
+</resources>

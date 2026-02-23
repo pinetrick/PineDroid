@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_diag_screen_title">診断</string>
+    <string name="pine_diag_section_memory">メモリ</string>
+    <string name="pine_diag_section_cpu">CPU</string>
+    <string name="pine_diag_section_network">ネットワーク</string>
+    <string name="pine_diag_section_storage">ストレージ</string>
+    <string name="pine_diag_section_device">デバイス</string>
+    <string name="pine_diag_heap_used">使用中ヒープ</string>
+    <string name="pine_diag_heap_max">最大ヒープ</string>
+    <string name="pine_diag_pss_memory">プロセスメモリ (PSS)</string>
+    <string name="pine_diag_ram_avail">空き RAM</string>
+    <string name="pine_diag_ram_total">合計 RAM</string>
+    <string name="pine_diag_cpu_cores">CPU コア数</string>
+    <string name="pine_diag_cpu_abi">アーキテクチャ</string>
+    <string name="pine_diag_net_type">ネットワークの種類</string>
+    <string name="pine_diag_net_connected">接続済み</string>
+    <string name="pine_diag_net_internet">インターネット接続</string>
+    <string name="pine_diag_storage_total">内部ストレージ合計</string>
+    <string name="pine_diag_storage_avail">内部ストレージ空き容量</string>
+    <string name="pine_diag_cache_size">アプリキャッシュサイズ</string>
+    <string name="pine_diag_device_model">デバイスモデル</string>
+    <string name="pine_diag_manufacturer">メーカー</string>
+    <string name="pine_diag_android_ver">Android バージョン</string>
+    <string name="pine_diag_api_level">API レベル</string>
+</resources>

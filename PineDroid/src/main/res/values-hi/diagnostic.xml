@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_diag_screen_title">डायग्नोस्टिक्स</string>
+    <string name="pine_diag_section_memory">मेमोरी</string>
+    <string name="pine_diag_section_cpu">CPU</string>
+    <string name="pine_diag_section_network">नेटवर्क</string>
+    <string name="pine_diag_section_storage">स्टोरेज</string>
+    <string name="pine_diag_section_device">डिवाइस</string>
+    <string name="pine_diag_heap_used">उपयोग किया गया Heap</string>
+    <string name="pine_diag_heap_max">अधिकतम Heap</string>
+    <string name="pine_diag_pss_memory">प्रोसेस मेमोरी (PSS)</string>
+    <string name="pine_diag_ram_avail">उपलब्ध RAM</string>
+    <string name="pine_diag_ram_total">कुल RAM</string>
+    <string name="pine_diag_cpu_cores">CPU कोर</string>
+    <string name="pine_diag_cpu_abi">आर्किटेक्चर</string>
+    <string name="pine_diag_net_type">नेटवर्क प्रकार</string>
+    <string name="pine_diag_net_connected">कनेक्टेड</string>
+    <string name="pine_diag_net_internet">इंटरनेट एक्सेस</string>
+    <string name="pine_diag_storage_total">आंतरिक स्टोरेज कुल</string>
+    <string name="pine_diag_storage_avail">आंतरिक स्टोरेज उपलब्ध</string>
+    <string name="pine_diag_cache_size">ऐप कैश आकार</string>
+    <string name="pine_diag_device_model">डिवाइस मॉडल</string>
+    <string name="pine_diag_manufacturer">निर्माता</string>
+    <string name="pine_diag_android_ver">Android संस्करण</string>
+    <string name="pine_diag_api_level">API स्तर</string>
+</resources>
