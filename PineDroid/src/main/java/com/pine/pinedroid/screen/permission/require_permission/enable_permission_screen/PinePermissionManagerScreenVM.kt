@@ -1,6 +1,7 @@
 package com.pine.pinedroid.screen.permission.require_permission.enable_permission_screen
 
 
+import android.os.Build
 import androidx.lifecycle.viewModelScope
 import com.pine.pinedroid.jetpack.viewmodel.BaseViewModel
 import com.pine.pinedroid.screen.permission.PineOnePermission
@@ -16,12 +17,14 @@ class PinePermissionManagerScreenVM :
     suspend fun onInit() {
         setState {
             copy(
-                permissionList = REQUIRED_PERMISSION.map {
-                    PermissionItem(
-                        granted = it.hasPermission(),
-                        permission = it
-                    )
-                },
+                permissionList = REQUIRED_PERMISSION
+                    .filter { Build.VERSION.SDK_INT in it.requireApiLevel }
+                    .map {
+                        PermissionItem(
+                            granted = it.hasPermission(),
+                            permission = it
+                        )
+                    },
             )
         }
     }
