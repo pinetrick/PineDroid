@@ -32,6 +32,7 @@ import com.pine.pinedroid.utils.shrinker_keep.Keep
 import com.pine.pinedroid.utils.toast
 import java.lang.ref.WeakReference
 import java.util.Date
+import java.util.concurrent.CopyOnWriteArrayList
 
 @Keep
 class PineLocationForegroundService : Service() {
@@ -264,7 +265,7 @@ class PineLocationForegroundService : Service() {
         const val CHANNEL_ID = "PineLocationForegroundServiceChannel"
         const val NOTIFICATION_ID = 56228466
 
-        val callbackFunctionList: ArrayList<WeakReference<PineLocationUpdateListener>> = arrayListOf()
+        val callbackFunctionList: CopyOnWriteArrayList<WeakReference<PineLocationUpdateListener>> = CopyOnWriteArrayList()
 
 
         private var serviceInstance: WeakReference<PineLocationForegroundService>? = null
