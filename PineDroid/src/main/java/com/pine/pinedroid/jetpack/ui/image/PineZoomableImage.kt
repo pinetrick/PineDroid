@@ -3,7 +3,6 @@ package com.pine.pinedroid.jetpack.ui.image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.calculateCentroidSize
 import androidx.compose.foundation.gestures.calculatePan
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -22,7 +21,6 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import com.pine.pinedroid.R
 import com.pine.pinedroid.activity.image_pickup.OneImage
-import kotlin.math.abs
 
 @Composable
 fun PineZoomableImage(
@@ -62,39 +60,39 @@ fun PineZoomableImage(
                     }
                 )
             }
-            .pointerInput(scale) {
+            .pointerInput(Unit) {
                 // 自定义手势处理：
-                // - 多指（捏合）：始终消费事件（处理缩放）
-                // - 单指 + 已缩放：消费事件（处理平移）
+                // - 多指（捏合）：立即消费，处理缩放（不等 touchSlop）
+                // - 单指 + 已缩放：消费，处理平移
                 // - 单指 + 未缩放：不消费，让父级 HorizontalPager 处理左右滑动
+                // 注意：key 用 Unit 而非 scale，避免 scale 变化时中断正在进行的手势
                 awaitEachGesture {
                     awaitFirstDown(requireUnconsumed = false)
-                    var totalZoom = 1f
-                    var totalPan = Offset.Zero
                     var pastTouchSlop = false
+                    var totalPan = Offset.Zero
                     val touchSlop = viewConfiguration.touchSlop
 
                     do {
                         val event = awaitPointerEvent()
                         val canceled = event.changes.any { it.isConsumed }
                         if (!canceled) {
+                            val isMultiTouch = event.changes.size > 1
                             val zoomChange = event.calculateZoom()
                             val panChange = event.calculatePan()
 
                             if (!pastTouchSlop) {
-                                totalZoom *= zoomChange
-                                totalPan += panChange
-                                val centroidSize = event.calculateCentroidSize(useCurrent = false)
-                                val zoomMotion = abs(1 - totalZoom) * centroidSize
-                                val panMotion = totalPan.getDistance()
-                                if (zoomMotion > touchSlop || panMotion > touchSlop) {
+                                if (isMultiTouch) {
+                                    // 多指立即开始，不等 slop
                                     pastTouchSlop = true
+                                } else {
+                                    totalPan += panChange
+                                    if (totalPan.getDistance() > touchSlop) {
+                                        pastTouchSlop = true
+                                    }
                                 }
                             }
 
                             if (pastTouchSlop) {
-                                val isMultiTouch = event.changes.size > 1
-                                // 只有多指缩放或已放大状态下的平移才消费事件
                                 if (isMultiTouch || scale > 1f) {
                                     val newScale = (scale * zoomChange).coerceIn(1f, 5f)
                                     scale = newScale
