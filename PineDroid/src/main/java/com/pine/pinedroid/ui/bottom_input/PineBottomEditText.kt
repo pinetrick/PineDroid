@@ -38,9 +38,9 @@ object PineBottomEditText {
             .setCancelable(false)
             .create()
 
-        // 设置对话框从顶部弹出
+        // 设置对话框从底部弹出
         val window = dialog.window
-        window?.setGravity(android.view.Gravity.TOP)
+        window?.setGravity(android.view.Gravity.BOTTOM)
 
         // 设置宽度为全屏
         val layoutParams = WindowManager.LayoutParams()

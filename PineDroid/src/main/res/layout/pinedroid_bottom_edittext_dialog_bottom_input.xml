@@ -9,28 +9,39 @@
         android:id="@+id/backgroundDimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#10000000"
+        android:background="#60000000"
         android:clickable="true"
         android:focusable="true" />
 
-    <!-- 评论输入区域 -->
+    <!-- 底部输入面板 -->
     <LinearLayout
         android:id="@+id/inputContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical"
-        android:background="#ddd"
-        android:elevation="8dp"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp">
+        android:background="@drawable/bottom_sheet_rounded_top"
+        android:elevation="12dp">
 
-        <!-- 输入框容器 -->
+        <!-- 拖动指示条 -->
+        <View
+            android:layout_width="36dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="#E0E0E0"
+            android:clickable="false" />
+
+        <!-- 输入框行 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp">
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="16dp">
 
             <EditText
                 android:id="@+id/editText"
@@ -40,28 +51,35 @@
                 android:hint="添加评论..."
                 android:maxLines="4"
                 android:minLines="1"
-                android:padding="8dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="9dp"
+                android:paddingBottom="9dp"
                 android:background="@drawable/edittext_rounded"
-                android:textColor="#333"
-                android:textColorHint="#666"
-                android:layout_gravity="bottom"
-                android:textSize="14sp"
-                android:gravity="start|top" />
+                android:textColor="#1A1A1A"
+                android:textColorHint="#AAAAAA"
+                android:textSize="15sp"
+                android:gravity="start|top"
+                android:lineSpacingMultiplier="1.2" />
 
             <Button
                 android:id="@+id/btnSend"
-                android:layout_width="60dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="8dp"
-                android:layout_gravity="bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="发送"
                 android:textColor="#fff"
                 android:background="@drawable/button_rounded"
                 android:textAllCaps="false"
                 android:textSize="14sp"
-          />
+                android:textStyle="bold" />
+
         </LinearLayout>
 
-
     </LinearLayout>
+
 </RelativeLayout>
