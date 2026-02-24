@@ -28,9 +28,11 @@ class LanguageSwitchScreenVM :
     }
 
     override fun getInitialViewState(): LanguageSwitchScreenState {
+        val saved = LanguageManager.getSavedLanguage()
         return LanguageSwitchScreenState(
             supportedLanguages = SUPPORTED_LANGUAGES,
-            currentLanguage = LanguageManager.getSavedLanguage()
+            currentLanguage = saved,
+            savedLanguage = saved,
         )
     }
 

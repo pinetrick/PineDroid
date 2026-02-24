@@ -42,6 +42,7 @@ fun PineTopAppBar(
     onReturn: (() -> Unit)? = null,
     actionIcon: String? = null,
     onAction: (() -> Unit)? = null,
+    actionEnabled: Boolean = true,
     secondActionIcon: String? = null,
     onSecondAction: (() -> Unit)? = null
 ) {
@@ -81,12 +82,12 @@ fun PineTopAppBar(
             }
 
             actionIcon?.let { actionIcon ->
-                IconButton(onClick = { }) {
+                IconButton(onClick = { }, enabled = actionEnabled) {
                     PineIcon(
                         text = actionIcon,
                         fontSize = 20.spwh,
-                        color = MaterialTheme.colorScheme.primary,
-                        onClick = onAction
+                        color = if (actionEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+                        onClick = if (actionEnabled) onAction else null
                     )
                 }
 

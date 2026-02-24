@@ -7,6 +7,7 @@ import com.pine.pinedroid.utils.shrinker_keep.Keep
 @Keep
 data class LanguageSwitchScreenState(
     var currentLanguage: LanguageInfo = SupportedLanguages.SUPPORTED_LANGUAGES.first(),
-    var supportedLanguages: List<LanguageInfo> = SupportedLanguages.SUPPORTED_LANGUAGES
+    var supportedLanguages: List<LanguageInfo> = SupportedLanguages.SUPPORTED_LANGUAGES,
+    var savedLanguage: LanguageInfo = SupportedLanguages.SUPPORTED_LANGUAGES.first(),
 
 ){}

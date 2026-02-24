@@ -50,8 +50,8 @@ fun LanguageSwitchScreen(
                 onReturn = viewModel::navigateBack,
                 actionIcon = "\uf00c",
                 onAction = viewModel::saveLanguage,
-
-                )
+                actionEnabled = viewState.currentLanguage.code != viewState.savedLanguage.code,
+            )
 
         },
         content = {
