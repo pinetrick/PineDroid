@@ -1,6 +1,8 @@
 package com.pine.pinedroid.net
 
 import com.google.gson.reflect.TypeToken
+import com.pine.pinedroid.debug.http_log.HttpLogCollector
+import com.pine.pinedroid.debug.http_log.HttpLogEntry
 import com.pine.pinedroid.utils.gson
 import com.pine.pinedroid.utils.log.logd
 import com.pine.pinedroid.utils.log.loge
@@ -80,7 +82,19 @@ object BackgroundScope : CoroutineScope by CoroutineScope(Dispatchers.IO + Super
 suspend inline fun <reified T> httpGet(url: String, cacheImages: Boolean = false): T? = withContext(Dispatchers.IO) {
     try {
         logv("HTTP Get", url)
-        val result: String = ktor.get(httpRootUrl + url).body()
+        val start = System.currentTimeMillis()
+        val rawResult = ktor.get(httpRootUrl + url)
+        val result: String = rawResult.body()
+        HttpLogCollector.record(HttpLogEntry(
+            timestamp = System.currentTimeMillis(),
+            method = "GET",
+            url = httpRootUrl + url,
+            requestBody = null,
+            statusCode = rawResult.status.value,
+            responseBody = result.take(2000),
+            durationMs = System.currentTimeMillis() - start,
+            isError = rawResult.status.value >= 400
+        ))
         logv("Get Result", result)
 
         if (cacheImages) {
@@ -115,8 +129,9 @@ suspend inline fun <reified T> httpPostJson(
         logv("Http Body", body)
         if (files.isNotEmpty()) logv("Http files", files)
 
-
-        result = ktor.post(httpRootUrl + url) {
+        val start = System.currentTimeMillis()
+        val bodyForLog = body?.let { gson.toJson(it).take(2000) }
+        val rawResult = ktor.post(httpRootUrl + url) {
             // 使用 multipart 格式
             setBody(MultiPartFormDataContent(formData {
                 // 添加普通字段
@@ -154,7 +169,18 @@ suspend inline fun <reified T> httpPostJson(
                     }
                 }
             }))
-        }.body()
+        }
+        result = rawResult.body()
+        HttpLogCollector.record(HttpLogEntry(
+            timestamp = System.currentTimeMillis(),
+            method = "POST",
+            url = httpRootUrl + url,
+            requestBody = bodyForLog,
+            statusCode = rawResult.status.value,
+            responseBody = result.take(2000),
+            durationMs = System.currentTimeMillis() - start,
+            isError = rawResult.status.value >= 400
+        ))
 
         logv("Response", result)
 

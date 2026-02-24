@@ -8,6 +8,7 @@ import android.view.View
 import androidx.core.net.toUri
 import com.pine.pinedroid.activity.PineDroidActivity
 import com.pine.pinedroid.debug.http_queue.UploadQueueActivity
+import com.pine.pinedroid.debug.server.PineDebugServer
 import com.pine.pinedroid.debug.task_manager.TaskManagerActivity
 import com.pine.pinedroid.file.DataCleanManager
 import com.pine.pinedroid.ui.float_window.FloatingWindowHelper
@@ -65,7 +66,9 @@ object FunctionWindowController {
                     }
                 }
             }
-            functionWindow!!.mainMessage.text = appContext.packageName + ": " + getAppMemoryUsage().kbToDisplayFileSize()
+            val serverUrl = PineDebugServer.serverUrl()
+            val memInfo = appContext.packageName + ": " + getAppMemoryUsage().kbToDisplayFileSize()
+            functionWindow!!.mainMessage.text = if (serverUrl != null) "$memInfo\n$serverUrl" else memInfo
             FloatingWindowHelper.showFloatingWindow(functionWindow!!)
         }
     }

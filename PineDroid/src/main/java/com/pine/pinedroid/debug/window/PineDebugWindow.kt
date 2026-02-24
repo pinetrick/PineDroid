@@ -1,5 +1,6 @@
 package com.pine.pinedroid.debug.window
 
+import com.pine.pinedroid.debug.server.PineDebugServer
 import com.pine.pinedroid.utils.PineApp
 import com.pine.pinedroid.utils.sp
 
@@ -13,6 +14,10 @@ object PineDebugWindow {
     var buttons: ArrayList<DebugWindowGridViewBean> = ArrayList()
 
     fun addButton(text: String, icon: String = "", action: () -> Unit = {}) {
+        // Auto-start debug HTTP server on first button add (debug mode only)
+        if (isDebugEnabled && !PineDebugServer.isRunning()) {
+            Thread { PineDebugServer.start() }.start()
+        }
         // Check if a button with the same text already exists
         val existingButton = buttons.find { it.text == text }
         if (existingButton == null) {
