@@ -148,7 +148,7 @@ sealed class SupportedLanguages : LanguageInfo("", Locale.getDefault(), "", "") 
         /**
          * 所有支持的语言列表
          */
-        val SUPPORTED_LANGUAGES: List<SupportedLanguages> = listOf(
+        val SUPPORTED_LANGUAGES: List<SupportedLanguages> by lazy { listOf(
             // 系统默认
             System,
 
@@ -232,10 +232,12 @@ sealed class SupportedLanguages : LanguageInfo("", Locale.getDefault(), "", "") 
             MiddleEasternAndAfrican.Swahili,
             MiddleEasternAndAfrican.Zulu,
             MiddleEasternAndAfrican.Afrikaans,
-        )
+        ) }
 
         // 创建查找Map以提高查找效率
-        private val languageMap = SUPPORTED_LANGUAGES.associateBy { it.code.lowercase() }
+        private val languageMap: Map<String, SupportedLanguages> by lazy {
+            SUPPORTED_LANGUAGES.associateBy { it.code.lowercase() }
+        }
 
         /**
          * 根据语言代码获取语言信息
