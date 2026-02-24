@@ -42,15 +42,18 @@ object PineBottomEditText {
         val window = dialog.window
         window?.setGravity(android.view.Gravity.BOTTOM)
 
-        // 设置宽度为全屏
+        // 设置宽高：宽全屏，高全屏（ADJUST_RESIZE 需要 MATCH_PARENT 才能生效）
         val layoutParams = WindowManager.LayoutParams()
         layoutParams.copyFrom(window?.attributes)
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
         window?.attributes = layoutParams
 
-        // 显示软键盘
-        window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        // 显示软键盘，并在键盘弹出时将窗口上推（避免遮挡输入框）
+        window?.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE or
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+        )
 
         btnSend.text = textButton
 
