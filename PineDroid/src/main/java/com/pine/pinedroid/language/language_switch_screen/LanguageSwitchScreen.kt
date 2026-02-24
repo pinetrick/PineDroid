@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -101,6 +102,14 @@ fun LanguageItem(
                 text = language.nativeName,
                 modifier = Modifier.padding(top = 4.dp)
             )
+            if (language.displayName.isNotBlank() && language.displayName != language.nativeName) {
+                Text(
+                    text = language.displayName,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+            }
         }
         RadioButton(
             selected = isSelected,

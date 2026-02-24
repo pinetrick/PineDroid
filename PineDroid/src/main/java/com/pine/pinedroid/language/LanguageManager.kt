@@ -67,7 +67,7 @@ object LanguageManager {
     }
 
     /**
-     * 获取保存的语言，没有就返回当前实际语言
+     * 获取保存的语言，没有就返回 System（跟随系统）
      * allowReturnSystem: SupportedLanguages.System 是否允许，如果不允许 就会返回当前的语言
      */
     fun getSavedLanguage(allowReturnSystem: Boolean = true): SupportedLanguages {
@@ -75,7 +75,7 @@ object LanguageManager {
         var language = if (!code.isNullOrBlank()) {
             SupportedLanguages.getLanguageInfo(code) ?: SupportedLanguages.System
         } else {
-            getCurrentAppLanguage()
+            SupportedLanguages.System
         }
         if ((!allowReturnSystem) && (language == SupportedLanguages.System)) {
             language = SupportedLanguages.getLanguageInfo(appContext.resources.configuration.locales[0].toLanguageTag()) ?: SupportedLanguages.English.NewZealand
