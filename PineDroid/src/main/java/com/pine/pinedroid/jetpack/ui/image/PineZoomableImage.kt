@@ -23,7 +23,8 @@ import com.pine.pinedroid.activity.image_pickup.OneImage
 @Composable
 fun PineZoomableImage(
     image: OneImage,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onScaleChanged: ((Float) -> Unit)? = null
 ) {
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -41,6 +42,7 @@ fun PineZoomableImage(
     val transformableState = rememberTransformableState { zoomChange, panChange, _ ->
         val newScale = (scale * zoomChange).coerceIn(1f, 5f)
         scale = newScale
+        onScaleChanged?.invoke(newScale)
         if (newScale > 1f) {
             offset = clampOffset(offset + panChange, newScale)
         } else {
@@ -60,8 +62,10 @@ fun PineZoomableImage(
                         if (scale > 1f) {
                             scale = 1f
                             offset = Offset.Zero
+                            onScaleChanged?.invoke(1f)
                         } else {
                             scale = 3f
+                            onScaleChanged?.invoke(3f)
                         }
                     }
                 )

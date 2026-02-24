@@ -15,6 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -97,8 +100,11 @@ fun ImagePreviewScreenContent(
             }
         }
 
+        var isZoomed by remember { mutableStateOf(false) }
+
         HorizontalPager(
             state = pagerState,
+            userScrollEnabled = !isZoomed,
             modifier = Modifier.fillMaxSize()
         ) { page ->
             Box(
@@ -106,7 +112,8 @@ fun ImagePreviewScreenContent(
             ) {
                 PineZoomableImage(
                     image = images[page],
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    onScaleChanged = { newScale -> isZoomed = newScale > 1f }
                 )
 
                 // 显示图片索引指示器（可选）
