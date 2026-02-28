@@ -2,6 +2,9 @@
 <resources>
     <string name="pine_loading">처리 중…</string>
     <string name="pine_loading_subtitle">잠시만 기다려 주세요</string>
+    <string name="pine_loading_cycling_1">거의 다 됐어요…</string>
+    <string name="pine_loading_cycling_2">로딩 중…</string>
+    <string name="pine_loading_cycling_3">조금만 기다려 주세요…</string>
     <string name="pine_confirm">확인</string>
 
 

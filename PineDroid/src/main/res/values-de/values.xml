@@ -2,6 +2,9 @@
 <resources>
     <string name="pine_loading">Wird verarbeitet…</string>
     <string name="pine_loading_subtitle">Bitte warten</string>
+    <string name="pine_loading_cycling_1">Fast fertig…</string>
+    <string name="pine_loading_cycling_2">Noch einen Moment…</string>
+    <string name="pine_loading_cycling_3">Wird geladen…</string>
     <string name="pine_confirm">Bestätigen</string>
 
 </resources>

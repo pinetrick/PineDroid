@@ -3,6 +3,9 @@
 
     <string name="pine_loading">Traitement en cours…</string>
     <string name="pine_loading_subtitle">Veuillez patienter</string>
+    <string name="pine_loading_cycling_1">Presque terminé…</string>
+    <string name="pine_loading_cycling_2">Chargement…</string>
+    <string name="pine_loading_cycling_3">Un instant…</string>
     <string name="pine_confirm">Confirmer</string>
 
 </resources>

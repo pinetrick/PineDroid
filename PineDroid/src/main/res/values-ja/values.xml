@@ -2,6 +2,9 @@
 <resources>
     <string name="pine_loading">処理中…</string>
     <string name="pine_loading_subtitle">しばらくお待ちください</string>
+    <string name="pine_loading_cycling_1">もうすぐです…</string>
+    <string name="pine_loading_cycling_2">読み込み中…</string>
+    <string name="pine_loading_cycling_3">少々お待ちを…</string>
     <string name="pine_confirm">確認</string>
 
 

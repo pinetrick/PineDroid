@@ -3,6 +3,9 @@
 
     <string name="pine_loading">Processing…</string>
     <string name="pine_loading_subtitle">Please wait</string>
+    <string name="pine_loading_cycling_1">Almost there…</string>
+    <string name="pine_loading_cycling_2">Hang tight…</string>
+    <string name="pine_loading_cycling_3">Still loading…</string>
     <string name="pine_confirm">Confirm</string>
 
 

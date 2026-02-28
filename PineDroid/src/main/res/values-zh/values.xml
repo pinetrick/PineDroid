@@ -2,6 +2,9 @@
 <resources>
     <string name="pine_loading">正在处理…</string>
     <string name="pine_loading_subtitle">请稍候</string>
+    <string name="pine_loading_cycling_1">马上就好…</string>
+    <string name="pine_loading_cycling_2">数据加载中…</string>
+    <string name="pine_loading_cycling_3">快完成了…</string>
 
     <string name="pine_confirm">确定</string>
 

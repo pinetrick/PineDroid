@@ -2,6 +2,9 @@
 <resources>
     <string name="pine_loading">प्रक्रिया जारी है…</string>
     <string name="pine_loading_subtitle">कृपया प्रतीक्षा करें</string>
+    <string name="pine_loading_cycling_1">लगभग हो गया…</string>
+    <string name="pine_loading_cycling_2">लोड हो रहा है…</string>
+    <string name="pine_loading_cycling_3">बस एक पल…</string>
     <string name="pine_confirm">पुष्टि करें</string>
 
 

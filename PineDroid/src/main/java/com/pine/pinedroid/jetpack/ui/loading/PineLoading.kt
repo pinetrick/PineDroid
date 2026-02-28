@@ -1,5 +1,10 @@
 package com.pine.pinedroid.jetpack.ui.loading
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +17,11 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -19,20 +29,40 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pine.pinedroid.R
+import kotlinx.coroutines.delay
 
 
 @Composable
 fun PineLoading(
     isLoading: Boolean = true,
-    title: String = stringResource(R.string.pine_loading),
-    subtitle: String = stringResource(R.string.pine_loading_subtitle),
+    title: String? = null,
+    subtitle: String? = null,
     content: @Composable () -> Unit = {}
 ) {
     val isPreview = LocalInspectionMode.current
-
-    // 如果是 Preview 模式，默认显示内容；否则使用传入的 isLoading
     val shouldShowLoading = if (isPreview) false else isLoading
 
+    val defaultTitle = stringResource(R.string.pine_loading)
+    val cyclingSubtitles = listOf(
+        stringResource(R.string.pine_loading_subtitle),
+        stringResource(R.string.pine_loading_cycling_1),
+        stringResource(R.string.pine_loading_cycling_2),
+        stringResource(R.string.pine_loading_cycling_3),
+    )
+
+    var subtitleIndex by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(shouldShowLoading) {
+        subtitleIndex = 0
+        if (!shouldShowLoading || subtitle != null) return@LaunchedEffect
+        delay(1000)
+        var i = 1
+        while (true) {
+            subtitleIndex = i % cyclingSubtitles.size
+            delay(2000)
+            i++
+        }
+    }
 
     if (shouldShowLoading) {
         Box(
@@ -45,7 +75,6 @@ fun PineLoading(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // 环形进度指示器
                 CircularProgressIndicator(
                     modifier = Modifier.size(64.dp),
                     color = MaterialTheme.colorScheme.primary,
@@ -54,25 +83,31 @@ fun PineLoading(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // 加载提示文本
                 Text(
-                    text = title,
+                    text = title ?: defaultTitle,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // 次级提示文本
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
-                )
+                AnimatedContent(
+                    targetState = subtitle ?: cyclingSubtitles[subtitleIndex],
+                    transitionSpec = {
+                        fadeIn(animationSpec = tween(400)) togetherWith
+                        fadeOut(animationSpec = tween(400))
+                    },
+                    label = "subtitle"
+                ) { text ->
+                    Text(
+                        text = text,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                    )
+                }
             }
         }
-    }
-    else content()
+    } else content()
 }
 
 @Preview
