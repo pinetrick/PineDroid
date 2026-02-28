@@ -5,6 +5,13 @@
     <string name="pine_loading_cycling_1">거의 다 됐어요…</string>
     <string name="pine_loading_cycling_2">로딩 중…</string>
     <string name="pine_loading_cycling_3">조금만 기다려 주세요…</string>
+    <string name="pine_loading_cycling_4">기다려 주셔서 감사합니다…</string>
+    <string name="pine_loading_cycling_5">최신 데이터를 가져오는 중…</string>
+    <string name="pine_loading_cycling_6">평소보다 조금 오래 걸리고 있어요…</string>
+    <string name="pine_loading_cycling_7">좋은 것은 기다릴 가치가 있어요…</string>
+    <string name="pine_loading_cycling_8">데이터 처리 중…</string>
+    <string name="pine_loading_cycling_9">준비 중입니다…</string>
+    <string name="pine_loading_cycling_10">거의 완료됐어요…</string>
     <string name="pine_confirm">확인</string>
 
 

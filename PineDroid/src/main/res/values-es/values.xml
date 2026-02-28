@@ -5,6 +5,13 @@
     <string name="pine_loading_cycling_1">Ya casi…</string>
     <string name="pine_loading_cycling_2">Cargando…</string>
     <string name="pine_loading_cycling_3">Un momento…</string>
+    <string name="pine_loading_cycling_4">Gracias por su paciencia…</string>
+    <string name="pine_loading_cycling_5">Obteniendo los datos más recientes…</string>
+    <string name="pine_loading_cycling_6">Tardando un poco más de lo habitual…</string>
+    <string name="pine_loading_cycling_7">Las cosas buenas llevan tiempo…</string>
+    <string name="pine_loading_cycling_8">Procesando datos…</string>
+    <string name="pine_loading_cycling_9">Preparando todo para usted…</string>
+    <string name="pine_loading_cycling_10">Casi listo…</string>
     <string name="pine_confirm">Confirmar</string>
 
 

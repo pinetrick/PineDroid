@@ -48,6 +48,13 @@ fun PineLoading(
         stringResource(R.string.pine_loading_cycling_1),
         stringResource(R.string.pine_loading_cycling_2),
         stringResource(R.string.pine_loading_cycling_3),
+        stringResource(R.string.pine_loading_cycling_4),
+        stringResource(R.string.pine_loading_cycling_5),
+        stringResource(R.string.pine_loading_cycling_6),
+        stringResource(R.string.pine_loading_cycling_7),
+        stringResource(R.string.pine_loading_cycling_8),
+        stringResource(R.string.pine_loading_cycling_9),
+        stringResource(R.string.pine_loading_cycling_10),
     )
 
     var subtitleIndex by remember { mutableIntStateOf(0) }

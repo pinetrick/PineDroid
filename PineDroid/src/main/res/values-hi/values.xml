@@ -5,6 +5,13 @@
     <string name="pine_loading_cycling_1">लगभग हो गया…</string>
     <string name="pine_loading_cycling_2">लोड हो रहा है…</string>
     <string name="pine_loading_cycling_3">बस एक पल…</string>
+    <string name="pine_loading_cycling_4">आपके धैर्य के लिए धन्यवाद…</string>
+    <string name="pine_loading_cycling_5">नवीनतम डेटा प्राप्त हो रहा है…</string>
+    <string name="pine_loading_cycling_6">सामान्य से थोड़ा अधिक समय लग रहा है…</string>
+    <string name="pine_loading_cycling_7">अच्छी चीज़ें समय लेती हैं…</string>
+    <string name="pine_loading_cycling_8">डेटा संसाधित हो रहा है…</string>
+    <string name="pine_loading_cycling_9">आपके लिए तैयारी हो रही है…</string>
+    <string name="pine_loading_cycling_10">लगभग तैयार…</string>
     <string name="pine_confirm">पुष्टि करें</string>
 
 
