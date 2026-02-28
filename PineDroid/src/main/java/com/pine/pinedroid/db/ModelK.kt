@@ -30,8 +30,13 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
     }
 
 
+    fun exclude(vararg columns: String): ModelK<T> {
+        model.exclude(*columns)
+        return this
+    }
+
     fun select(columns: String = "*"): List<T> {
-        val dbRecords = model.select(columns).map {  convertToType(it)!! }
+        val dbRecords = model.select(columns).map { convertToType(it)!! }
         return dbRecords
     }
 
@@ -98,14 +103,15 @@ class ModelK<T : Any>(private var kclass: KClass<T>, dbName: String? = null) {
      */
     private fun convertToType(dbRecord: DbRecord): T? {
         return try {
-            val args = parameters.associate { param ->
+            val args = mutableMapOf<kotlin.reflect.KParameter, Any?>()
+            parameters.forEach { param ->
                 val paramName = param.name ?: ""
                 val dbValue = findValueInRecord(dbRecord, paramName)
                 val convertedValue = convertValue(dbValue, param.type)
-                //logd("Db", "$paramName: $dbValue ${param.type} -> $convertedValue")
-                param to convertedValue
+                // 如果值为 null 且参数有默认值，跳过让 Kotlin 使用默认值（支持部分列 SELECT）
+                if (convertedValue == null && param.isOptional) return@forEach
+                args[param] = convertedValue
             }
-            //logd("convertToType: ${kclass.simpleName}", args)
             try {
                 constructor.callBy(args)
             } catch (e: InvocationTargetException) {

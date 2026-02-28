@@ -28,6 +28,7 @@ open class Model(name: String, private val dbName: String? = null) {
     private var limitCount: Int? = null
     private var orderBy: String = ""
     private var offsetCount: Int? = null
+    private var excludeColumns: List<String> = emptyList()
 
     private var lastSql = "";
     private val tableStructure: TableStructure
@@ -89,6 +90,11 @@ open class Model(name: String, private val dbName: String? = null) {
         return this
     }
 
+    fun exclude(vararg columns: String): Model {
+        excludeColumns = columns.flatMap { it.split(",").map(String::trim).filter(String::isNotEmpty) }
+        return this
+    }
+
     fun order(key: String): Model {
         orderBy = "ORDER BY $key"
         return this
@@ -126,7 +132,10 @@ open class Model(name: String, private val dbName: String? = null) {
                 else -> ""
             }
 
-            lastSql = "SELECT $columns FROM $tableName $whereSql $orderBy $limitSql"
+            val effectiveColumns = if (excludeColumns.isEmpty()) columns
+            else tableStructure.getColumnNames().filter { it !in excludeColumns }.joinToString(", ")
+
+            lastSql = "SELECT $effectiveColumns FROM $tableName $whereSql $orderBy $limitSql"
 
             return rawQuery(lastSql, whereArgs.toTypedArray()).first
         } catch (exception: SQLiteException) {
