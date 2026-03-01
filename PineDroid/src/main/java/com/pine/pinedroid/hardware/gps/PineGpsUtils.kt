@@ -67,4 +67,25 @@ object PineGpsUtils {
         }
     }
 
+    private val slopeColorFlat    = Color.rgb(198, 227, 115)  // 黄绿  #C6E373
+    private val slopeColorSteepUp = Color.rgb(183,  28,  28)  // 深红  #B71C1C
+    private val slopeColorSteepDn = Color.rgb( 13,  71, 161)  // 深蓝  #0D47A1
+
+    fun slopeToColor(slope: Float, minSlope: Float, maxSlope: Float): Int {
+        return if (slope >= 0f) {
+            val t = if (maxSlope > 0f) (slope / maxSlope).coerceIn(0f, 1f) else 0f
+            interpolateColor(slopeColorFlat, slopeColorSteepUp, t)
+        } else {
+            val t = if (minSlope < 0f) (slope / minSlope).coerceIn(0f, 1f) else 0f
+            interpolateColor(slopeColorFlat, slopeColorSteepDn, t)
+        }
+    }
+
+    private fun interpolateColor(c1: Int, c2: Int, t: Float): Int {
+        val r = (Color.red(c1)   + (Color.red(c2)   - Color.red(c1))   * t).toInt()
+        val g = (Color.green(c1) + (Color.green(c2) - Color.green(c1)) * t).toInt()
+        val b = (Color.blue(c1)  + (Color.blue(c2)  - Color.blue(c1))  * t).toInt()
+        return Color.rgb(r, g, b)
+    }
+
 }
