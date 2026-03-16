@@ -43,7 +43,10 @@ object PineApp {
     }
 
     fun rebootApp() {
-        ProcessPhoenix.triggerRebirth(appContext)
+        // appContext 可能被 LanguageManager.applyLanguage() 替换为 createConfigurationContext 包装
+        // ProcessPhoenix 需要原始 Application 上下文才能正确解析启动 Intent
+        val context = appContext.applicationContext ?: appContext
+        ProcessPhoenix.triggerRebirth(context)
     }
 
 
