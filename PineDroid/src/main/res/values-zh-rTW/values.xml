@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_loading">正在處理…</string>
+    <string name="pine_loading_subtitle">請稍候</string>
+    <string name="pine_loading_cycling_1">馬上就好…</string>
+    <string name="pine_loading_cycling_2">資料載入中…</string>
+    <string name="pine_loading_cycling_3">快完成了…</string>
+    <string name="pine_loading_cycling_4">感謝您的耐心等待…</string>
+    <string name="pine_loading_cycling_5">正在取得最新資料…</string>
+    <string name="pine_loading_cycling_6">比平時稍慢一些，敬請見諒…</string>
+    <string name="pine_loading_cycling_7">好東西值得等待…</string>
+    <string name="pine_loading_cycling_8">努力處理中…</string>
+    <string name="pine_loading_cycling_9">正在為您準備…</string>
+    <string name="pine_loading_cycling_10">即將完成…</string>
+
+    <string name="pine_confirm">確定</string>
+
+</resources>

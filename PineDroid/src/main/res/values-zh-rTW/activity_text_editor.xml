@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_text_editor_title">文字編輯器</string>
+    <string name="pine_text_editor_back_cd">返回</string>
+    <string name="pine_text_editor_path_copied">路徑已複製</string>
+    <string name="pine_text_editor_copy_path_cd">複製路徑</string>
+    <string name="pine_text_editor_search_cd">搜尋</string>
+    <string name="pine_text_editor_save_cd">儲存</string>
+    <string name="pine_text_editor_loading">正在載入檔案…</string>
+    <string name="pine_text_editor_error_cd">錯誤</string>
+    <string name="pine_text_editor_unknown_error">未知錯誤</string>
+    <string name="pine_text_editor_retry">重試</string>
+    <string name="pine_text_editor_saving">正在儲存…</string>
+    <string name="pine_text_editor_search_hint">搜尋（至少2個字元）</string>
+    <string name="pine_text_editor_no_results">無結果</string>
+    <string name="pine_text_editor_prev_cd">上一個</string>
+    <string name="pine_text_editor_next_cd">下一個</string>
+    <string name="pine_text_editor_lines">行: %d</string>
+    <string name="pine_text_editor_words">字: %d</string>
+    <string name="pine_text_editor_chars">字元: %d</string>
+    <string name="pine_text_editor_modified">已修改</string>
+    <string name="pine_text_editor_confirm">確定</string>
+    <string name="pine_text_editor_save_success">儲存成功</string>
+</resources>

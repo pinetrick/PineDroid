@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pine_camera_starting">正在啟動相機</string>
+    <string name="pine_camera_processing">正在處理</string>
+    <string name="pine_camera_starting_subtitle">請稍候…</string>
+
+    <string name="pine_image_pickup_processing">正在處理</string>
+    <string name="pine_image_pickup_title">選擇圖片</string>
+
+    <string name="pine_preview_title">圖片預覽</string>
+    <string name="pine_preview_no_picture">暫無圖片</string>
+
+</resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_task_list_title">執行中的工作</string>
+    <string name="pine_task_list_kill_title">終止程序？</string>
+    <string name="pine_task_list_process">程序：%s</string>
+    <string name="pine_task_list_pid_category">PID：%1$s  |  %2$s</string>
+    <string name="pine_task_list_main_process_warning">警告：這是主程序，終止它將強制關閉應用程式。</string>
+    <string name="pine_task_list_kill">終止</string>
+    <string name="pine_task_list_cancel">取消</string>
+    <string name="pine_task_list_memory_overview">記憶體概覽</string>
+    <string name="pine_task_list_total_ram">總記憶體</string>
+    <string name="pine_task_list_free_ram">可用記憶體</string>
+    <string name="pine_task_list_used_ram">已用記憶體</string>
+    <string name="pine_task_list_low_mem_threshold">低記憶體閾值</string>
+    <string name="pine_task_list_zram">ZRAM</string>
+    <string name="pine_task_list_running_processes">執行中程序（%d）</string>
+    <string name="pine_task_list_refresh">重新整理</string>
+    <string name="pine_task_list_android10_note">Android 10+ 限制了程序可見性，僅能查看本應用程式程序，查看其他應用程式需要 root 權限。</string>
+    <string name="pine_task_list_main_badge">主程序</string>
+    <string name="pine_task_list_kill_cd">終止</string>
+    <string name="pine_task_list_detail_pid">程序 ID</string>
+    <string name="pine_task_list_detail_package">套件名稱</string>
+    <string name="pine_task_list_detail_type">類型</string>
+    <string name="pine_task_list_detail_memory">記憶體（PSS）</string>
+    <string name="pine_task_list_pid">PID：%s</string>
+</resources>

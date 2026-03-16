@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pine_permission_system_alert_window_text">需要懸浮視窗權限以顯示懸浮內容</string>
+    <string name="pine_permission_system_alert_window_description">此權限用於在其他應用程式上層顯示懸浮視窗，如迷你視窗、氣泡提示等</string>
+
+    <string name="pine_permission_camera_text">需要相機權限以使用相關功能</string>
+    <string name="pine_permission_camera_description">此權限用於拍照、掃描 QR Code 等需要使用相機的功能</string>
+
+    <string name="pine_permission_coarse_location_text">需要位置權限以取得大致地理位置</string>
+    <string name="pine_permission_coarse_location_description">此權限用於基於網路的定位服務，如查詢附近內容</string>
+
+    <string name="pine_permission_fine_location_text">需要精確位置權限以提供定位服務</string>
+    <string name="pine_permission_fine_location_description">此權限用於地圖、導航等需要精確定位的功能</string>
+
+    <string name="pine_permission_foreground_service_location_text">需要前台位置服務權限以持續取得位置</string>
+    <string name="pine_permission_foreground_service_location_description">此權限允許應用程式在背景運行時持續取得您的位置資訊，用於導航、運動追蹤等功能</string>
+
+    <string name="pine_permission_read_external_storage_text">需要讀取儲存空間權限以存取檔案</string>
+    <string name="pine_permission_read_external_storage_description">此權限用於讀取裝置中的照片、檔案等媒體內容</string>
+
+    <string name="pine_permission_read_media_audio_text">需要存取音訊權限以瀏覽媒體內容</string>
+    <string name="pine_permission_read_media_audio_description">此權限用於讀取裝置中的音訊檔案</string>
+
+    <string name="pine_permission_read_media_images_text">需要讀取儲存空間權限以存取照片</string>
+    <string name="pine_permission_read_media_images_description">此權限用於讀取裝置中的照片、檔案等媒體內容</string>
+
+    <string name="pine_permission_read_media_video_text">需要存取影片權限以瀏覽媒體內容</string>
+    <string name="pine_permission_read_media_video_description">此權限用於讀取裝置中的影片檔案</string>
+
+    <string name="pine_permission_record_audio_text">需要麥克風權限以進行錄音</string>
+    <string name="pine_permission_record_audio_description">此權限用於語音輸入、錄音等需要使用麥克風的功能</string>
+
+    <string name="pine_permission_write_external_storage_text">需要儲存空間權限以儲存檔案</string>
+    <string name="pine_permission_write_external_storage_description">此權限用於將照片、檔案等內容儲存至裝置</string>
+
+    <string name="pine_permission_activity_recognition_text">運動辨識權限用於統計步數</string>
+    <string name="pine_permission_activity_recognition_description">此權限用於讀取裝置運動感測器資料，統計您的每日步數、運動距離等健康資訊。</string>
+
+    <string name="pine_permission_background_location_text">需要背景定位權限以在應用程式未使用時取得位置資訊</string>
+    <string name="pine_permission_background_location_description">該權限允許應用程式在背景運行或螢幕關閉時取得您的位置資訊，用於持續活動記錄、安全監測或基於位置的自動化等功能。</string>
+
+    <string name="pine_permission_post_notifications_text">需要通知權限以顯示前台服務通知</string>
+    <string name="pine_permission_post_notifications_description">該權限允許應用程式顯示通知，這些通知對於前台服務（如背景定位和持續活動更新）是必需的。</string>
+
+    <string name="pine_permission_title">權限請求</string>
+    <string name="pine_permission_redirect_to_setting">前往應用程式設定授權</string>
+    <string name="pine_permission_auth_now">立即授權</string>
+    <string name="pine_permission_auth_later">稍後再說</string>
+    <string name="pine_permission_descritpion">授權後您可以享受更完整的功能體驗</string>
+
+
+    <string name="pine_permission_manager_title">權限管理</string>
+    <string name="pine_permission_manager_title_request">需要權限</string>
+    <string name="pine_permission_manager_description">為了應用程式正常運行，請啟用以下所需權限</string>
+
+</resources>

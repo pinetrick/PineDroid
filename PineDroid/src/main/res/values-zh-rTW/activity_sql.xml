@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_sql_back_cd">返回</string>
+    <string name="pine_sql_hint">輸入SQL語句，例如: SELECT * FROM table_name</string>
+    <string name="pine_sql_execute_cd">執行SQL</string>
+    <string name="pine_sql_executing">執行中…</string>
+    <string name="pine_sql_result">執行結果（%d 筆記錄）</string>
+    <string name="pine_sql_empty">暫無資料</string>
+    <string name="pine_sql_edit_title">編輯: %s</string>
+    <string name="pine_sql_save">儲存</string>
+    <string name="pine_sql_cancel">取消</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_upload_queue_title">上傳佇列</string>
+    <string name="pine_upload_queue_empty">暫無待上傳項目</string>
+    <string name="pine_upload_queue_delete">刪除</string>
+    <string name="pine_upload_queue_upload">上傳</string>
+    <string name="pine_upload_queue_file_preview">檔案預覽</string>
+</resources>

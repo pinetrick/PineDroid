@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 使用者資料相關字串 -->
+    <string name="profile_default_avatar_description">預設頭像</string>
+    <string name="profile_login_prompt">請登入以使用完整功能</string>
+    <string name="profile_default_username">使用者</string>
+    <string name="profile_logout_button">登出</string>
+    <string name="profile_login_button">立即登入</string>
+
+</resources>

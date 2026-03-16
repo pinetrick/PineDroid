@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pine_db_selection_title">資料庫選擇</string>
+    <string name="pine_db_selection_back">返回</string>
+    <string name="pine_db_selection_db_icon_cd">資料庫</string>
+    <string name="pine_db_selection_modified">修改時間: %s</string>
+    <string name="pine_db_selection_empty_icon_cd">空資料庫</string>
+    <string name="pine_db_selection_empty_title">未找到資料庫檔案</string>
+    <string name="pine_db_selection_empty_desc">請檢查資料庫檔案是否存在於應用程式目錄中</string>
+    <string name="pine_db_selection_loading">載入資料庫中…</string>
+</resources>
