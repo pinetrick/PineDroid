@@ -6,6 +6,7 @@ import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.pine.pinedroid.utils.activityContext
@@ -33,35 +34,40 @@ object GoogleSignIn{
         val user: FirebaseUser? = getSignedInUser()
         if (user != null) return user
 
-        // Instantiate a Google sign-in request
         logv("Start Google Sign in")
-        val googleIdOption = GetGoogleIdOption.Builder()
-            // Your server's client ID, not your Android client ID.
-            .setServerClientId(clientId)
-            // Only show accounts previously used to sign in.
-            .setFilterByAuthorizedAccounts(false)
-            .build()
-
-        // Create the Credential Manager request
-        val request = GetCredentialRequest.Builder()
-            .addCredentialOption(googleIdOption)
-            .build()
-
-
         val credentialManager = CredentialManager.create(activityContext)
 
-
-
+        // 优先用 GetSignInWithGoogleOption（兼容性更好，直接弹 Google 登录界面）
+        // 失败则降级到 GetGoogleIdOption
         return try {
+            val signInOption = GetSignInWithGoogleOption.Builder(clientId).build()
+            val request = GetCredentialRequest.Builder()
+                .addCredentialOption(signInOption)
+                .build()
             val result = credentialManager.getCredential(
                 request = request,
                 context = activityContext,
             )
             handleSignIn(result)
-            // 登录成功
         } catch (e: Exception) {
-            loge("signin", e)
-            null
+            logv("GetSignInWithGoogleOption failed, fallback to GetGoogleIdOption", e)
+            try {
+                val googleIdOption = GetGoogleIdOption.Builder()
+                    .setServerClientId(clientId)
+                    .setFilterByAuthorizedAccounts(false)
+                    .build()
+                val request = GetCredentialRequest.Builder()
+                    .addCredentialOption(googleIdOption)
+                    .build()
+                val result = credentialManager.getCredential(
+                    request = request,
+                    context = activityContext,
+                )
+                handleSignIn(result)
+            } catch (e2: Exception) {
+                loge("signin", e2)
+                null
+            }
         }
     }
 
