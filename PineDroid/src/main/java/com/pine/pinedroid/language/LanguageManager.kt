@@ -9,14 +9,25 @@ import com.pine.pinedroid.utils.sp
 import java.util.Locale
 
 private var currentLanguageCode: String? = null
+private var currentLanguageCodeCountry: String? = null
 
 //en zh ...
 fun getCurrentLanguageCode(): String {
     if (currentLanguageCode == null) {
         currentLanguageCode = LanguageManager.getSavedLanguage(false).locale.language.lowercase()
+        currentLanguageCodeCountry = LanguageManager.getSavedLanguage(false).locale.country.lowercase()
     }
 
     return currentLanguageCode!!
+}
+
+fun getCurrentLanguageCodeFull(): String {
+    if (currentLanguageCode == null) {
+        currentLanguageCode = LanguageManager.getSavedLanguage(false).locale.language.lowercase()
+        currentLanguageCodeCountry = LanguageManager.getSavedLanguage(false).locale.country.lowercase()
+    }
+
+    return "$currentLanguageCode-$currentLanguageCodeCountry"
 }
 object LanguageManager {
     private const val KEY_LANGUAGE = "selected_language"

@@ -10,7 +10,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import com.jakewharton.processphoenix.ProcessPhoenix
 import com.pine.pinedroid.utils.log.loge
 import com.pine.pinedroid.utils.log.logi
 import java.security.MessageDigest
@@ -43,7 +42,12 @@ object PineApp {
     }
 
     fun rebootApp() {
-        ProcessPhoenix.triggerRebirth(appContext)
+        val context = appContext.applicationContext ?: appContext
+        val pm = context.packageManager
+        val intent = pm.getLaunchIntentForPackage(context.packageName) ?: return
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        context.startActivity(intent)
+        exitProcess(0)
     }
 
 

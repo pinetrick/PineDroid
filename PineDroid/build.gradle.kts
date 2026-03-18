@@ -113,7 +113,10 @@ dependencies {
 
 
 
-    // Also add the dependencies for the Credential Manager libraries and specify their versions
+    // Google Sign-In (legacy API, 兼容性好)
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
+
+    // Credential Manager (保留作为备用)
     implementation("androidx.credentials:credentials:1.3.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
@@ -127,7 +130,4 @@ dependencies {
     // Optionally, you can include the widgets library for ScaleBar, etc.
     implementation("com.google.maps.android:maps-compose-widgets:6.7.2")
 
-
-    //APP 重启
-    implementation("com.jakewharton:process-phoenix:2.1.0")
 }
